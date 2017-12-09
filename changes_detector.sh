@@ -10,7 +10,14 @@ then
   exit
 fi
 
-changed_refs=$(awk -f "$path_git_sync/changed_refs.awk" --assign deletion_allowed=$deletion_allowed <(echo "$refs_repo_1"; echo "$refs_repo_2"))
+changed_refs=$(awk \
+  -f "$path_git_sync/changed_refs.awk" \
+  --assign deletion_allowed=$deletion_allowed \
+  --assign origin_1="$origin_1" \
+  --assign origin_2="$origin_2" \
+  <(echo "$refs_repo_1") \
+  <(echo "$refs_repo_2") \
+)
 
 
 

@@ -45,8 +45,8 @@ export must_exist_branch
   source "$invoke_path"/sample_init.sh;
 }
 
-export origin_1=prefix_1
-export origin_2=prefix_2
+export origin_1=origin_"$prefix_1"
+export origin_2=origin_"$prefix_2"
 
 path_project_root="$path_git_sync/sync-projects/$project_folder"
 export path_sync_repo="$path_project_root/sync_repo"
