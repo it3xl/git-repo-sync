@@ -1,3 +1,5 @@
+#deletion_allowed
+
 BEGIN{
   ref_count="ref_count";
   ref_key="ref_key";

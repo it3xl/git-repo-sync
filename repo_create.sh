@@ -1,7 +1,7 @@
 
 repo_path="$1"
 
-if [[ -f "$repo_path/config" ]]; then
+if [[ -f "$repo_path/.git/config" ]]; then
   exit
 fi
 
