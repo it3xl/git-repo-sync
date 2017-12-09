@@ -35,6 +35,28 @@ if [[ ${missed_repo_settings:+1} ]]; then
   exit 2
 fi
 
+
+
+
+
+
+
+
+
+
+
+# add a check that urls and prifixes must not be the same!
+
+
+
+
+
+
+
+
+
+
+
 export prefix_1
 export url_1
 export prefix_2

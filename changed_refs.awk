@@ -5,7 +5,17 @@ BEGIN {
   ref_key="ref_key";
 }
 BEGINFILE {
-  print origin_1 " " origin_2
+  file_num++;
+  switch (file_num) {
+    case "1":
+      repo=origin_1
+      break
+    case "2":
+      repo=origin_2
+      break
+  }
+
+  print file_num " repo = " repo "\n"
 }
 {
   ref=$0;
@@ -13,7 +23,7 @@ BEGINFILE {
   ref_store[ref][ref_key]=$2;
   
   print
-  print " ref_cont: " ref_store[ref][ref_count] ", ref_key: " ref_store[ref][ref_key]
+  print "    ref_key: " ref_store[ref][ref_key] "; ref_cont: " ref_store[ref][ref_count]
   print ""
   
 }
