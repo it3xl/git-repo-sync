@@ -10,6 +10,10 @@ then
   exit
 fi
 
+
+#git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/origin/vendor_co/*"
+
+
 changed_refs=$(awk \
   -f "$path_git_sync/changed_refs.awk" \
   --assign deletion_allowed=$deletion_allowed \
