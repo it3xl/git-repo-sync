@@ -15,6 +15,8 @@ changed_refs=$(awk \
   --assign deletion_allowed=$deletion_allowed \
   --assign origin_1="$origin_1" \
   --assign origin_2="$origin_2" \
+  --assign prefix_1="$prefix_1" \
+  --assign prefix_2="$prefix_2" \
   <(echo "$refs_repo_1") \
   <(echo "$refs_repo_2") \
 )
@@ -38,7 +40,7 @@ for r in $changed_refs; do
 done
 
 echo
-echo fetch_refs "${fetch_refs[@]}"
+#echo fetch_refs "${fetch_refs[@]}"
 
 
 

@@ -12,7 +12,7 @@ bash "$path_git_sync"/repo_create.sh "$path_sync_repo"
 cd "$path_sync_repo"
 
 source "$path_git_sync"/deletion_allowability.sh
-source "$path_git_sync"/changes_detector.sh
+source "$path_git_sync"/chang_detector.sh
 
 
 

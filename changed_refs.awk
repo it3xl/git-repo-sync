@@ -5,8 +5,7 @@ BEGIN {
   ref_key="ref_key";
 }
 BEGINFILE {
-  file_num++;
-  switch (file_num) {
+  switch (++file_num) {
     case "1":
       repo=origin_1
       break
@@ -15,29 +14,28 @@ BEGINFILE {
       break
   }
 
-  print file_num " repo = " repo "\n"
+  #print file_num " repo = " repo "\n"
 }
 {
-  ref=$0;
-  ref_store[ref][ref_count]++;
-  ref_store[ref][ref_key]=$2;
-  
-  print
-  print "    ref_key: " ref_store[ref][ref_key] "; ref_cont: " ref_store[ref][ref_count]
-  print ""
-  
+  ref=$2;
+  ref_store[ref][repo]=$1;
 }
 END {
 
-  print "oppa"
   for(ref in ref_store){
-    if(1 < ref_store[ref][ref_count])
+    print ref
+    print origin_1 " " ref_store[ref][origin_1]
+    print origin_2 " " ref_store[ref][origin_2]
+    print ""
+
+    if(ref_store[ref][origin_1] == ref_store[ref][origin_2])
       continue;
     
-    changed_refs[ref_store[ref][ref_key]]++;
+    changed_refs[ref]++;
   }
   
-  for(key in changed_refs){
-    print key;
+  print ""
+  for(ref in changed_refs){
+    print ref;
   }
 }
