@@ -20,13 +20,16 @@ $2 {
   refs[$3][dest]["ref"] = $2;
 }
 END {
+  dest = "";
+  origin = "";
+
   remove_unchanged(refs);
 
   fetch[1] = fetch_refspec(refs, remote_1, local_1);
   fetch[2] = fetch_refspec(refs, remote_2, local_2);
 
-  push[1] = push_refspec(refs, remote_1, local_1);
-  push[2] = push_refspec(refs, remote_2, local_2);
+  push[1] = push_refspec(refs);
+  push[2] = push_refspec(refs);
 }
 
 
@@ -77,11 +80,7 @@ function remove_unchanged(refs) {
 }
 function fetch_refspec(refs, remote, local,    refspec) {
   for(key in refs){
-    sha = refs[key][remote]["sha"];
-    if(!sha || sha != refs[key][local]["sha"])
-    {
-      refspec = refspec " +'" refs[key][remote]["ref"] "':'" refs[key][local]["ref"] "'";
-    }
+    refspec = refspec fetch_dest(refs[key], remote, local);
   }
 
   tty_dbg("\tfetch " remote);
@@ -89,22 +88,34 @@ function fetch_refspec(refs, remote, local,    refspec) {
 
   return refspec;
 }
+function fetch_dest(dest, remote, local) {
+  sha = dest[remote]["sha"];
+  if(!sha || sha != dest[local]["sha"])
+  {
+    return "  +'" dest[remote]["ref"] "':'" dest[local]["ref"] "'";
+  }
+}
 function push_refspec(refs) {
   for(key in refs){
-    sha = refs[key][remote]["sha"];
-    if(!sha || sha != refs[key][local]["sha"])
-    {
-      refspec = refspec " +" refs[key][remote]["ref"] ":" refs[key][local]["ref"];
-    }
+    push_dest(refs[key]);
   }
+}
+function push_dest(dest) {
+  sha_1 = dest[local_1]["sha"];
+  sha_2 = dest[local_2]["sha"];
+  sha_remote_1 = dest[remote_1]["sha"];
+  sha_remote_2 = dest[remote_2]["sha"];
 
+  if(sha_1 && sha_1 == sha_2){
+    if(sha_remote_1 && sha_remote_2){
+      
+    }
 
+  } else if(dest[remote_1]["sha"] == dest[local_2]["sha"]){
 
+  } else if(dest[remote_2]["sha"] == dest[local_1]["sha"]){
 
-
-
-
-
+  }
 
 }
 
