@@ -80,7 +80,7 @@ function fetch_refspec(refs, remote, local,    refspec) {
     sha = refs[key][remote]["sha"];
     if(!sha || sha != refs[key][local]["sha"])
     {
-      refspec = refspec " +" refs[key][remote]["ref"] ":" refs[key][local]["ref"];
+      refspec = refspec " +'" refs[key][remote]["ref"] "':'" refs[key][local]["ref"] "'";
     }
   }
 
@@ -89,8 +89,14 @@ function fetch_refspec(refs, remote, local,    refspec) {
 
   return refspec;
 }
-function push_refspec(refs, remote, local,    refspec) {
-  
+function push_refspec(refs) {
+  for(key in refs){
+    sha = refs[key][remote]["sha"];
+    if(!sha || sha != refs[key][local]["sha"])
+    {
+      refspec = refspec " +" refs[key][remote]["ref"] ":" refs[key][local]["ref"];
+    }
+  }
 
 
 
