@@ -6,7 +6,7 @@ url_local_1="$url_local/local_$prefix_1"
 url_local_2="$url_local/local_$prefix_2"
 
 first_branch=$must_exist_branch
-second_branch=$prefix_2/develop
+second_branch=${prefix_2}develop
 
 export must_exist_branch=$first_branch
 
