@@ -45,7 +45,7 @@ fi
 
 
 
-# add a check that urls and prefixes must not be the same!
+# TODO: add a check that urls and prefixes must not be the same!
 
 
 
