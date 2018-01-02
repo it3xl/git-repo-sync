@@ -12,7 +12,7 @@ git init
 
 
 git config --local advice.pushUpdateRejected false
-
+#git config --local core.logAllRefUpdates
 
 
 echo Repo created at $repo_path

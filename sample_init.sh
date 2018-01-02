@@ -2,14 +2,11 @@
 echo Start `basename "$BASH_SOURCE"`
 
 url_local="$path_git_sync/sample_repos"
-url_local_1="$url_local/local_$prefix_1"
-url_local_2="$url_local/local_$prefix_2"
+url_local_1="$url_local/local_$prefix_1_safe"
+url_local_2="$url_local/local_$prefix_2_safe"
 
 first_branch=$must_exist_branch
 second_branch=${prefix_2}develop
-
-export must_exist_branch=$first_branch
-
 
 if [[ ! -f "$url_1/config" ]]; then
   echo

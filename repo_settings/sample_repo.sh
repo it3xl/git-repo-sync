@@ -10,7 +10,7 @@ project_folder=sample_repo
 
 
 # A conventional prefix for refs for repo 1.
-prefix_1=client_co/
+prefix_1=clie/nt_co/
 #url_1=https://your-repo1-url.org/git/my_repo.git
 url_1="$path_git_sync/sample_repos/remote_$prefix_1"
 
