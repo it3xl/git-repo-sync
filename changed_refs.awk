@@ -1,23 +1,45 @@
 # Tests
 ## Restore
 
-BEGIN {
+BEGIN { # Constants.
   local_refs_prefix = "refs/remotes/";
   remote_refs_prefix = "refs/heads/";
   
+  tty_attached = "/dev/tty";
+}
+BEGIN { # Parameters.
+  tty_header("AWK started");
+  tty_dbg_line("AWK debugging is ON");
+
+  if(!must_exist_branch)
+    tty("Deletion is blocked. Parameter must_exist_branch is empty");
+    
+  if(!origin_1){
+    tty("Error. Parameter origin_1 is empty");
+    exit 1002;
+  }
+  if(!origin_2){
+    tty("Error. Parameter origin_2 is empty");
+    exit 1003;
+  }
+  if(!prefix_1){
+    tty("Error. Parameter prefix_1 is empty");
+    exit 1004;
+  }
+  if(!prefix_2){
+    tty("Error. Parameter prefix_2 is empty");
+    exit 1005;
+  }
+
   local_1 = "1 local ref " prefix_1;
   local_2 = "2 local ref " prefix_2;
   remote_1 = "1 remote ref " prefix_1;
   remote_2 = "2 remote ref " prefix_2;
-
-  tty_attached = "/dev/tty";
-
-  tty_dbg_line("AWK debugging is ON");
 }
 BEGINFILE {
   file_states();
 }
-{
+{ # Set a common key for every ref.
   if(!$2)
     next;
     
@@ -30,29 +52,31 @@ BEGINFILE {
   refs[$3][dest]["sha"] = $1;
   refs[$3][dest]["ref"] = $2;
 }
-END {
+END { # Declare processing globs.
   dest = "";
   
   # Action array variables.
-  split("", a_ff1); split("", a_ff2);
-  split("", a_del1); split("", a_del2);
   split("", a_restore);
   split("", a_fetch1); split("", a_fetch2);
+  split("", a_del1); split("", a_del2);
+  split("", a_ff1); split("", a_ff2);
   split("", a_solv);
   # Operation array variables.
-  split("", op_push_ff1); split("", op_push_ff2);
-  split("", op_push1); split("", op_push2);
   split("", op_fetch1); split("", op_fetch2);
   split("", op_del_local);
+  split("", op_push_ff1); split("", op_push_ff2);
+  split("", op_push_nff1); split("", op_push_nff2);
+  split("", op_push_restore1); split("", op_push_restore2);
+  split("", op_push_del1); split("", op_push_del2);
   split("", op_solv_push1); split("", op_solv_push2);
-  split("", op_post_fetch1); split("", op_post_fetch2);
+  split("", op_fetch_post1); split("", op_fetch_post2);
   # Output variables.
   out_fetch1; out_fetch2;
   out_del;
   out_push1; out_push2;
   out_post_fetch1; out_post_fetch2;
 }
-END {
+END { # Processing.
   generate_missing_refs();
   
   deletion_allowed = 0;
@@ -82,13 +106,15 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
     # Nothing to change.
     return;
   }
-  if(!(rr1 rr2)){
-    tty_dbg("a_restore, no remote refs: " cr);
-    a_restore[cr];
-    return;
-  }
+  
   if(rr1 == rr2){
     rr = rr1;
+    
+    if(!rr){
+      tty_dbg("a_restore, no remote refs: " cr);
+      a_restore[cr];
+      return;
+    }
     
     if(lr1 != rr){
       tty_dbg("a_fetch1, net fail: " cr);
@@ -101,14 +127,14 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
     return;
   }
 
-  if(!(lr1 lr2)){
-    tty_dbg("a_solv, no local: " cr);
-    a_solv[cr];
-    return;
-  }
-
   if(lr1 == lr2){
     lr = lr1;
+    
+    if(!lr){
+      tty_dbg("a_solv, no local: " cr);
+      a_solv[cr];
+      return;
+    }
     
     if(!rr1 && rr2 == lr){
       tty_dbg("a_del2: " cr);
@@ -136,52 +162,58 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
   a_solv[cr];
 }
 function actions_to_operations(    ref, sha1, sha2){
-    
-  for(ref in a_ff1){
-    op_push_ff1[ref];
-    op_fetch1[ref];
-    op_fetch2[ref];
-  }
-  for(ref in a_ff2){
-    op_push_ff2[ref];
-    op_fetch1[ref];
-    op_fetch2[ref];
-  }
-  if(deletion_allowed){
-    for(ref in a_del1){
-      op_push1[ref];
-      op_del_local[ref];
-    }
-    for(ref in a_del2){
-      op_push2[ref];
-      op_del_local[ref];
-    }
-  }
   for(ref in a_restore){
     if(refs[ref][local_1]["sha"]){
-      op_push1[ref];
-      op_fetch1[ref];
+      op_push_restore1[ref];
+      op_fetch_post1[ref];
     }
     if(refs[ref][local_2]["sha"]){
-      op_push2[ref];
-      op_fetch2[ref];
+      op_push_restore2[ref];
+      op_fetch_post2[ref];
     }
   }
+
   for(ref in a_fetch1){
     op_fetch1[ref];
   }
   for(ref in a_fetch2){
     op_fetch2[ref];
   }
+
+  if(deletion_allowed){
+    for(ref in a_del1){
+      op_del_local[ref];
+      op_push_del1[ref];
+    }
+    for(ref in a_del2){
+      op_del_local[ref];
+      op_push_del2[ref];
+    }
+  }
+  
+  for(ref in a_ff1){
+    op_fetch2[ref];
+    op_push_ff1[ref];
+    op_fetch_post1[ref];
+  }
+  for(ref in a_ff2){
+    op_fetch1[ref];
+    op_push_ff2[ref];
+    op_fetch_post2[ref];
+  }
+  
   for(ref in a_solv){
+    v1 = index(ref, prefix_1);
+  
+  
     if(!refs[ref][local_1]["sha"]){
       op_solv_push1[ref];
     }
     if(!refs[ref][local_2]["sha"]){
       op_solv_push2[ref];
     }
-    op_post_fetch1[ref];
-    op_post_fetch2[ref];
+    op_fetch_post1[ref];
+    op_fetch_post2[ref];
   }
 }
 function operations_to_output(){
@@ -235,11 +267,11 @@ function operations_to_output(){
     }
     print out_push_solv2;
     
-    for(ref in op_post_fetch1){
+    for(ref in op_fetch_post1){
       out_post_fetch1 = out_post_fetch1 "  +'" refs[ref][remote_1]["ref"] "':'" refs[ref][local_1]["ref"] "'";
     }
     print out_post_fetch1;
-    for(ref in op_post_fetch2){
+    for(ref in op_fetch_post2){
       out_post_fetch2 = out_post_fetch2 "  +'" refs[ref][remote_2]["ref"] "':'" refs[ref][local_2]["ref"] "'";
     }
     print out_post_fetch2;
