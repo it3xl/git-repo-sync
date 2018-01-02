@@ -5,8 +5,8 @@ BEGIN {
   local_refs_prefix = "refs/remotes/";
   remote_refs_prefix = "refs/heads/";
   
-  local_1 = "1 local ref " origin_1;
-  local_2 = "2 local ref " origin_2;
+  local_1 = "1 local ref " prefix_1;
+  local_2 = "2 local ref " prefix_2;
   remote_1 = "1 remote ref " prefix_1;
   remote_2 = "2 remote ref " prefix_2;
 
@@ -65,7 +65,7 @@ END {
   tty_dbg("deletion allowance = " deletion_allowed " by " must_exist_branch);
   
   for(currentRef in refs){
-    states_to_action( \
+    state_to_action( \
       currentRef, \
       refs[currentRef][remote_1]["sha"], \
       refs[currentRef][remote_2]["sha"], \
@@ -77,7 +77,7 @@ END {
   operations_to_output();
 }
 
-function states_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
+function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
   if(rr1 == rr2 && lr1 == lr2 && lr1 == rr2){
     # Nothing to change.
     return;
