@@ -5,29 +5,33 @@ BEGIN {
   local_refs_prefix = "refs/remotes/";
   remote_refs_prefix = "refs/heads/";
   
-  remote_1 = origin_1;
-  remote_2 = origin_2;
-  local_1 = prefix_1;
-  local_2 = prefix_2;
+  local_1 = "1 local ref " origin_1;
+  local_2 = "2 local ref " origin_2;
+  remote_1 = "1 remote ref " prefix_1;
+  remote_2 = "2 remote ref " prefix_2;
 
   tty_attached = "/dev/tty";
 
-  tty_dbg("AWK debugging is ON");
+  tty_dbg_line("AWK debugging is ON");
 }
 BEGINFILE {
   file_states();
 }
 {
-  if($2){
-    common_key();
-
-    refs[$3][dest]["sha"] = $1;
-    refs[$3][dest]["ref"] = $2;
+  if(!$2)
+    next;
+    
+  prefix_name_key();
+  if(index($3, prefix_1) != 1 && index($3, prefix_2) != 1){
+    tty_dbg("next " $3 " " prefix_1 " " prefix_2);
+    next;
   }
+  
+  refs[$3][dest]["sha"] = $1;
+  refs[$3][dest]["ref"] = $2;
 }
 END {
   dest = "";
-  origin = "";
   
   # Action array variables.
   split("", a_ff1); split("", a_ff2);
@@ -171,10 +175,10 @@ function actions_to_operations(    ref, sha1, sha2){
     op_fetch2[ref];
   }
   for(ref in a_solv){
-    if(!index(refs[ref][local_1]["ref"], local_1)){
+    if(!refs[ref][local_1]["sha"]){
       op_solv_push1[ref];
     }
-    if(!index(refs[ref][local_2]["ref"], local_2)){
+    if(!refs[ref][local_2]["sha"]){
       op_solv_push2[ref];
     }
     op_solv_fetch1[ref];
@@ -270,18 +274,16 @@ function file_states() {
       break;
     case 3:
       dest = local_1;
-      origin = remote_1;
       break;
     case 4:
       dest = local_2;
-      origin = remote_2;
       break;
   }
 }
-function common_key() {
+function prefix_name_key() {
   # Generates a common key for all 4 locations of every ref.
   $3 = $2
-  split($3, split_refs, local_refs_prefix origin "/");
+  split($3, split_refs, local_refs_prefix dest "/");
   if(split_refs[2]){
     # Removes "refs/remotes/current_origin/"
     $3 = split_refs[2];
@@ -314,6 +316,7 @@ function generate_missing_refs(){
   }
 }
 
+
 function tty(msg){
   print msg >> tty_attached;
 }
@@ -326,6 +329,14 @@ function tty_dbg(msg){
 
   #print "Œ " msg >> tty_attached;
   print "Œ " msg " Ð" >> tty_attached;
+}
+function tty_line_dbg(msg){
+  tty_dbg();
+  tty_dbg(msg);
+}
+function tty_dbg_line(msg){
+  tty_dbg(msg);
+  tty_dbg();
 }
 
 END{
