@@ -42,27 +42,6 @@ echo ___________________________________________________
 
 
 
-declare -a fetch_refs;
-declare -a sync_refs;
-#declare -A resolve_refs;
-for r in $changed_refs; do
-  fetch_refs+=("+$r:$r");
-  sync_refs+=("$r:$r");
-  #resolve_refs+=('"%s" ' "+$r:$r");
-done
-
-echo
-#echo fetch_refs "${fetch_refs[@]}"
-
-
-
-
-
-
-
-
-
-
 
 
 
