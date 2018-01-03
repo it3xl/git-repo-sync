@@ -296,20 +296,20 @@ function operations_to_refspec(){
   { # op_del_local
     for(ref in op_del_local){
       if(refs[ref][local_1]["sha"]){
-        out_del = out_del "  '" origin_1 "/" ref "'";
+        out_del = out_del "  " origin_1 "/" ref;
       }
       if(refs[ref][local_2]["sha"]){
-        out_del = out_del "  '" origin_2 "/" ref "'";
+        out_del = out_del "  " origin_2 "/" ref;
       }
     }
     print out_del;
   }
   { # op_fetch1, op_fetch2
     for(ref in op_fetch1){
-      out_fetch1 = out_fetch1 "  +'" refs[ref][remote_1]["ref"] "':'" refs[ref][local_1]["ref"];
+      out_fetch1 = out_fetch1 "  +" refs[ref][remote_1]["ref"] ":" refs[ref][local_1]["ref"];
     }
     for(ref in op_fetch2){
-      out_fetch2 = out_fetch2 "  +'" refs[ref][remote_2]["ref"] "':'" refs[ref][local_2]["ref"];
+      out_fetch2 = out_fetch2 "  +" refs[ref][remote_2]["ref"] ":" refs[ref][local_2]["ref"];
     }
     print out_fetch1;
     print out_fetch2;
@@ -317,34 +317,34 @@ function operations_to_refspec(){
   
   { # op_push_restore1, op_push_restore2
     for(ref in op_push_restore1){
-      out_push1 = out_push1 "  '" refs[ref][local_1]["ref"] "':'" refs[ref][remote_1]["ref"] "'";
+      out_push1 = out_push1 "  " refs[ref][local_1]["ref"] ":" refs[ref][remote_1]["ref"];
     }
     for(ref in op_push_restore2){
-      out_push2 = out_push2 "  '" refs[ref][local_2]["ref"] "':'" refs[ref][remote_2]["ref"] "'";
+      out_push2 = out_push2 "  " refs[ref][local_2]["ref"] ":" refs[ref][remote_2]["ref"];
     }
   }
   { # op_push_del1, op_push_del2
     for(ref in op_push_del1){
-      out_push1 = out_push1 "  '':'" refs[ref][remote_1]["ref"] "'";
+      out_push1 = out_push1 "  :" refs[ref][remote_1]["ref"];
     }
     for(ref in op_push_del2){
-      out_push2 = out_push2 "  '':'" refs[ref][remote_2]["ref"] "'";
+      out_push2 = out_push2 "  :" refs[ref][remote_2]["ref"];
     }
   }
   { # op_push_ff_to1, op_push_ff_to2
     for(ref in op_push_ff_to1){
-      out_push1 = out_push1 "  '" refs[ref][local_2]["ref"] "':'" refs[ref][remote_1]["ref"] "'";
+      out_push1 = out_push1 "  " refs[ref][local_2]["ref"] ":" refs[ref][remote_1]["ref"];
     }
     for(ref in op_push_ff_to2){
-      out_push2 = out_push2 "  '" refs[ref][local_1]["ref"] "':'" refs[ref][remote_2]["ref"] "'";
+      out_push2 = out_push2 "  " refs[ref][local_1]["ref"] ":" refs[ref][remote_2]["ref"];
     }
   }
   { # op_push_nff_to1, op_push_nff_to2
     for(ref in op_push_nff_to1){
-      out_push1 = out_push1 "  +'" refs[ref][local_2]["ref"] "':'" refs[ref][remote_1]["ref"] "'";
+      out_push1 = out_push1 "  +" refs[ref][local_2]["ref"] ":" refs[ref][remote_1]["ref"];
     }
     for(ref in op_push_nff_to2){
-      out_push2 = out_push2 "  +'" refs[ref][local_1]["ref"] "':'" refs[ref][remote_2]["ref"] "'";
+      out_push2 = out_push2 "  +" refs[ref][local_1]["ref"] ":" refs[ref][remote_2]["ref"];
     }
   }
   print out_push1;
@@ -352,10 +352,10 @@ function operations_to_refspec(){
 
   { # op_fetch_post1, op_fetch_post2
     for(ref in op_fetch_post1){
-      out_post_fetch1 = out_post_fetch1 "  +'" refs[ref][remote_1]["ref"] "':'" refs[ref][local_1]["ref"] "'";
+      out_post_fetch1 = out_post_fetch1 "  +" refs[ref][remote_1]["ref"] ":" refs[ref][local_1]["ref"];
     }
     for(ref in op_fetch_post2){
-      out_post_fetch2 = out_post_fetch2 "  +'" refs[ref][remote_2]["ref"] "':'" refs[ref][local_2]["ref"] "'";
+      out_post_fetch2 = out_post_fetch2 "  +" refs[ref][remote_2]["ref"] ":" refs[ref][local_2]["ref"];
     }
     print out_post_fetch1;
     print out_post_fetch2;

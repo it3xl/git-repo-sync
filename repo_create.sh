@@ -14,6 +14,9 @@ git init
 git config --local advice.pushUpdateRejected false
 #git config --local core.logAllRefUpdates
 
+git remote add $origin_1 "$url_1"
+git remote add $origin_2 "$url_2"
+
 
 echo Repo created at $repo_path
 
