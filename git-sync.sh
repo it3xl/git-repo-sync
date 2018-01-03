@@ -19,7 +19,7 @@ local_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remote
 local_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/$prefix_2")
 
 changed_refs=$(awk \
-  -f "$path_git_sync/changed_refs.awk" \
+  -f "$path_git_sync/state_to_refspec.awk" \
   `# --lint` \
   --assign must_exist_branch=$must_exist_branch \
   --assign origin_1="$origin_1" \
