@@ -1,0 +1,3 @@
+git branch --delete --force --remotes origin/vendor_co-develop
+
+nff push for delete is wrong.
