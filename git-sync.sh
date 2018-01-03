@@ -26,7 +26,7 @@ changed_refs=$(awk \
   --assign origin_2="$origin_2" \
   --assign prefix_1="$prefix_1" \
   --assign prefix_2="$prefix_2" \
-  --assign debug_on=1 \
+  --assign trace_on=1 \
   <(echo "$remote_refs_1") \
   <(echo "$remote_refs_2") \
   <(echo "$local_refs_1") \
