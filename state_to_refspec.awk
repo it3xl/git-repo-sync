@@ -53,7 +53,7 @@ BEGINFILE {
   refs[$3][dest]["ref"] = $2;
 }
 END { # Processing.
-  dest = "";
+  dest = ""; ref_prefix = "";
 
   deletion_allowed = 0;
   unlock_deletion( \
@@ -77,36 +77,33 @@ END { # Processing.
     );
   }
   actions_to_operations();
-  operations_to_refspec();
+  operations_to_refspecs();
 }
 
 function file_states() {
   switch (++file_num) {
     case 1:
       dest = remote_1;
+      ref_prefix = remote_refs_prefix;
       break;
     case 2:
       dest = remote_2;
+      ref_prefix = remote_refs_prefix;
       break;
     case 3:
       dest = local_1;
+      ref_prefix = local_refs_prefix origin_1 "/";
       break;
     case 4:
       dest = local_2;
+      ref_prefix = local_refs_prefix origin_2 "/";
       break;
   }
 }
-function prefix_name_key() {
-  # Generates a common key for all 4 locations of every ref.
+function prefix_name_key() { # Generates a common key for all 4 locations of every ref.
   $3 = $2
-  split($3, split_refs, local_refs_prefix dest "/");
-  if(split_refs[2]){
-    # Removes "refs/remotes/current_origin/"
-    $3 = split_refs[2];
-  }else{
-    # Removes "refs/heads/"
-    sub("refs/[^/]*/", "", $3);
-  }
+  split($3, split_refs, ref_prefix);
+  $3 = split_refs[2];
 }
 
 function unlock_deletion(rr1, rr2, lr1, lr2){
@@ -291,7 +288,7 @@ function actions_to_operations(    ref, sha1, sha2, is_side1, is_side2){
     }
   }
 }
-function operations_to_refspec(){
+function operations_to_refspecs(){
   print "{[Results: del; fetch 1, 2; push 1, 2; post fetch 1, 2;]}"
   { # op_del_local
     for(ref in op_del_local){
@@ -380,7 +377,6 @@ function trace(msg){
     return;
   }
   
-  #print "Œ " msg >> tty_attached;
   print "Œ " msg >> tty_attached;
 }
 function trace_header(msg){
