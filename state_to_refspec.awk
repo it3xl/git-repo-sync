@@ -2,6 +2,13 @@
 ## Restore
 
 BEGIN { # Constants.
+  side_1_index = 1;
+  side_2_index = 2;
+  side1 = side_1_index;
+  side2 = side_2_index;
+  sides[side1]["other"] = side2;
+  sides[side2]["other"] = side1;
+
   local_refs_prefix = "refs/remotes/";
   remote_refs_prefix = "refs/heads/";
   
@@ -103,6 +110,7 @@ END { # Processing.
   }
   actions_to_operations();
   operations_to_refspecs();
+  refspecs_to_stream();
 }
 
 function unlock_deletion(rr1, rr2, lr1, lr2){
@@ -222,7 +230,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
   
   a_solv[cr];
 }
-function actions_to_operations(    ref, sha1, sha2, is_side1, is_side2){
+function actions_to_operations(    ref, owns_side1, owns_side2){
   for(ref in a_restore){
     if(refs[ref][local_1]["sha"]){
       op_push_restore1[ref];
@@ -262,16 +270,16 @@ function actions_to_operations(    ref, sha1, sha2, is_side1, is_side2){
   }
   
   for(ref in a_solv){
-    is_side1 = index(ref, prefix_1) == 1;
-    is_side2 = index(ref, prefix_2) == 1;
-    if(!is_side1 && !is_side2){
+    owns_side1 = index(ref, prefix_1) == 1;
+    owns_side2 = index(ref, prefix_2) == 1;
+    if(!owns_side1 && !owns_side2){
       continue;
     }
-    if(is_side1 && is_side2){
+    if(owns_side1 && owns_side2){
       continue;
     }
     
-    if(is_side1){
+    if(owns_side1){
       if(refs[ref][remote_1]["sha"]){
         if(refs[ref][remote_1]["sha"] != refs[ref][local_1]["sha"]){
           op_fetch1[ref];
@@ -286,7 +294,7 @@ function actions_to_operations(    ref, sha1, sha2, is_side1, is_side2){
         op_fetch_post1[ref];
       }
     }
-    if(is_side2){
+    if(owns_side2){
       if(refs[ref][remote_2]["sha"]){
         if(refs[ref][remote_2]["sha"] != refs[ref][local_2]["sha"]){
           op_fetch2[ref];
@@ -303,8 +311,7 @@ function actions_to_operations(    ref, sha1, sha2, is_side1, is_side2){
     }
   }
 }
-function operations_to_refspecs(){
-  print "{[Results: del; fetch 1, 2; push 1, 2; post fetch 1, 2;]}"
+function operations_to_refspecs(    ref){
   { # op_del_local
     for(ref in op_del_local){
       if(refs[ref][local_1]["sha"]){
@@ -314,7 +321,6 @@ function operations_to_refspecs(){
         out_del = out_del "  " origin_2 "/" ref;
       }
     }
-    print out_del;
   }
   { # op_fetch1, op_fetch2
     for(ref in op_fetch1){
@@ -323,8 +329,6 @@ function operations_to_refspecs(){
     for(ref in op_fetch2){
       out_fetch2 = out_fetch2 "  +" refs[ref][remote_2]["ref"] ":" refs[ref][local_2]["ref"];
     }
-    print out_fetch1;
-    print out_fetch2;
   }
   
   { # op_push_restore1, op_push_restore2
@@ -359,8 +363,6 @@ function operations_to_refspecs(){
       out_push2 = out_push2 "  +" refs[ref][local_1]["ref"] ":" refs[ref][remote_2]["ref"];
     }
   }
-  print out_push1;
-  print out_push2;
 
   { # op_fetch_post1, op_fetch_post2
     for(ref in op_fetch_post1){
@@ -369,10 +371,17 @@ function operations_to_refspecs(){
     for(ref in op_fetch_post2){
       out_post_fetch2 = out_post_fetch2 "  +" refs[ref][remote_2]["ref"] ":" refs[ref][local_2]["ref"];
     }
-    print out_post_fetch1;
-    print out_post_fetch2;
   }
-
+}
+function refspecs_to_stream(){
+  print "{[Results: 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch;]}"
+  print out_del;
+  print out_fetch1;
+  print out_fetch2;
+  print out_push1;
+  print out_push2;
+  print out_post_fetch1;
+  print out_post_fetch2;
   print "{[End of results]}";
 }
 
