@@ -72,6 +72,11 @@ function file_states() {
   refs[$3][dest]["sha"] = $1;
   refs[$3][dest]["ref"] = $2;
 }
+function prefix_name_key() { # Generates a common key for all 4 locations of every ref.
+  $3 = $2
+  split($3, split_refs, ref_prefix);
+  $3 = split_refs[2];
+}
 END { # Processing.
   dest = ""; ref_prefix = "";
 
@@ -82,7 +87,7 @@ END { # Processing.
     refs[must_exist_branch][local_1]["sha"], \
     refs[must_exist_branch][local_2]["sha"] \
   );
-  trace_line("deletion allowance = " deletion_allowed " by " must_exist_branch);
+  trace_line("deletion " ((deletion_allowed) ? "allowed" : "blocked") " by " must_exist_branch);
 
   generate_missing_refs();
   declare_processing_globs();
@@ -98,12 +103,6 @@ END { # Processing.
   }
   actions_to_operations();
   operations_to_refspecs();
-}
-
-function prefix_name_key() { # Generates a common key for all 4 locations of every ref.
-  $3 = $2
-  split($3, split_refs, ref_prefix);
-  $3 = split_refs[2];
 }
 
 function unlock_deletion(rr1, rr2, lr1, lr2){
@@ -132,7 +131,6 @@ function generate_missing_refs(){
       refs[ref][local_2]["ref"] = local_refs_prefix origin_2 "/" ref
   }
 }
-
 function declare_processing_globs(){
   # Action array variables.
   split("", a_restore);

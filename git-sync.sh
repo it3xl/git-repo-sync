@@ -50,8 +50,8 @@ mapfile -t refspec_list < <(echo "$refspecs")
 
 del_spec="${refspec_list[1]}";
 if [[ -n "$del_spec" ]]; then
-  echo git branch --delete --force --remotes "$del_spec"
-  git branch --delete --force --remotes "$del_spec"
+  echo git branch --delete --force --remotes $del_spec
+  git branch --delete --force --remotes $del_spec
 fi;
 
 fetch1_spec="${refspec_list[2]}";
