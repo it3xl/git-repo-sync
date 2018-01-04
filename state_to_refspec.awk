@@ -9,7 +9,7 @@ BEGIN { # Constants.
 }
 BEGIN { # Parameters.
   write_header("AWK started");
-  trace_line("AWK debugging is ON");
+  trace("AWK debugging is ON");
 
   if(!must_exist_branch)
     write("Deletion is blocked. Parameter must_exist_branch is empty");
@@ -87,7 +87,7 @@ END { # Processing.
     refs[must_exist_branch][local_1]["sha"], \
     refs[must_exist_branch][local_2]["sha"] \
   );
-  trace_line("deletion " ((deletion_allowed) ? "allowed" : "blocked") " by " must_exist_branch);
+  write("Deletion " ((deletion_allowed) ? "allowed" : "blocked") " by " must_exist_branch);
 
   generate_missing_refs();
   declare_processing_globs();

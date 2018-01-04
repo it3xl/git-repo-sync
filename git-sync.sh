@@ -44,46 +44,45 @@ echo
 echo ------------------ Git refspecs: ------------------
 echo "$refspecs"
 echo ___________________________________________________
-echo
 
 mapfile -t refspec_list < <(echo "$refspecs")
 
 del_spec="${refspec_list[1]}";
 if [[ -n "$del_spec" ]]; then
-  echo git branch --delete --force --remotes $del_spec
+  echo $'\n>' git branch --delete --force --remotes $del_spec
   git branch --delete --force --remotes $del_spec
 fi;
 
 fetch1_spec="${refspec_list[2]}";
 if [[ -n "$fetch1_spec" ]]; then
-  echo git fetch $origin_1 $fetch1_spec
+  echo $'\n>' git fetch $origin_1 $fetch1_spec
   git fetch $origin_1 $fetch1_spec
 fi;
 fetch2_spec="${refspec_list[3]}";
 if [[ -n "$fetch2_spec" ]]; then
-  echo git fetch $origin_2 $fetch2_spec
+  echo $'\n>' git fetch $origin_2 $fetch2_spec
   git fetch $origin_2 $fetch2_spec
 fi;
 
 push1_spec="${refspec_list[4]}";
 if [[ -n "$push1_spec" ]]; then
-  echo git push $origin_1 $push1_spec
+  echo $'\n>' git push $origin_1 $push1_spec
   git push $origin_1 $push1_spec || true
 fi;
 push2_spec="${refspec_list[5]}";
 if [[ -n "$push2_spec" ]]; then
-  echo git push $origin_2 $push2_spec
+  echo $'\n>' git push $origin_2 $push2_spec
   git push $origin_2 $push2_spec || true
 fi;
 
 post_fetch1_spec="${refspec_list[6]}";
 if [[ -n "$post_fetch1_spec" ]]; then
-  echo git fetch $origin_1 $post_fetch1_spec
+  echo $'\n>' git fetch $origin_1 $post_fetch1_spec
   git fetch $origin_1 $post_fetch1_spec
 fi;
 post_fetch2_spec="${refspec_list[7]}";
 if [[ -n "$post_fetch2_spec" ]]; then
-  echo git fetch $origin_2 $post_fetch2_spec
+  echo $'\n>' git fetch $origin_2 $post_fetch2_spec
   git fetch $origin_2 $post_fetch2_spec
 fi;
 
