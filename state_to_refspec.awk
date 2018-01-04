@@ -273,22 +273,30 @@ function actions_to_operations(    ref, sha1, sha2, is_side1, is_side2){
     
     if(is_side1){
       if(refs[ref][remote_1]["sha"]){
-        op_fetch1[ref];
+        if(refs[ref][remote_1]["sha"] != refs[ref][local_1]["sha"]){
+          op_fetch1[ref];
+        }
         op_push_nff_to2[ref];
         op_fetch_post2[ref];
       } else if(refs[ref][remote_2]["sha"]){
-        op_fetch2[ref];
+        if(refs[ref][remote_2]["sha"] != refs[ref][local_2]["sha"]){
+          op_fetch2[ref];
+        }
         op_push_nff_to1[ref];
         op_fetch_post1[ref];
       }
     }
     if(is_side2){
       if(refs[ref][remote_2]["sha"]){
-        op_fetch2[ref];
+        if(refs[ref][remote_2]["sha"] != refs[ref][local_2]["sha"]){
+          op_fetch2[ref];
+        }
         op_push_nff_to1[ref];
         op_fetch_post1[ref];
       } else if(refs[ref][remote_1]["sha"]){
-        op_fetch1[ref];
+        if(refs[ref][remote_1]["sha"] != refs[ref][local_1]["sha"]){
+          op_fetch1[ref];
+        }
         op_push_nff_to2[ref];
         op_fetch_post2[ref];
       }
