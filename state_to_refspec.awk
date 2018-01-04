@@ -39,6 +39,26 @@ BEGIN { # Parameters.
 BEGINFILE {
   file_states();
 }
+function file_states() {
+  switch (++file_num) {
+    case 1:
+      dest = remote_1;
+      ref_prefix = remote_refs_prefix;
+      break;
+    case 2:
+      dest = remote_2;
+      ref_prefix = remote_refs_prefix;
+      break;
+    case 3:
+      dest = local_1;
+      ref_prefix = local_refs_prefix origin_1 "/";
+      break;
+    case 4:
+      dest = local_2;
+      ref_prefix = local_refs_prefix origin_2 "/";
+      break;
+  }
+}
 { # Ref states preparation.
   if(!$2)
     next;
@@ -80,26 +100,6 @@ END { # Processing.
   operations_to_refspecs();
 }
 
-function file_states() {
-  switch (++file_num) {
-    case 1:
-      dest = remote_1;
-      ref_prefix = remote_refs_prefix;
-      break;
-    case 2:
-      dest = remote_2;
-      ref_prefix = remote_refs_prefix;
-      break;
-    case 3:
-      dest = local_1;
-      ref_prefix = local_refs_prefix origin_1 "/";
-      break;
-    case 4:
-      dest = local_2;
-      ref_prefix = local_refs_prefix origin_2 "/";
-      break;
-  }
-}
 function prefix_name_key() { # Generates a common key for all 4 locations of every ref.
   $3 = $2
   split($3, split_refs, ref_prefix);
@@ -132,6 +132,7 @@ function generate_missing_refs(){
       refs[ref][local_2]["ref"] = local_refs_prefix origin_2 "/" ref
   }
 }
+
 function declare_processing_globs(){
   # Action array variables.
   split("", a_restore);
@@ -188,15 +189,17 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
       return;
     }
     
-    if(!rr1 && rr2 == lr){
-      trace("a_del2: " cr);
-      a_del2[cr];
-      return;
-    }
-    if(!rr2 && rr1 == lr){
-      trace("a_del1: " cr);
-      a_del1[cr];
-      return;
+    if(deletion_allowed){
+      if(!rr1 && rr2 == lr){
+        trace("a_del2: " cr);
+        a_del2[cr];
+        return;
+      }
+      if(!rr2 && rr1 == lr){
+        trace("a_del1: " cr);
+        a_del1[cr];
+        return;
+      }
     }
     
     if(rr1 == lr && rr2 != lr){
@@ -232,15 +235,13 @@ function actions_to_operations(    ref, sha1, sha2, is_side1, is_side2){
     op_fetch2[ref];
   }
 
-  if(deletion_allowed){
-    for(ref in a_del1){
-      op_del_local[ref];
-      op_push_del1[ref];
-    }
-    for(ref in a_del2){
-      op_del_local[ref];
-      op_push_del2[ref];
-    }
+  for(ref in a_del1){
+    op_del_local[ref];
+    op_push_del1[ref];
+  }
+  for(ref in a_del2){
+    op_del_local[ref];
+    op_push_del2[ref];
   }
   
   for(ref in a_ff_to1){
