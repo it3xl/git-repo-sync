@@ -13,17 +13,8 @@ cd "$path_sync_repo"
 
 source "$path_git_sync"/change_detector.sh
 
-
 local_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
 local_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
-
-echo
-echo local_refs_1
-echo "$local_refs_1"
-echo
-echo local_refs_2
-echo "$local_refs_2"
-echo
 
 refspecs=$(awk \
   -f "$path_git_sync/state_to_refspec.awk" \

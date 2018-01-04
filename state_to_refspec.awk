@@ -2,21 +2,14 @@
 ## Restore
 
 BEGIN { # Constants.
-  side_1_index = 1;
-  side_2_index = 2;
-  side1 = side_1_index;
-  side2 = side_2_index;
-  sides[side1]["other"] = side2;
-  sides[side2]["other"] = side1;
-
   local_refs_prefix = "refs/remotes/";
   remote_refs_prefix = "refs/heads/";
   
   tty_attached = "/dev/tty";
 }
 BEGIN { # Parameters.
-  write_header("AWK started");
-  trace("AWK debugging is ON");
+  write_header("GAWK started");
+  trace("Tracing is ON");
 
   if(!must_exist_branch)
     write("Deletion is blocked. Parameter must_exist_branch is empty");
