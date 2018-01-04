@@ -187,17 +187,25 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
       return;
     }
     
-    if(deletion_allowed){
-      if(!rr1 && rr2 == lr){
+    if(!rr1 && rr2 == lr){
+      if(deletion_allowed){
         trace("a_del2: " cr);
         a_del2[cr];
-        return;
+      }else{
+        trace("a_solv, an unknown remote: " cr);
+        a_solv[cr];
       }
-      if(!rr2 && rr1 == lr){
+      return;
+    }
+    if(!rr2 && rr1 == lr){
+      if(deletion_allowed){
         trace("a_del1: " cr);
         a_del1[cr];
-        return;
+      }else{
+        trace("a_solv, an unknown remote: " cr);
+        a_solv[cr];
       }
+      return;
     }
     
     if(rr1 == lr && rr2 != lr){
