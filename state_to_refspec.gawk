@@ -1,6 +1,3 @@
-# Tests
-## Restore
-
 BEGIN { # Constants.
   local_refs_prefix = "refs/remotes/";
   remote_refs_prefix = "refs/heads/";
