@@ -31,11 +31,6 @@ refspecs=$(awk \
   <(echo "$local_refs_2") \
 )
 
-echo
-echo ------------------ Git refspecs: ------------------
-echo "$refspecs"
-echo ___________________________________________________
-
 mapfile -t refspec_list < <(echo "$refspecs")
 
 del_spec="${refspec_list[1]}";
@@ -45,6 +40,17 @@ push_spec1="${refspec_list[4]}";
 push_spec2="${refspec_list[5]}";
 post_fetch_spec1="${refspec_list[6]}";
 post_fetch_spec2="${refspec_list[7]}";
+
+echo
+echo ------------------ Git refspecs: ------------------
+echo '>' del_spec: $del_spec
+echo '>' fetch_spec1: $fetch_spec1
+echo '>' fetch_spec2: $fetch_spec2
+echo '>' push_spec1: $push_spec1
+echo '>' push_spec2: $push_spec2
+echo '>' post_fetch_spec1: $post_fetch_spec1
+echo '>' post_fetch_spec2: $post_fetch_spec2
+echo ___________________________________________________
 
 mkdir -p "$path_async_output"
 
@@ -84,9 +90,9 @@ fi;
 
 
 if [[ -n "$push_spec1" && -n "$push_spec2" ]]; then
-  git push --verbose $origin_1 $push_spec1 || true &> "$path_async_output/push1.txt" &
+  { git push --verbose $origin_1 $push_spec1 || true; } &> "$path_async_output/push1.txt" &
   pid_push1=$!
-  git push --verbose $origin_2 $push_spec2 || true &> "$path_async_output/push2.txt" &
+  { git push --verbose $origin_2 $push_spec2 || true; } &> "$path_async_output/push2.txt" &
   pid_push2=$!
   
   push_report1="> Push $origin_1 "

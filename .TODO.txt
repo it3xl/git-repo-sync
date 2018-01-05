@@ -1,0 +1,4 @@
+
+Disable Post-fetch because of "updating local tracking ref" during any Git push.
+
+
