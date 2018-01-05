@@ -14,7 +14,7 @@ run_sample=0
 }
 
 folder_name_repo_settings=repo_settings
-file_repo_settings="$invoke_path/$folder_name_repo_settings/$file_name_repo_settings"
+file_repo_settings="$path_git_sync/$folder_name_repo_settings/$file_name_repo_settings"
 if [[ ! -f "$file_repo_settings" ]]; then
   echo "Error! Exit! The first parameter must be a name of a file from the folder $folder_name_repo_settings."
   echo "See an example how to fill it with repo's environment variables."
@@ -51,11 +51,12 @@ export origin_1=orig_1_$prefix_1_safe
 export origin_2=orig_2_$prefix_2_safe
 
 (( $run_sample == 1 )) && {
-  source "$invoke_path"/sample_init.sh;
+  source "$path_git_sync"/sample_init.sh;
 }
 
 path_project_root="$path_git_sync/sync-projects/$project_folder"
 export path_sync_repo="$path_project_root/sync_repo"
+export path_async_output="$path_project_root/async_output"
 
 
 echo End `basename "$BASH_SOURCE"`

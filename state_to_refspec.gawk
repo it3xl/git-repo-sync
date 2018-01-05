@@ -382,6 +382,9 @@ function write(msg){
 function write_header(msg){
   write("\n" msg "\n");
 }
+function write_after_line(msg){
+  write("\n" msg);
+}
 function trace(msg){
   if(!trace_on)
     return;
@@ -408,5 +411,6 @@ function trace_line(msg){
 }
 
 END{ # Disposing.
+  write_after_line("GAWK end");
   close(tty_attached);
 }

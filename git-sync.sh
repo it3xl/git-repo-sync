@@ -39,42 +39,106 @@ echo ___________________________________________________
 mapfile -t refspec_list < <(echo "$refspecs")
 
 del_spec="${refspec_list[1]}";
+fetch_spec1="${refspec_list[2]}";
+fetch_spec2="${refspec_list[3]}";
+push_spec1="${refspec_list[4]}";
+push_spec2="${refspec_list[5]}";
+post_fetch_spec1="${refspec_list[6]}";
+post_fetch_spec2="${refspec_list[7]}";
+
+mkdir -p "$path_async_output"
+
 if [[ -n "$del_spec" ]]; then
   echo $'\n>' git branch --delete --force --remotes $del_spec
   git branch --delete --force --remotes $del_spec
 fi;
 
-fetch1_spec="${refspec_list[2]}";
-if [[ -n "$fetch1_spec" ]]; then
-  echo $'\n>' git fetch $origin_1 $fetch1_spec
-  git fetch $origin_1 $fetch1_spec
-fi;
-fetch2_spec="${refspec_list[3]}";
-if [[ -n "$fetch2_spec" ]]; then
-  echo $'\n>' git fetch $origin_2 $fetch2_spec
-  git fetch $origin_2 $fetch2_spec
+
+if [[ -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
+  git fetch $origin_1 $fetch_spec1 &> "$path_async_output/fetch1.txt" &
+  pid_fetch1=$!
+  git fetch $origin_2 $fetch_spec2 &> "$path_async_output/fetch2.txt" &
+  pid_fetch2=$!
+  
+  fetch_report1="> Fetch $origin_1 "
+  wait $pid_fetch1 && fetch_report1+="(async success)" || fetch_report1+="(async failure)"
+  fetch_report2+="> Fetch $origin_2 "
+  wait $pid_fetch2 && fetch_report2+="(async success)" || fetch_report2+="(async failure)"
+  
+  echo
+  echo $fetch_report1
+  cat < "$path_async_output/fetch1.txt"
+  echo
+  echo $fetch_report2
+  cat < "$path_async_output/fetch2.txt"
+else
+  if [[ -n "$fetch_spec1" ]]; then
+    echo $'\n>' Fetch $origin_1
+    git fetch $origin_1 $fetch_spec1
+  fi;
+  if [[ -n "$fetch_spec2" ]]; then
+    echo $'\n>' Fetch $origin_2
+    git fetch $origin_2 $fetch_spec2
+  fi;
 fi;
 
-push1_spec="${refspec_list[4]}";
-if [[ -n "$push1_spec" ]]; then
-  echo $'\n>' git push $origin_1 $push1_spec
-  git push $origin_1 $push1_spec || true
-fi;
-push2_spec="${refspec_list[5]}";
-if [[ -n "$push2_spec" ]]; then
-  echo $'\n>' git push $origin_2 $push2_spec
-  git push $origin_2 $push2_spec || true
+
+if [[ -n "$push_spec1" && -n "$push_spec2" ]]; then
+  git push --verbose $origin_1 $push_spec1 || true &> "$path_async_output/push1.txt" &
+  pid_push1=$!
+  git push --verbose $origin_2 $push_spec2 || true &> "$path_async_output/push2.txt" &
+  pid_push2=$!
+  
+  push_report1="> Push $origin_1 "
+  wait $pid_push1 && push_report1+="(async success)" || push_report1+="(async failure)"
+  push_report2+="> Push $origin_2 "
+  wait $pid_push2 && push_report2+="(async success)" || push_report2+="(async failure)"
+  
+  echo
+  echo $push_report1
+  cat < "$path_async_output/push1.txt"
+  echo
+  echo $push_report2
+  cat < "$path_async_output/push2.txt"
+else
+  if [[ -n "$push_spec1" ]]; then
+    echo $'\n>' Push $origin_1
+    git push --verbose $origin_1 $push_spec1 || true
+  fi;
+  if [[ -n "$push_spec2" ]]; then
+    echo $'\n>' Push $origin_2
+    git push --verbose $origin_2 $push_spec2 || true
+  fi;
 fi;
 
-post_fetch1_spec="${refspec_list[6]}";
-if [[ -n "$post_fetch1_spec" ]]; then
-  echo $'\n>' git fetch $origin_1 $post_fetch1_spec
-  git fetch $origin_1 $post_fetch1_spec
-fi;
-post_fetch2_spec="${refspec_list[7]}";
-if [[ -n "$post_fetch2_spec" ]]; then
-  echo $'\n>' git fetch $origin_2 $post_fetch2_spec
-  git fetch $origin_2 $post_fetch2_spec
+
+if [[ -n "$post_fetch_spec1" && -n "$post_fetch_spec2" ]]; then
+  git fetch $origin_1 $post_fetch_spec1 &> "$path_async_output/post_fetch1.txt" &
+  pid_post_fetch1=$!
+  git fetch $origin_2 $post_fetch_spec2 &> "$path_async_output/post_fetch2.txt" &
+  pid_post_fetch2=$!
+  
+  post_fetch_report1="> Post-fetch $origin_1 "
+  wait $pid_post_fetch1 && post_fetch_report1+="(async success)" || post_fetch_report1+="(async failure)"
+  post_fetch_report2+="> Post-fetch $origin_2 "
+  wait $pid_post_fetch2 && post_fetch_report2+="(async success)" || post_fetch_report2+="(async failure)"
+  
+  echo
+  echo $post_fetch_report1
+  cat < "$path_async_output/post_fetch1.txt"
+  echo
+  echo $post_fetch_report2
+  cat < "$path_async_output/post_fetch2.txt"
+  
+else
+  if [[ -n "$post_fetch_spec1" ]]; then
+    echo $'\n>' Post-fetch $origin_1
+    git fetch $origin_1 $post_fetch_spec1
+  fi;
+  if [[ -n "$post_fetch_spec2" ]]; then
+    echo $'\n>' Post-fetch $origin_2
+    git fetch $origin_2 $post_fetch_spec2
+  fi;
 fi;
 
 
