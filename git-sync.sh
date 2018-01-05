@@ -41,21 +41,11 @@ push_spec2="${refspec_list[5]}";
 post_fetch_spec1="${refspec_list[6]}";
 post_fetch_spec2="${refspec_list[7]}";
 
-echo
-echo ------------------ Git refspecs: ------------------
-echo '>' del_spec: $del_spec
-echo '>' fetch_spec1: $fetch_spec1
-echo '>' fetch_spec2: $fetch_spec2
-echo '>' push_spec1: $push_spec1
-echo '>' push_spec2: $push_spec2
-echo '>' post_fetch_spec1: $post_fetch_spec1
-echo '>' post_fetch_spec2: $post_fetch_spec2
-echo ___________________________________________________
-
 mkdir -p "$path_async_output"
 
 if [[ -n "$del_spec" ]]; then
-  echo $'\n>' git branch --delete --force --remotes $del_spec
+  echo $'\n>' Delete local branch
+  echo $del_spec
   git branch --delete --force --remotes $del_spec
 fi;
 
@@ -73,17 +63,21 @@ if [[ -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
   
   echo
   echo $fetch_report1
+  echo $fetch_spec1
   cat < "$path_async_output/fetch1.txt"
   echo
   echo $fetch_report2
+  echo $fetch_spec2
   cat < "$path_async_output/fetch2.txt"
 else
   if [[ -n "$fetch_spec1" ]]; then
     echo $'\n>' Fetch $origin_1
+    echo $fetch_spec1
     git fetch $origin_1 $fetch_spec1
   fi;
   if [[ -n "$fetch_spec2" ]]; then
     echo $'\n>' Fetch $origin_2
+    echo $fetch_spec2
     git fetch $origin_2 $fetch_spec2
   fi;
 fi;
@@ -102,17 +96,21 @@ if [[ -n "$push_spec1" && -n "$push_spec2" ]]; then
   
   echo
   echo $push_report1
+  echo $push_spec1
   cat < "$path_async_output/push1.txt"
   echo
   echo $push_report2
+  echo $push_spec2
   cat < "$path_async_output/push2.txt"
 else
   if [[ -n "$push_spec1" ]]; then
     echo $'\n>' Push $origin_1
+    echo $push_spec1
     git push --verbose $origin_1 $push_spec1 || true
   fi;
   if [[ -n "$push_spec2" ]]; then
     echo $'\n>' Push $origin_2
+    echo $push_spec2
     git push --verbose $origin_2 $push_spec2 || true
   fi;
 fi;
@@ -131,18 +129,22 @@ if [[ -n "$post_fetch_spec1" && -n "$post_fetch_spec2" ]]; then
   
   echo
   echo $post_fetch_report1
+  echo $post_fetch_spec1
   cat < "$path_async_output/post_fetch1.txt"
   echo
   echo $post_fetch_report2
+  echo $post_fetch_spec2
   cat < "$path_async_output/post_fetch2.txt"
   
 else
   if [[ -n "$post_fetch_spec1" ]]; then
     echo $'\n>' Post-fetch $origin_1
+    echo $post_fetch_spec1
     git fetch $origin_1 $post_fetch_spec1
   fi;
   if [[ -n "$post_fetch_spec2" ]]; then
     echo $'\n>' Post-fetch $origin_2
+    echo $post_fetch_spec2
     git fetch $origin_2 $post_fetch_spec2
   fi;
 fi;
