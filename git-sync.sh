@@ -6,15 +6,30 @@ echo Start `basename $0`
 invoke_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$invoke_path"/set_env.sh "$@"
 
+
+
 echo
 bash "$path_git_sync"/repo_create.sh "$path_sync_repo"
-
 cd "$path_sync_repo"
 
-source "$path_git_sync"/change_detector.sh
 
-local_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
-local_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
+echo
+if [[ ! -f "$env_modifications_signal_file" ]]; then
+  source "$path_git_sync"/change_detector.sh
+
+  if (( $changes_detected != 1 )); then
+    echo '@' RESULT: Refs are the same. Exit.
+    
+    exit
+  fi
+else
+  echo '@' RESULT: Synchronization requested.
+  
+  source "$env_modifications_signal_file"
+  rm -f "$env_modifications_signal_file"
+fi
+
+
 
 refspecs=$(awk \
   -f "$path_git_sync/state_to_refspec.gawk" \

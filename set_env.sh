@@ -56,7 +56,11 @@ export origin_2=orig_2_$prefix_2_safe
 
 path_project_root="$path_git_sync/sync-projects/$project_folder"
 export path_sync_repo="$path_project_root/sync_repo"
+# Catches outputs of the fork-join async implementation.
 export path_async_output="$path_project_root/async_output"
+signal_files_folder=file-signals
+export env_modifications_signal_file="$path_project_root/$signal_files_folder/there-are-modifications"
+
 
 
 echo End `basename "$BASH_SOURCE"`
