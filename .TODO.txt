@@ -1,4 +1,15 @@
 
-Disable Post-fetch because of "updating local tracking ref" during any Git push.
+
+Add to change_detector.sh a check for local refs too.
+
+Think about mitigation of any NFF after a long job interruption by a preliminary FF.
+  Looks like it is excessive.
+    Remember the time of the last sync.
+    Without an analysys of predecessor refs do a FF.
+    Remember the FF was already applyed.
+
+
+
+Research how to disable post-fetches because of the "updating local tracking ref" during any Git push.
 
 
