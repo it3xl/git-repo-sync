@@ -2,7 +2,7 @@ BEGIN { # Constants.
   local_refs_prefix = "refs/remotes/";
   remote_refs_prefix = "refs/heads/";
   
-  tty_attached = "/dev/tty";
+  out_stream_attached = "/dev/stderr";
 }
 BEGIN { # Parameters.
   write_header("GAWK started");
@@ -377,7 +377,7 @@ function refspecs_to_stream(){
 
 
 function write(msg){
-  print msg >> tty_attached;
+  print msg >> out_stream_attached;
 }
 function write_header(msg){
   write("\n" msg "\n");
@@ -390,11 +390,11 @@ function trace(msg){
     return;
 
   if(!msg){
-    print "|" >> tty_attached;
+    print "|" >> out_stream_attached;
     return;
   }
   
-  print "| " msg >> tty_attached;
+  print "| " msg >> out_stream_attached;
 }
 function trace_header(msg){
   trace();
@@ -412,5 +412,5 @@ function trace_line(msg){
 
 END{ # Disposing.
   write_after_line("GAWK end");
-  close(tty_attached);
+  close(out_stream_attached);
 }
