@@ -70,9 +70,9 @@ fi;
 
 
 if [[ -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
-  git fetch $origin_1 $fetch_spec1 &> "$path_async_output/fetch1.txt" &
+  git fetch --no-tags $origin_1 $fetch_spec1 &> "$path_async_output/fetch1.txt" &
   pid_fetch1=$!
-  git fetch $origin_2 $fetch_spec2 &> "$path_async_output/fetch2.txt" &
+  git fetch --no-tags $origin_2 $fetch_spec2 &> "$path_async_output/fetch2.txt" &
   pid_fetch2=$!
   
   fetch_report1="> Fetch $origin_1 "
@@ -92,12 +92,12 @@ else
   if [[ -n "$fetch_spec1" ]]; then
     echo $'\n>' Fetch $origin_1
     echo $fetch_spec1
-    git fetch $origin_1 $fetch_spec1
+    git fetch --no-tags $origin_1 $fetch_spec1
   fi;
   if [[ -n "$fetch_spec2" ]]; then
     echo $'\n>' Fetch $origin_2
     echo $fetch_spec2
-    git fetch $origin_2 $fetch_spec2
+    git fetch --no-tags $origin_2 $fetch_spec2
   fi;
 fi;
 
@@ -136,9 +136,9 @@ fi;
 
 
 if [[ -n "$post_fetch_spec1" && -n "$post_fetch_spec2" ]]; then
-  git fetch $origin_1 $post_fetch_spec1 &> "$path_async_output/post_fetch1.txt" &
+  git fetch --no-tags $origin_1 $post_fetch_spec1 &> "$path_async_output/post_fetch1.txt" &
   pid_post_fetch1=$!
-  git fetch $origin_2 $post_fetch_spec2 &> "$path_async_output/post_fetch2.txt" &
+  git fetch --no-tags $origin_2 $post_fetch_spec2 &> "$path_async_output/post_fetch2.txt" &
   pid_post_fetch2=$!
   
   post_fetch_report1="> Post-fetch $origin_1 "
@@ -159,12 +159,12 @@ else
   if [[ -n "$post_fetch_spec1" ]]; then
     echo $'\n>' Post-fetch $origin_1
     echo $post_fetch_spec1
-    git fetch $origin_1 $post_fetch_spec1
+    git fetch --no-tags $origin_1 $post_fetch_spec1
   fi;
   if [[ -n "$post_fetch_spec2" ]]; then
     echo $'\n>' Post-fetch $origin_2
     echo $post_fetch_spec2
-    git fetch $origin_2 $post_fetch_spec2
+    git fetch --no-tags $origin_2 $post_fetch_spec2
   fi;
 fi;
 
