@@ -17,6 +17,14 @@ source "$path_git_sync"/change_detector.sh
 echo
 if (( $changes_detected == 1 )); then
   install -D /dev/null "$env_modifications_signal_file"
+  
+  # Passing of remote refs to prevent excessive network requesting.
+  echo > "$env_modifications_signal_file"
+  echo "remote_refs_1=\"$remote_refs_1\"" >> "$env_modifications_signal_file"
+  echo >> "$env_modifications_signal_file"
+  echo "remote_refs_2=\"$remote_refs_2\"" >> "$env_modifications_signal_file"
+  echo >> "$env_modifications_signal_file"
+  
   echo '@' RESULT: Synchronization requested.
 else
   echo '@' RESULT: Refs are the same. Exit.

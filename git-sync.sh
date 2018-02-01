@@ -26,10 +26,13 @@ else
   echo '@' RESULT: Synchronization requested.
   
   source "$env_modifications_signal_file"
+  
   rm -f "$env_modifications_signal_file"
 fi
 
 
+local_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
+local_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
 
 refspecs=$(awk \
   -f "$path_git_sync/state_to_refspec.gawk" \

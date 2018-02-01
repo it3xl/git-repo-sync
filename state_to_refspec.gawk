@@ -390,11 +390,11 @@ function trace(msg){
     return;
 
   if(!msg){
-    print "Œ" >> tty_attached;
+    print "|" >> tty_attached;
     return;
   }
   
-  print "Œ " msg >> tty_attached;
+  print "| " msg >> tty_attached;
 }
 function trace_header(msg){
   trace();
