@@ -10,6 +10,9 @@ cd "$repo_path"
 
 git init
 
+if [[ -f "$path_git_sync/repo_create.local.sh" ]]; then
+  source "$path_git_sync/repo_create.local.sh"
+fi
 
 git config --local advice.pushUpdateRejected false
 #git config --local core.logAllRefUpdates

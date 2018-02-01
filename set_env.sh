@@ -51,7 +51,7 @@ export origin_1=orig_1_$prefix_1_safe
 export origin_2=orig_2_$prefix_2_safe
 
 (( $run_sample == 1 )) && {
-  source "$path_git_sync"/sample_init.sh;
+  source "$path_git_sync/sample_init.sh";
 }
 
 path_project_root="$path_git_sync/sync-projects/$project_folder"

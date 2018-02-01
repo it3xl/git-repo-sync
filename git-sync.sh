@@ -4,21 +4,22 @@ echo
 echo Start `basename $0`
 
 invoke_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$invoke_path"/set_env.sh "$@"
+source "$invoke_path/set_env.sh" "$@"
 
 
 
 echo
-bash "$path_git_sync"/repo_create.sh "$path_sync_repo"
+bash "$path_git_sync/repo_create.sh" "$path_sync_repo"
 cd "$path_sync_repo"
 
 
 echo
 if [[ ! -f "$env_modifications_signal_file" ]]; then
-  source "$path_git_sync"/change_detector.sh
+  source "$path_git_sync/change_detector.sh"
 
   if (( $changes_detected != 1 )); then
     echo '@' RESULT: Refs are the same. Exit.
+    echo
     
     exit
   fi
