@@ -149,6 +149,7 @@ function declare_processing_globs(){
   out_fetch1; out_fetch2;
   out_push1; out_push2;
   out_post_fetch1; out_post_fetch2;
+  out_notify;
 }
 function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
   if(rr1 == rr2 && lr1 == lr2 && lr1 == rr2){
@@ -336,6 +337,13 @@ function operations_to_refspecs(    ref){
     for(ref in op_push_del2){
       out_push2 = out_push2 "  :" refs[ref][remote_2]["ref"];
     }
+    
+    for(ref in op_push_del1){
+      out_notify = out_notify  prefix_1  " | deletion | "  refs[ref][remote_1]["ref"]  "   "  refs[ref][remote_1]["sha"]  "\n";
+    }
+    for(ref in op_push_del2){
+      out_notify = out_notify  prefix_2  " | deletion | "  refs[ref][remote_2]["ref"]  "   "  refs[ref][remote_2]["sha"]  "\n";
+    }
   }
   { # op_push_ff_to1, op_push_ff_to2
     for(ref in op_push_ff_to1){
@@ -351,6 +359,17 @@ function operations_to_refspecs(    ref){
     }
     for(ref in op_push_nff_to2){
       out_push2 = out_push2 "  +" refs[ref][local_1]["ref"] ":" refs[ref][remote_2]["ref"];
+    }
+    
+    for(ref in op_push_nff_to1){
+      if(refs[ref][remote_1]["sha"]){
+        out_notify = out_notify  prefix_1  " | conflict-solving | "  refs[ref][remote_1]["ref"]  "   "  refs[ref][remote_1]["sha"]  "\n";
+      }
+    }
+    for(ref in op_push_nff_to2){
+      if(refs[ref][remote_2]["sha"]){
+        out_notify = out_notify  prefix_2  " | conflict-solving | "  refs[ref][remote_2]["ref"]  "   "  refs[ref][remote_2]["sha"]  "\n";
+      }
     }
   }
 
@@ -372,6 +391,7 @@ function refspecs_to_stream(){
   print out_push2;
   print out_post_fetch1;
   print out_post_fetch2;
+  print out_notify;
   print "{[End of results]}";
 }
 

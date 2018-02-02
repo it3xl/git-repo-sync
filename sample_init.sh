@@ -1,7 +1,12 @@
 
 echo Start `basename "$BASH_SOURCE"`
 
-url_local="$path_git_sync/sample_repos"
+url_local="$path_project_root/material_repos"
+
+# Overrides settings' file values.
+url_1="$url_local/remote_$prefix_1_safe"
+url_2="$url_local/remote_$prefix_2_safe"
+
 url_local_1="$url_local/local_$prefix_1_safe"
 url_local_2="$url_local/local_$prefix_2_safe"
 

@@ -50,16 +50,17 @@ export prefix_2_safe=${prefix_2_safe//\//-}
 export origin_1=orig_1_$prefix_1_safe
 export origin_2=orig_2_$prefix_2_safe
 
-(( $run_sample == 1 )) && {
-  source "$path_git_sync/sample_init.sh";
-}
-
 path_project_root="$path_git_sync/sync-projects/$project_folder"
 export path_sync_repo="$path_project_root/sync_repo"
 # Catches outputs of the fork-join async implementation.
 export path_async_output="$path_project_root/async_output"
 signal_files_folder=file-signals
 export env_modifications_signal_file="$path_project_root/$signal_files_folder/there-are-modifications"
+export env_notify_signal_file="$path_project_root/$signal_files_folder/notify"
+
+(( $run_sample == 1 )) && {
+  source "$path_git_sync/sample_init.sh";
+}
 
 
 

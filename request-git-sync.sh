@@ -33,7 +33,6 @@ else
   exit
 fi
 
+
 echo
-
-
 echo End `basename $0`
