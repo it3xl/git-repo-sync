@@ -56,7 +56,8 @@ export path_sync_repo="$path_project_root/sync_repo"
 export path_async_output="$path_project_root/async_output"
 signal_files_folder=file-signals
 export env_modifications_signal_file="$path_project_root/$signal_files_folder/there-are-modifications"
-export env_notify_signal_file="$path_project_root/$signal_files_folder/notify"
+export env_notify_del_file="$path_project_root/$signal_files_folder/notify_del"
+export env_notify_solving_file="$path_project_root/$signal_files_folder/notify_solving"
 
 (( $run_sample == 1 )) && {
   source "$path_git_sync/sample_init.sh";

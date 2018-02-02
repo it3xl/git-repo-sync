@@ -13,7 +13,8 @@ bash "$path_git_sync/repo_create.sh" "$path_sync_repo"
 cd "$path_sync_repo"
 
 
-rm -f "$env_notify_signal_file"
+rm -f "$env_notify_del_file"
+rm -f "$env_notify_solving_file"
 
 
 echo
@@ -63,7 +64,8 @@ push_spec1="${refspec_list[4]}";
 push_spec2="${refspec_list[5]}";
 post_fetch_spec1="${refspec_list[6]}";
 post_fetch_spec2="${refspec_list[7]}";
-notify="${refspec_list[8]}";
+notify_del="${refspec_list[8]}";
+notify_solving="${refspec_list[9]}";
 
 mkdir -p "$path_async_output"
 
@@ -107,11 +109,17 @@ else
 fi;
 
 
-if [[ -n "$notify" ]]; then
-  install -D /dev/null "$env_notify_signal_file"
+if [[ -n "$notify_del" ]]; then
+  install -D /dev/null "$env_notify_del_file"
   
-  echo > "$env_notify_signal_file"
-  echo "$notify" >> "$env_notify_signal_file"
+  echo > "$env_notify_del_file"
+  echo "$notify_del" >> "$env_notify_del_file"
+fi;
+if [[ -n "$notify_solving" ]]; then
+  install -D /dev/null "$env_notify_solving_file"
+  
+  echo > "$env_notify_solving_file"
+  echo "$notify_solving" >> "$env_notify_solving_file"
 fi;
 
 
