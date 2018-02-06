@@ -1,0 +1,14 @@
+
+
+
+Research to disable post-fetches because we have the "updating local tracking ref" during any Git pushing.
+
+Think about mitigation of any NFF after a long job interruption by a preliminary FF.
+  Looks like it is excessive.
+    Remember the time of the last sync.
+    Without an analysis of predecessor refs do a FF.
+    Remember if the FF was already applied.
+.
+
+
+
