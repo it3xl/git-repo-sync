@@ -1,6 +1,42 @@
 
-remote_refs_1=$(git ls-remote --heads "$url_1" $prefix_1* $prefix_2*)
-remote_refs_2=$(git ls-remote --heads "$url_2" $prefix_1* $prefix_2*)
+mkdir -p "$path_async_output"
+
+git ls-remote --heads "$url_1" $prefix_1* $prefix_2* &> "$path_async_output/remote_refs_1.txt" &
+pid_remote_refs_1=$!
+git ls-remote --heads "$url_2" $prefix_1* $prefix_2* &> "$path_async_output/remote_refs_2.txt" &
+pid_remote_refs_2=$!
+
+err_remote_refs_1=0;
+wait $pid_remote_refs_1 || err_remote_refs_1=$?
+err_remote_refs_2=0;
+wait $pid_remote_refs_2 || err_remote_refs_2=$?
+
+remote_refs_1=$(<"$path_async_output/remote_refs_1.txt")
+remote_refs_2=$(<"$path_async_output/remote_refs_2.txt")
+
+if (( $err_remote_refs_1 != 0 )); then
+  echo
+  echo "> Async fail | Change detection | $origin_1 | Error $err_remote_refs_1"
+  echo "$remote_refs_1"
+  echo ">"
+fi;
+if (( $err_remote_refs_2 != 0 )); then
+  echo
+  echo "> Async fail | Change detection | $origin_2 | Error $err_remote_refs_2"
+  echo "$remote_refs_2"
+  echo ">"
+fi;
+if (( $err_remote_refs_1 != 0 )); then
+  echo
+  echo "> Exit."
+  exit $err_remote_refs_1;
+fi;
+if (( $err_remote_refs_2 != 0 )); then
+  echo
+  echo "> Exit."
+  exit $err_remote_refs_2;
+fi;
+
 
 local_refs_1_sha=$(git for-each-ref --format="%(objectname)" "refs/remotes/$origin_1/")
 local_refs_2_sha=$(git for-each-ref --format="%(objectname)" "refs/remotes/$origin_2/")
