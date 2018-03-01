@@ -3,7 +3,19 @@ Autumated synchronization of two remote Git repositories with auto conflict solv
 
 ## How to Use
 
-settings
+### Environment
+
+Use any \*nix or Window machine.
+
+Install Git
+
+For \*nix users - update you bash and awk to any modern versions
+
+Install Jenkins to invocate git-sync periodically. Or use any another means - crons or schedulers.
+
+### Settings
+
+
 
 invocation
 
