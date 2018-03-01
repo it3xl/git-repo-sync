@@ -40,7 +40,7 @@ Please, proceed reading further.
 * Failover & auto recovery of synchronization is supported. Especially for network troubles.
 * Solution is applied per-repository (vs per-server)
 * Syncronization of the Git-tags was removed because GitLab loves to block tag's deletion.
-* Single non-bare Git repositories is used for synchronization.
+* Single non-bare Git repositories is used for the synchronization.
 
 
 ## How to Use
@@ -66,6 +66,8 @@ repo_create.local
 
 ### Invocation
 
+
+
 ### Repeated Invocations
 
 
@@ -77,4 +79,4 @@ repo_create.local
 
 ## Known Limitations
 
-If you will commit to a branch more often then once in a 3 to 5 seconds, your commit may be rejcted. You will need to repeat your commit from your local repository.
+If you will commit in the same branch more often then once in a 1 to 3 seconds, your commit may be rejected as a conflicting commit. You will need to repeat your commit from your local repository. It is pretty rare case. It should be, but I still can't obtain it. If it is a trouble, I know how to fix it.
