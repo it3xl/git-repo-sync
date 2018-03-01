@@ -1,6 +1,8 @@
 # git-sync
 
-Autumated synchronization of two remote Git repositories with auto conflict solving.
+Automated synchronization of two remote Git repositories with auto conflict solving.
+
+The text below is in the process of writing. Be patient. Let me know in case of any error, please.
 
 ## What it gives
 
@@ -18,8 +20,14 @@ You can attach some your automations and notify somehow about conflict solving o
 
 ## Features
 
-* Complete repository deletion prventions
-
+* Prevention of an occasional deletion of an entire repository.
+* Deletion and creation of branches in the foreign repository.
+* Auto conflict resolving by [Convention over Git](http://blog.it3xl.com/2017/09/convention-over-git.html) (non-fast-forward branch conflicts).
+* Recreation of the synchronization from any position and from scratch.
+* Failover & auto recovery of synchronization is supported. Especially for network troubles.
+* Solution is applied per-repository (vs per-server)
+* Syncronization of the Git-tags was removed because GitLab loves to block tag's deletion.
+* Single non-bare Git repositories is used for synchronization.
 
 
 ## How to Use
