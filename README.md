@@ -1,5 +1,19 @@
 # git-sync
-Autumated synchronization of 2 remote Git repositories with auto conflict solving.
+Autumated synchronization of two remote Git repositories with auto conflict solving.
 
-### I just released it. Doing final testing in a production environment.
-Description will soon be.
+## How to Use
+
+settings
+
+invocation
+
+repeated invocations
+
+signals
+
+
+
+
+## Known Limitations
+
+If you will commit to a branch more often then once in a 3 to 5 seconds, your commit may be rejcted. You will need to repeat your commit from your local repository.
