@@ -23,13 +23,16 @@ The owner will win in case of any conflicting commits. Commits of a loser will b
 
 You can attach some your automations and notify somehow about conflict solving or about any branch deletion.
 
-## Deal
+## Offer
 
-This is my business and I be glad to offer you my experience and service. And I like to evolve projects if they in-demand.<br/>
-If you want to close any task and forget about it, ask me. I'm doing solutions that do not remind of themselves.<br/>
-If my offer is not for you, this is even better. I'm happy to see professionals here.
+I am offering the complete package that includes
+* Working system
+* One year support
+* Dayly backups of your repositories
+* Notifications about conflict solving or deletion of a branch
+* any customizations
 
-Please, proceed reading further.
+To contact me go to [it3xl.com](it3xl.com)
 
 ## Features
 
@@ -55,7 +58,7 @@ Install Git
 
 For \*nix users - update you bash and awk to any modern versions
 
-Install Jenkins to invocate **git-sync** periodically. Or use any another means - crons or schedulers.
+Tune any automation to invocate **git-sync** periodically - crons, schedulers, etc.
 
 ### Tune you sync project
 
@@ -70,13 +73,3 @@ repo_create.local
 
 ### Repeated Invocations
 
-
-
-### Signals
-
-
-
-
-## Known Limitations
-
-If you will commit in the same branch more often then once in a 1 to 3 seconds, your commit may be rejected as a conflicting commit. You will need to repeat your commit from your local repository. It is pretty rare case. It should be, but I still can't obtain it. If it is a trouble, I know how to fix it.
