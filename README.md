@@ -25,7 +25,7 @@ You can attach some your automations and notify somehow about conflict solving o
 
 ## Offer
 
-I am offering the complete package that includes
+I am offering a complete package that includes
 * Working system
 * One year support
 * Dayly backups of your repositories
