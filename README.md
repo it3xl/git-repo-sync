@@ -13,18 +13,19 @@
 ## How it works
 
 Imagine, you have a repository and you want to share this repository with your partner.<br/>
-You both will be two sides of one repository.
+Both of you will be two sides of the same repository.
 
-You agreed that shared branches on your side will be having names with the prefix **foo-**<br/>
-And your partner desided to use the prefix **bar/**
+You agreed that your will be owning the prefix **foo-**<br/>
+And your partner desided to use the prefix **bar/**<br/>
+Only branches with such the prefixes will be synchronized and visible on both sides.
 
 You need to describe this in a simple config-file such as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh)
 
-Run the git-sync periodically, better once in a minute.
+Now, run the git-sync periodically, better once in a minute.
 
-That's all. You may work and forget about **git-sync**.
+That's all. You may work and forget about **git-sync**. In the case of any synchronization interrupt, **git-sync** will do everything right.
 
-Each side is considered the owner of its prefixed branches. The owner will win in case of any conflicting commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.
+Each side is considered the owner of its prefixed branches. The owner will win in the case of any conflicting commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.
 
 ## Offer
 
