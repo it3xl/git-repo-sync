@@ -27,16 +27,23 @@ That's all. You may work and forget about **git-sync**. In the case of any synch
 
 Each side is considered the owner of its prefixed branches. The owner will win in the case of any conflicting commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.
 
-## Offer
+## FAQ
+
+**Why is everything done so?** - This is an exprerience. This is robust.<br/>
+**Why do not synchronize everything at once?** - For the same reason you do not use a single primary remote Git-repository. You will spend significant resources to cover this idea. Think about it - your are not a GitHub.
+**Is it possible to synchronize everything at once?** - Yes. I did.
+**Why do not the Git-tags sync?** - This is disabled because popular GitLab-server blocks tag deletion.
+
+## Ready to pay for a working solution 
 
 I am offering a complete package that includes
-* Working system
+* Working solution
 * One year support
-* Dayly backups of your repositories
-* Notifications about conflict solving or deletion of a branch
+* Daily backups of your repositories
+* Notifications about conflict solving or branches deletion
 * any customizations
 
-To contact me go to [it3xl.com](it3xl.com)
+If you are interested, then contact me at [it3xl.com](it3xl.com)
 
 ## Features
 
