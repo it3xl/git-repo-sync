@@ -1,27 +1,30 @@
 # git-sync
 
-Automated synchronization of remote Git repositories with auto conflict solving.
+**git-sync** is automated synchronization of remote Git repositories with auto conflict solving.
 
 The text below is in the process of writing. Be patient. Let me know in case of any error, please.
 
-## Main scenarios
+## Scenarios of usage
 
-* You want to keep you repositories neat and sane between customers and clients.
-* You have a repository with limited internet access and want it be accessible by your partners.
+* Auto syncronizations of remote Git-repositories.
+* Keeping of repositories neat and sane between customers and clients.
+* Share a repository with limited internet access with your partners.
 
-## What it gives
+## How it works
 
-You can synchronize many repositories by pairs.
+Imagine, you have a repository and you want to share this repository with your partner.<br/>
+You both will be two sides of one repository.
 
-Only Git-branches with simple prefixes in names will be under synchronization. I.e. they will be seen on another repository.
+You agreed that shared branches on your side will be having names with the prefix **foo-**<br/>
+And your partner desided to use the prefix **bar/**
 
-You will have two prefixes for each of your two repositories.
+You need to describe this in a simple config-file such as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh)
 
-Each repository is considered the owner of its prefix and branches with this prefix in names.
+Run the git-sync periodically, better once in a minute.
 
-The owner will win in case of any conflicting commits. Commits of a loser will be rejected, but he have only to repeat its commits again from his local repository after an Git update.
+That's all. You may work and forget about **git-sync**.
 
-You can attach some your automations and notify somehow about conflict solving or about any branch deletion.
+Each side is considered the owner of its prefixed branches. The owner will win in case of any conflicting commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.
 
 ## Offer
 
@@ -44,6 +47,7 @@ To contact me go to [it3xl.com](it3xl.com)
 * Solution is applied per-repository (vs per-server)
 * Syncronization of the Git-tags was removed because GitLab loves to block tag's deletion.
 * Single non-bare Git repositories is used for the synchronization.
+* You can attach some your automations and notify somehow about conflict solving or about any branch deletion.
 
 
 ## How to Use
