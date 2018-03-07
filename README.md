@@ -2,7 +2,7 @@
 
 **git-sync** is automated synchronization of remote Git repositories with auto conflict solving.
 
-The text below is in the process of writing. Be patient. Let me know in case of any error, please.
+(The text below is in the process of writing. Be patient. Let me know in case of any error, please.)
 
 ## Scenarios of usage
 
