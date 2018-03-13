@@ -220,6 +220,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
     }
   }
   
+  trace("a_solv, all others: " cr);
   a_solv[cr];
 }
 function actions_to_operations(    ref, owns_side1, owns_side2){
