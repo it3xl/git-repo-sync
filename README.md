@@ -2,21 +2,26 @@
 
 **git-sync** is an automated synchronization of remote Git repositories with auto conflict solving.
 
-(The text below is in the process of writing. Be patient. Let me know in case of any error, please.)
-
 ## Scenarios of usage
 
 * Auto syncronizations of remote Git-repositories.
-* Keeping of repositories neat and sane between customers and clients.
 * Share a repository with limited internet access with your partners.
+* Keeping of repositories neat and sane between customers and clients.
+
+## Package
+
+This is a working solutions out of the box. If you won't configure your repositories, then a test environment will be create.<br/>
+You will receive interconnected two remote and two local repositories on your machine.<br/>
+Play with it. Details below.
 
 ## How it works
 
-Imagine, you have a repository and you want to share this repository with your partner.<br/>
-Both of you will be two sides of the same repository.
+There are two remote repositories. Each repository is a separate side.
 
-You agreed that your will be owning the prefix **foo-**<br/>
-And your partner desided to use the prefix **bar/**<br/>
+You agreed that
+* the first repository owns the prefix **foo-**<br/>
+* the second repository owns the prefix **bar/**<br/>
+
 Only branches with such the prefixes will be synchronized and visible on both sides.
 
 You need to describe this in a simple config-file such as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh)
