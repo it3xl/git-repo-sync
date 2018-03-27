@@ -4,8 +4,8 @@
 
 ## Scenarios of usage
 
-* Auto syncronizations of remote Git-repositories.
-* Share a repository with limited internet access with your partners.
+* Auto synchronization of remote Git-repositories.
+* Sharing of a repository with limited internet access with your partners.
 * Keeping of repositories neat and sane between customers and clients.
 
 ## Run and play
@@ -26,9 +26,9 @@ Only branches with such the prefixes will be synchronized and visible on both si
 Git-conflicts solving.<br/>
 Conflicts may occur only if your merge or commit to another side.<br/>
 The prefix owner will win in case of any conflicting git-commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.<br/>
-The package is prepared, but does not include conflict informing. For this reason, you can ask your another side to perform git-merge or just recheck your action after run of **git-sync** and repeat if needed.
+The package is prepared, but does not include conflict informing. For this reason, you can ask your another side to perform git-merging from your branch into their. Or just recheck your action after running of **git-sync** and repeat them if needed.
 
-For now, Git-tags are excluded from synchronization.<br/>
+For now, Git-tags are excluded from synchronization.
 
 ## FAQ
 
@@ -39,10 +39,10 @@ For now, Git-tags are excluded from synchronization.<br/>
 
 ## I warned you
 
-Most of the following sections describe technical deatails.<br/>
-if you are techically savvy, I expect you will complete everything from one day to one week. Depends on your situation and needs.<br/>
+Most of the following sections describe technical details.<br/>
+if you are technically savvy, I expect you will complete everything from one day to one week. Depends on your situation and needs.<br/>
 The only thing I want to say. This is really working and live solution.<br/>
-I wait for your notes and wish you luck.
+I am waiting for your notes and wish you luck.
 
 ## Wish to pay for a box?
 
@@ -53,10 +53,10 @@ I am offering a complete package that includes
 * Working solution
 * One year support
 * Automated backups of your repositories
-* Notifications about conflict solving or branche deletion
+* Notifications about conflict solving or branch deletion
 * reasonable customizations
 
-Contact me at [it3xl.com](it3xl.com) if your are interesting.
+Contact me at [it3xl.com](it3xl.com).
 
 ## Features
 
