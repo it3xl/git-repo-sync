@@ -17,8 +17,9 @@ You will get two remote and two local interconnected repositories on your machin
 
 Imagine, there are two remote repositories. Each repository is a separate side.<br/>
 You agreed that
-* the first repository owns the prefix **foo-**<br/>
-* the second repository owns the prefix **bar/**<br/>
+* the first repository owns the prefix **foo-**
+* the second repository owns the prefix **bar/**
+* (the names are arbitrary)
 
 Only branches with such the prefixes will be synchronized and visible on both sides.
 
