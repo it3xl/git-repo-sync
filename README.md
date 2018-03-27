@@ -31,21 +31,24 @@ For now, Git-tags are excluded from synchronization.<br/>
 
 ## FAQ
 
-**Why is everything done so?** - This is an experience. This is a proven and working solution.<br/>
+**Why is everything done so?** - This is a proven and working solution. But I am open for ideas.<br/>
 **Why do not synchronize everything at once?** - You will spend significant resources to cover this and make everything professional.<br/>
-**Is it possible to synchronize all branches and tags?** - Yes. I have another solutions and ideas. No one is interested.<br/>
+**Is it possible to synchronize all branches and tags?** - Yes. I have another [solutions and ideas](http://blog.it3xl.com/2018/02/approaches-to-synchronize-git-repos.html). No one is interested.<br/>
 **Why do not sync Git-tags?** - This is disabled because some popular Git-servers block deletion of tags.
 
-## I warned you.
+## I warned you
 
-if you are techically savvy, I expect you will complete everything from one day to one month. Depends on your situation and needs.<br/>
-I wish you luck.
+Most of the following sections describe technical deatails.<br/>
+if you are techically savvy, I expect you will complete everything from one day to one week. Depends on your situation and needs.<br/>
+The only thing I want to say. This is really working and live solution.<br/>
+I wait for your notes and wish you luck.
 
-## Wish to pay for a working solution?
+## Wish to pay for a box?
 
-Most of the following sections describe technical deatails.
+If you are not ready to spend your time, ask me to do it for you.
 
 I am offering a complete package that includes
+
 * Working solution
 * One year support
 * Automated backups of your repositories
@@ -67,39 +70,38 @@ Contact me at [it3xl.com](it3xl.com) if your are interesting.
 * You can attach some your automations and notify somehow about conflict solving or about any branch deletion.
 * others.
 
+## The Glossary
+
+My [glossary](http://blog.it3xl.com/2018/02/glossary-of-synchronization-of-remote.html) related to the topic.
+
 ## How to Use
 
-You need to describe the prefixes and details of your real remote repositories in a simple config-file.<br/>
+You need to describe the prefixes and simple details of your real remote repositories in a simple config-file.<br/>
 Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh) and put it next to it.
 
-Now, run the **git-sync** and pass the name of your config file as a parameter.<br/>
+Run the **git-sync** and pass the name of your config file as a parameter.<br/>
 Run **git-sync** so periodically, better once in a minute.
 
 That's all. You may work and forget about **git-sync**.<br/>
 In the case of any synchronization interruption the **git-sync** will do everything right.
 
-### Environment
+### Prepare Environment
 
 Use any \*nix or Window machine.
 
 Install Git
 
-For \*nix users - update you bash and awk to any modern versions
+For \*nix users - update you bash and awk to any modern version
 
 Tune any automation to invocate **git-sync** periodically - crons, schedulers, etc.
 
-### Tune you sync project
-
-
-repo_settings\sample_repo.sh
-
-repo_create.local
-
 ### Invocation
 
+Run in a console
 
+    bash git-sync.sh your_file_with_project_settings.sh
 
-### Repeated Invocations
+Repeat this invocation when you want to synchronize your remote repositories.
 
 
 
