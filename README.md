@@ -36,6 +36,24 @@ For now, Git-tags are excluded from synchronization.<br/>
 **Is it possible to synchronize all branches and tags?** - Yes. I have another solutions and ideas. No one is interested.<br/>
 **Why do not sync Git-tags?** - This is disabled because some popular Git-servers block deletion of tags.
 
+## I warned you.
+
+if you are techically savvy, I expect you will complete everything from one day to one month. Depends on your situation and needs.<br/>
+I wish you luck.
+
+## Wish to pay for a working solution?
+
+Most of the following sections describe technical deatails.
+
+I am offering a complete package that includes
+* Working solution
+* One year support
+* Automated backups of your repositories
+* Notifications about conflict solving or branche deletion
+* reasonable customizations
+
+Contact me at [it3xl.com](it3xl.com) if your are interesting.
+
 ## Features
 
 * Prevention of an occasional deletion of an entire repository.
@@ -83,14 +101,5 @@ repo_create.local
 
 ### Repeated Invocations
 
-## Wish to pay for a working solution?
 
-I am offering a complete package that includes
-* Working solution
-* One year support
-* Automated backups of your repositories
-* Notifications about conflict solving or branche deletion
-* reasonable customizations
-
-Contact me at [it3xl.com](it3xl.com) if your are interesting.
 
