@@ -26,7 +26,7 @@ Only branches with such the prefixes will be synchronized and visible on both si
 Git-conflicts solving.<br/>
 Conflicts may occur only if your merge or commit to another side.<br/>
 The prefix owner will win in case of any conflicting git-commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.<br/>
-Package are prepered but do not include a conflic informing. For this reason, you can ask another side to perform git-merge or just recheck your action after run of **git-sync** and repeat if needed.
+The package is prepared, but does not include conflict informing. For this reason, you can ask your another side to perform git-merge or just recheck your action after run of **git-sync** and repeat if needed.
 
 For now, Git-tags are excluded from synchronization.<br/>
 
