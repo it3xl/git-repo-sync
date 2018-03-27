@@ -10,45 +10,47 @@
 
 ## Package
 
-This is a working solutions out of the box. If you won't configure your repositories, then a test environment will be create.<br/>
-You will receive interconnected two remote and two local repositories on your machine.<br/>
-Play with it. Details below.
+If you will run **git-sync** without a parameter, then a test environment will be create.<br/>
+You will get two remote and two local interconnected repositories on your machine.<br/>
+Play with it.
 
 ## How it works
 
-There are two remote repositories. Each repository is a separate side.
-
+Imagine, there are two remote repositories. Each repository is a separate side.<br/>
 You agreed that
 * the first repository owns the prefix **foo-**<br/>
 * the second repository owns the prefix **bar/**<br/>
 
-Only branches with such the prefixes will be synchronized and visible on both sides.
+Only branches with such the prefixes will be synchronized and visible on both sides.<br/>
+For now, Git-tags are excluded from synchronization.<br/>
+Git-conflicts. The owner will win in the case of any conflicting git-commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.
 
-You need to describe this in a simple config-file such as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh)
+You need to describe the prefixes and details of your real remote repositories in a simple config-file.<br/>
+Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh) and put it next to it.
 
-Now, run the git-sync periodically, better once in a minute.
+Now, run the **git-sync** and pass the name of your config file as a parameter.<br/>
+Run **git-sync** so periodically, better once in a minute.
 
-That's all. You may work and forget about **git-sync**. In the case of any synchronization interrupt, **git-sync** will do everything right.
-
-Each side is considered the owner of its prefixed branches. The owner will win in the case of any conflicting commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.
+That's all. You may work and forget about **git-sync**.<br/>
+In the case of any synchronization interruption the **git-sync** will do everything right.
 
 ## FAQ
 
-**Why is everything done so?** - This is an exprerience. This is robust.<br/>
-**Why do not synchronize everything at once?** - For the same reason you do not use a single primary remote Git-repository. You will spend significant resources to cover this idea. Think about it - your are not a GitHub.
-**Is it possible to synchronize everything at once?** - Yes. I did.
-**Why do not the Git-tags sync?** - This is disabled because popular GitLab-server blocks tag deletion.
+**Why is everything done so?** - This is experience and common practice.<br/>
+**Why do not synchronize everything at once?** - You will spend significant resources to cover this and make everything professional.<br/>
+**Is it possible to synchronize all branches and tags?** - Yes. I have another solutions and ideas. No one is interested.<br/>
+**Why do not sync Git-tags?** - This is disabled because some popular Git-servers block deletion of tags.
 
-## Ready to pay for a working solution 
+## Ready to pay for a working solution?
 
 I am offering a complete package that includes
 * Working solution
 * One year support
-* Daily backups of your repositories
-* Notifications about conflict solving or branches deletion
-* any customizations
+* Automated backups of your repositories
+* Notifications about conflict solving or branche deletion
+* reasonable customizations
 
-If you are interested, then contact me at [it3xl.com](it3xl.com)
+Contact me at [it3xl.com](it3xl.com) if your are interesting.
 
 ## Features
 
@@ -61,7 +63,7 @@ If you are interested, then contact me at [it3xl.com](it3xl.com)
 * Syncronization of the Git-tags was removed because GitLab loves to block tag's deletion.
 * Single non-bare Git repositories is used for the synchronization.
 * You can attach some your automations and notify somehow about conflict solving or about any branch deletion.
-
+* others.
 
 ## How to Use
 
