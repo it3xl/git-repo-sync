@@ -22,27 +22,19 @@ You agreed that
 
 Only branches with such the prefixes will be synchronized and visible on both sides.
 
-Git-conflicts solving. The prefix owner will win in case of any conflicting git-commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.
+Git-conflicts solving.<br/>
+Conflicts may occur only if your merge or commit to another side.<br/>
+The prefix owner will win in case of any conflicting git-commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.<br/>
+Package are prepered but do not include a conflic informing. For this reason, you can ask another side to perform git-merge or just recheck your action after run of **git-sync** and repeat if needed.
 
 For now, Git-tags are excluded from synchronization.<br/>
 
 ## FAQ
 
-**Why is everything done so?** - This is experience and common practice.<br/>
+**Why is everything done so?** - This is an experience. This is a proven and working solution.<br/>
 **Why do not synchronize everything at once?** - You will spend significant resources to cover this and make everything professional.<br/>
 **Is it possible to synchronize all branches and tags?** - Yes. I have another solutions and ideas. No one is interested.<br/>
 **Why do not sync Git-tags?** - This is disabled because some popular Git-servers block deletion of tags.
-
-## Ready to pay for a working solution?
-
-I am offering a complete package that includes
-* Working solution
-* One year support
-* Automated backups of your repositories
-* Notifications about conflict solving or branche deletion
-* reasonable customizations
-
-Contact me at [it3xl.com](it3xl.com) if your are interesting.
 
 ## Features
 
@@ -90,4 +82,15 @@ repo_create.local
 
 
 ### Repeated Invocations
+
+## Wish to pay for a working solution?
+
+I am offering a complete package that includes
+* Working solution
+* One year support
+* Automated backups of your repositories
+* Notifications about conflict solving or branche deletion
+* reasonable customizations
+
+Contact me at [it3xl.com](it3xl.com) if your are interesting.
 
