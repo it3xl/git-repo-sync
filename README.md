@@ -10,9 +10,8 @@
 
 ## Run and play
 
-If you will run **git-sync** without a parameter, then a test environment will be create.<br/>
+If you will run **git-sync** without a parameter, then a test environment will be created.<br/>
 You will get two remote and two local interconnected repositories on your machine.<br/>
-Play with it.
 
 ## How it works
 
