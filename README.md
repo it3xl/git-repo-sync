@@ -8,7 +8,7 @@
 * Share a repository with limited internet access with your partners.
 * Keeping of repositories neat and sane between customers and clients.
 
-## Package
+## Run and play
 
 If you will run **git-sync** without a parameter, then a test environment will be create.<br/>
 You will get two remote and two local interconnected repositories on your machine.<br/>
@@ -21,18 +21,11 @@ You agreed that
 * the first repository owns the prefix **foo-**<br/>
 * the second repository owns the prefix **bar/**<br/>
 
-Only branches with such the prefixes will be synchronized and visible on both sides.<br/>
+Only branches with such the prefixes will be synchronized and visible on both sides.
+
+Git-conflicts solving. The prefix owner will win in case of any conflicting git-commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.
+
 For now, Git-tags are excluded from synchronization.<br/>
-Git-conflicts. The owner will win in the case of any conflicting git-commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.
-
-You need to describe the prefixes and details of your real remote repositories in a simple config-file.<br/>
-Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh) and put it next to it.
-
-Now, run the **git-sync** and pass the name of your config file as a parameter.<br/>
-Run **git-sync** so periodically, better once in a minute.
-
-That's all. You may work and forget about **git-sync**.<br/>
-In the case of any synchronization interruption the **git-sync** will do everything right.
 
 ## FAQ
 
@@ -67,7 +60,14 @@ Contact me at [it3xl.com](it3xl.com) if your are interesting.
 
 ## How to Use
 
-Read the folloving sections before you will start creating your Git-syncronizations.
+You need to describe the prefixes and details of your real remote repositories in a simple config-file.<br/>
+Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh) and put it next to it.
+
+Now, run the **git-sync** and pass the name of your config file as a parameter.<br/>
+Run **git-sync** so periodically, better once in a minute.
+
+That's all. You may work and forget about **git-sync**.<br/>
+In the case of any synchronization interruption the **git-sync** will do everything right.
 
 ### Environment
 
