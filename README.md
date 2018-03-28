@@ -66,7 +66,7 @@ Contact me at [it3xl.com](it3xl.com).
 * Recreation of the synchronization from any position and from scratch.
 * Failover & auto recovery of synchronization is supported. Especially for network troubles.
 * Solution is applied per-repository (vs per-server)
-* Syncronization of the Git-tags was removed because GitLab loves to block tag's deletion.
+* Synchronization of the Git-tags was removed because GitLab loves to block tag's deletion.
 * Single non-bare Git repositories is used for the synchronization.
 * You can attach some your automations and notify somehow about conflict solving or about any branch deletion.
 * others.
