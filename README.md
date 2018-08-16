@@ -1,6 +1,6 @@
 # git-sync
 
-**git-sync** is an automated synchronization of remote Git repositories with auto conflict solving.
+**git-sync** is an automated synchronization of two remote Git repositories with auto conflict solving.
 
 ## Scenarios of usage
 
