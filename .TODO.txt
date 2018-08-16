@@ -1,5 +1,15 @@
 
 
+Recreate sync repos if parameters were changed.
+  Do not see enough reasons to implement this yet.
+  We are solving problems here, not playing games.
+
+if prefix_1 or prefix_2 undefined, it blocks migration of correspongind branches.
+  Do not see enough reasons to implement this yet.
+  Use any one line force migration command of Git.
+
+
+
 
 Research to disable post-fetches because we have the "updating local tracking ref" during any Git pushing.
 
