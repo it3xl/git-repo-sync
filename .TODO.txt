@@ -1,4 +1,8 @@
 
+Code down a victim branches' support.
+  Any side may move victim branches to any commit.
+  It uses a last win strategy.
+
 Try to use GNU timeout (or something) instead of the plain wait command.
   Add a fetch wait period config parameters.
   I expect my solution to work from under automaton servers such as Jenkins.
