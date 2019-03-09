@@ -1,4 +1,8 @@
 
+Try to use GNU timeout instead of the wait command.
+  I expect my solution to work from under automaton servers such as Jenkins.
+  There we can use some "kill after inactivity" features.
+  But for those who runs it directly...
 
 Recreate sync repos if parameters were changed.
   Do not see enough reasons to implement this yet.
