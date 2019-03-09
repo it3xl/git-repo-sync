@@ -1,8 +1,10 @@
 
-Try to use GNU timeout instead of the wait command.
+Try to use GNU timeout (or something) instead of the plain wait command.
+  Add a fetch wait period config parameters.
   I expect my solution to work from under automaton servers such as Jenkins.
   There we can use some "kill after inactivity" features.
-  But for those who runs it directly...
+  But for those who runs it directly we have to prevent any hanging.
+  Nobody expects any hanging.
 
 Recreate sync repos if parameters were changed.
   Do not see enough reasons to implement this yet.
