@@ -75,6 +75,17 @@ I am offering a complete package that includes
 * You can attach some your automations and notify somehow about conflict solving or about any branch deletion.
 * others.
 
+## What to expect next
+
+**Victim Branches**
+
+We have some branches that reflect all our stands (dev, test, UAT, pre-prod).  
+Any commit three runs complete CI/CD processes.  
+It is useful to allow any team sides to put this branches at any position, on any commit.  
+I think it is time to add this branches in git-sync.  
+**victim/test-stand**  
+**victim-test-stand**  
+
 ## The Glossary
 
 My [glossary](http://blog.it3xl.com/2018/02/glossary-of-synchronization-of-remote.html) related to the topic.
