@@ -44,9 +44,13 @@ if you are technically savvy, I expect you will complete everything from one day
 The only thing I want to say. This is really working and live solution.<br/>
 I am waiting for your notes and wish you luck.
 
-## Wish to pay for a box?
+## Need help?
 
-If you are not ready to spend your time, ask me to do it for you.
+Ask me. I'll answer on you questions. It is freeeee))
+
+See my contacts at [it3xl.com](it3xl.com).
+
+If you are not ready to spend your time, then I can do everything for you.
 
 I am offering a complete package that includes
 
@@ -54,9 +58,9 @@ I am offering a complete package that includes
 * One year support
 * Automated backups of your repositories
 * Notifications about conflict solving or branch deletion
-* reasonable customizations
+* reasonable customizations for you cases
 
-Contact me at [it3xl.com](it3xl.com).
+
 
 ## Features
 
