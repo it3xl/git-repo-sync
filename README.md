@@ -41,7 +41,7 @@ For now, Git-tags are excluded from synchronization.
 
 Most of the following sections describe technical details.<br/>
 if you are technically savvy, I expect you will complete everything from one day to one week. Depends on your situation and needs.<br/>
-The only thing I want to say. This is really working and live solution.<br/>
+The only thing I want to say, this is really working.<br/>
 I am waiting for your notes and wish you luck.
 
 ## Need help?
