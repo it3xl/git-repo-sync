@@ -90,7 +90,9 @@ Everybody can live without it. Although it is annoying.
 We have some branches that reflect all our stands (dev, test, UAT, pre-prod).  
 Any commit three runs complete CI/CD processes.  
 It is useful to allow any team sides to put this branches at any position, on any commit.  
-I think it is time to add this branches in git-sync.  
+I think it is time to add such branches into git-sync.
+
+E.g.  
 **victim/test-stand**  
 **victim-test-stand**  
 
