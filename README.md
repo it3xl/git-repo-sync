@@ -98,7 +98,7 @@ E.g.
 
 ## The Glossary
 
-My [glossary](http://blog.it3xl.com/2018/02/glossary-of-synchronization-of-remote.html) related to the topic.
+Here is my [glossary](http://blog.it3xl.com/2018/02/glossary-of-synchronization-of-remote.html) related to the topic.
 
 ## How to Use
 
