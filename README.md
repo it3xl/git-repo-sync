@@ -77,7 +77,15 @@ I am offering a complete package that includes
 
 ## What to expect next
 
+**Git credentials from environment**
+
+[bash-git-credential-helper](https://github.com/it3xl/bash-git-credential-helper)  
+It is under active development and I'm forced to integrate it into git-sync.
+
 **Victim Branches**
+
+I've temporary postponed this feature.  
+Everybody can live without it. Although it is annoying.
 
 We have some branches that reflect all our stands (dev, test, UAT, pre-prod).  
 Any commit three runs complete CI/CD processes.  
