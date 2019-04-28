@@ -119,7 +119,7 @@ Install Git
 
 For \*nix users - update you bash and awk to any modern version
 
-Tune any automation to invocate **git-sync** periodically - crons, schedulers, etc.
+Tune any automation to invocate **git-sync** periodically - crons, schedulers, Jenkins, GitLab-CI, etc.
 
 ### Invocation
 
