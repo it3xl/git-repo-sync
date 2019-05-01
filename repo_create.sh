@@ -1,27 +1,26 @@
 set -euf +x -o pipefail
 
-echo
 echo Start `basename "$BASH_SOURCE"`
 
-repo_path="$1"
 
 
-
-if [[ -f "$repo_path/.git/config" ]]; then
+if [[ -f "$path_sync_repo/.git/config" ]]; then
   exit
 fi
 
 
 function delete_project_repo_and_exit() {
-    echo Deletion of "$repo_path" to allow restart git-cred initializing.
-    rm -rf "$repo_path"
+    echo Deletion of "$path_sync_repo" to allow restart git-cred initializing.
+    rm -rf "$path_sync_repo"
+    
+    echo Interruption on error.
     
     exit 1
 }
 
 
-mkdir -p "$repo_path"
-cd "$repo_path"
+mkdir -p "$path_sync_repo"
+cd "$path_sync_repo"
 
 git init
 
@@ -33,8 +32,7 @@ git remote add $origin_2 "$url_2"
 
 
 [[ "$use_bash_git_credential_helper" == "1" ]] && {
-  echo As use_bash_git_credential_helper variable is set to $use_bash_git_credential_helper
-  echo we will initialize git-cred.sh
+  echo Initializing git-cred as use_bash_git_credential_helper is set to $use_bash_git_credential_helper
 
   if [[ ! -f "$git_cred" ]]; then
     echo Error! Exit! You have to update/download Git-submodules of git-sync project to use $git_cred
@@ -43,17 +41,17 @@ git remote add $origin_2 "$url_2"
     delete_project_repo_and_exit
   fi
   
-  source "$git_cred"  init  repo_1  $url_1 || delete_project_repo_and_exit
-  source "$git_cred"  init  repo_2  $url_2 || delete_project_repo_and_exit
+  GIT_CRED_DO_NOT_EXIT=1
+  
+  source "$git_cred"  init  repo_1  $url_1
+  [[ $GIT_CRED_FAILED ]] && delete_project_repo_and_exit
+  
+  source "$git_cred"  init  repo_2  $url_2
+  [[ $GIT_CRED_FAILED ]] && delete_project_repo_and_exit
 }
 
 
-if [[ -f "$path_git_sync/repo_create.local.sh" ]]; then
-  source "$path_git_sync/repo_create.local.sh"
-fi
-
-
-echo Repo created at $repo_path
+echo Repo created at $path_sync_repo
 
 
 echo End `basename "$BASH_SOURCE"`

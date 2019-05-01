@@ -54,17 +54,14 @@ must_exist_branch=${prefix_1}production
 #  that are defined automatically by Jenkins or any other Continues Integration (CI) tool.
 #
 # You can use git-cred as an external tool and tune everything manually.
-# But this integration allows you to call "git-cred  init" only once during your git-sync project creation.
+# But this integration allows you to call initializing of git-cred only once during your git-sync project creation.
 # Also it will support you during migrations and relocations of you CI.
 #
-# Drawback. If you git-cred will throw an error during creation of a git-sync project then you will have to delete
-# sync-projects/<your-project-folder>
-#
-## Steps
+## Integration steps
 #
 # Load Git submodules of git-sync (https://github.com/it3xl/git-sync)
 #
-# Assign here (in your sync project settings file) the following variable to 1.
+# Assign here (i.e. in your settings file) the following variable to 1.
 # use_bash_git_credential_helper=1
 #
 # Before any call to git-sync.sh or request-git-sync.sh, define in Jenkins the following credential environment variables
