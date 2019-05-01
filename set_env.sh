@@ -13,14 +13,21 @@ run_sample=0
   file_name_repo_settings="sample_repo.sh"
 }
 
-folder_name_repo_settings=repo_settings
-file_repo_settings="$path_git_sync/$folder_name_repo_settings/$file_name_repo_settings"
-if [[ ! -f "$file_repo_settings" ]]; then
-  echo "Error! Exit! The first parameter must be a name of a file from the folder $folder_name_repo_settings."
-  echo "See an example how to fill it with repo's environment variables."
+relative_settings_file="$path_git_sync/$file_name_repo_settings"
+absolut_settings_file="$file_name_repo_settings"
+subfolder_settings_file="$path_git_sync/repo_settings/$file_name_repo_settings"
+if [[ -f "$relative_settings_file" ]]; then
+  source "$relative_settings_file"
+elif [[ -f "$absolut_settings_file" ]]; then
+  source "$absolut_settings_file"
+elif [[ -f "$subfolder_settings_file" ]]; then
+  source "$subfolder_settings_file"
+else
+  echo "Error! Exit! The first parameter must be a path, relative path or a name of a file with your sync-project repo settings."
+  echo The '"'$file_name_repo_settings'"' is not recognized as a file.
+  
   exit 1;
 fi
-source "$file_repo_settings"
 
 if [[ ! ${project_folder:+1} ]]; then missed_repo_settings+="project_folder "; fi
 if [[ ! ${prefix_1:+1} ]]; then missed_repo_settings+="prefix_1 "; fi
