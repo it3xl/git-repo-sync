@@ -44,10 +44,10 @@ git remote add $origin_2 "$url_2"
   GIT_CRED_DO_NOT_EXIT=1
   
   source "$git_cred"  init  repo_1  $url_1
-  [[ $GIT_CRED_FAILED ]] && delete_project_repo_and_exit
+  [[ $GIT_CRED_FAILED != 0 ]] && delete_project_repo_and_exit
   
   source "$git_cred"  init  repo_2  $url_2
-  [[ $GIT_CRED_FAILED ]] && delete_project_repo_and_exit
+  [[ $GIT_CRED_FAILED != 0 ]] && delete_project_repo_and_exit
 }
 
 
