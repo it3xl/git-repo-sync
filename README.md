@@ -8,27 +8,29 @@
 * Sharing of a repository with limited internet access with your partners.
 * Keeping of repositories neat and sane between customers and clients.
 
-## Run and play
+## Playground
 
-If you will run **git-sync** without a parameter, then a test environment will be created.<br/>
+If you will run **git-sync.sh** without parameters, then a test environment will be created.<br/>
 You will get two remote and two local interconnected repositories on your machine.<br/>
+Make changes there, run **git-sync.sh**, see behavour and results.
 
 ## How it works
 
 Imagine, there are two remote repositories. Each repository is a separate side.<br/>
 You agreed that
-* the first repository owns the prefix **foo-**
-* the second repository owns the prefix **bar/**
-* (the names are arbitrary)
+* the first repository owns a prefix **foo-**
+* the second repository owns a prefix **bar/**
+* branch names after prefixes are arbitrary.
 
 Only branches with such the prefixes will be synchronized and visible on both sides.
 
-Git-conflicts solving.<br/>
-Conflicts may occur only if your merge or commit to another side.<br/>
-The prefix owner will win in case of any conflicting git-commits. Commits of a loser will be rejected, but he just has to repeat his commits again from his local repository after a Git update.<br/>
-The package is prepared, but does not include conflict informing. For this reason, you can ask your another side to perform git-merging from your branch into their. Or just recheck your action after running of **git-sync** and repeat them if needed.
+**Git conflicts solving**<br/>
+Conflicts may occur only if your do merges or commits to another side branches.<br/>
+The prefix owner will win in case of any conflicts.<br/>
+Commits of a loser will be rejected, but he just has to repeat merge or commits again (from his local repository) after a Git update (fetch, pull, merge, etc).<br/>
 
-For now, Git-tags are excluded from synchronization.
+**Git-tags**
+I've excluded Git-tags from synchronization. Nothing wrong with tags but there are some nervous subtleties with them.
 
 ## FAQ
 
