@@ -48,12 +48,10 @@ I am waiting for your notes and wish you luck.
 
 ## Need help?
 
-Ask me. I'll answer on you questions. It is freeeee))
-
+Ask me. I'll answer on you questions ASAP.<br/>
 See my contacts at [it3xl.com](it3xl.com).
 
-If you are not ready to spend your time, then I can do everything for you.
-
+If you are not ready to spend your time, then I can do everything for you.<br/>
 I am offering a complete package that includes
 
 * Working solution
@@ -62,20 +60,23 @@ I am offering a complete package that includes
 * Notifications about conflict solving or branch deletion
 * reasonable customizations for you cases
 
-
-
 ## Features
 
 * Prevention of an occasional deletion of an entire repository.
-* Deletion and creation of branches in the foreign repository.
-* Auto conflict resolving by [Convention over Git](http://blog.it3xl.com/2017/09/convention-over-git.html) (non-fast-forward branch conflicts).
+* Deletion and creation of branches from one side repository to another.
+* Auto conflict solving by [Convention over Git](http://blog.it3xl.com/2017/09/convention-over-git.html) (non-fast-forward branch conflicts).
 * Recreation of the synchronization from any position and from scratch.
 * Failover & auto recovery of synchronization is supported. Especially for network troubles.
-* Solution is applied per-repository (vs per-server)
+* Solution is applied per-repository (not per-server)
 * Synchronization of the Git-tags was removed because GitLab loves to block tag's deletion.
 * Single non-bare Git repository is used for the synchronization.
-* You can attach some your automations and notify somehow about conflict solving or about any branch deletion.
-* others.
+* You can attach your automations to notify about conflict solving or a branch deletion.
+
+## Provinding credentials for Git
+
+I use my **bash Git Credential Helper [git-cred](https://github.com/it3xl/bash-git-credential-helper)**<br/>
+It passes to Git credentials from enviroment variables created by Continues Intergration tools like Jenkins.<br/>
+It is **[inegrated](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh)** now with git-sync. 
 
 ## What to expect next
 
