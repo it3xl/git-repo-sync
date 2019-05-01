@@ -80,15 +80,9 @@ It is **[inegrated](https://github.com/it3xl/git-sync/blob/master/repo_settings/
 
 ## What to expect next
 
-**Git credentials from environment**
-
-[bash-git-credential-helper](https://github.com/it3xl/bash-git-credential-helper)  
-It is under active development and I'm forced to integrate it into git-sync.
-
 **Victim Branches**
 
-I've temporary postponed this feature.  
-Everybody can live without it. Although it is annoying.
+I've temporary postponed this feature. Everybody can live without it. Although it is annoying.
 
 We have some branches that reflect all our stands (dev, test, UAT, pre-prod).  
 Any commit three runs complete CI/CD processes.  
@@ -106,13 +100,16 @@ Here is my [glossary](http://blog.it3xl.com/2018/02/glossary-of-synchronization-
 ## How to Use
 
 You need to describe the prefixes and simple details of your real remote repositories in a simple config-file.<br/>
-Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh) and put it next to it.
+Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh).
 
-Run the **git-sync** and pass the name of your config file as a parameter.<br/>
+Run the **git-sync** and pass a path to your config file as a parameter.<br/>
+
+    bash git-sync.sh "relative_or_absolute_path/project_settings.sh"
+
 Run **git-sync** so periodically, better once in a minute.
 
 That's all. You may work and forget about **git-sync**.<br/>
-In the case of any synchronization interruption the **git-sync** will do everything right.
+In the case of any synchronization interruption **git-sync** will do everything right.
 
 ### Prepare Environment
 
@@ -123,14 +120,4 @@ Install Git
 For \*nix users - update you bash and awk to any modern version
 
 Tune any automation to invocate **git-sync** periodically - crons, schedulers, Jenkins, GitLab-CI, etc.
-
-### Invocation
-
-Run in a console
-
-    bash git-sync.sh your_file_with_project_settings.sh
-
-Repeat this invocation when you want to synchronize your remote repositories.
-
-
 
