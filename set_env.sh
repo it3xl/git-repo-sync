@@ -17,13 +17,16 @@ relative_settings_file="$path_git_sync/$file_name_repo_settings"
 absolut_settings_file="$file_name_repo_settings"
 subfolder_settings_file="$path_git_sync/repo_settings/$file_name_repo_settings"
 if [[ -f "$relative_settings_file" ]]; then
+  echo Settings. Using relative. $relative_settings_file
   source "$relative_settings_file"
 elif [[ -f "$absolut_settings_file" ]]; then
+  echo Settings. Using absolute. $absolut_settings_file
   source "$absolut_settings_file"
 elif [[ -f "$subfolder_settings_file" ]]; then
+  echo Settings. Using repo_settings subfolder. $subfolder_settings_file
   source "$subfolder_settings_file"
 else
-  echo "Error! Exit! The first parameter must be a path, relative path or a name of a file with your sync-project repo settings."
+  echo "Error! Exit! The first parameter must be an absolute path, relative path or a name of a file with your sync-project repo settings."
   echo The '"'$file_name_repo_settings'"' is not recognized as a file.
   
   exit 1;
@@ -57,6 +60,8 @@ export prefix_2_safe=${prefix_2_safe//\//-}
 export origin_1=orig_1_$prefix_1_safe
 export origin_2=orig_2_$prefix_2_safe
 
+export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
+
 path_project_root="$path_git_sync/sync-projects/$project_folder"
 export path_sync_repo="$path_project_root/sync_repo"
 # Catches outputs of the fork-join async implementation.
@@ -65,6 +70,8 @@ signal_files_folder=file-signals
 export env_modifications_signal_file="$path_project_root/$signal_files_folder/there-are-modifications"
 export env_notify_del_file="$path_project_root/$signal_files_folder/notify_del"
 export env_notify_solving_file="$path_project_root/$signal_files_folder/notify_solving"
+
+export git_cred="$path_git_sync/util/bash-git-credential-helper/git-cred.sh"
 
 (( $run_sample == 1 )) && {
   source "$path_git_sync/sample_init.sh";

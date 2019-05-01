@@ -9,7 +9,7 @@ source "$invoke_path/set_env.sh" "$@"
 rm -f "$env_modifications_signal_file"
 
 echo
-bash "$path_git_sync/repo_create.sh" "$path_sync_repo"
+source "$path_git_sync/repo_create.sh" "$path_sync_repo"
 cd "$path_sync_repo"
 
 source "$path_git_sync/change_detector.sh"

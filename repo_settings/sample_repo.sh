@@ -48,21 +48,32 @@ url_2=https://git.your-repo2-url.org/my_repo.git
 must_exist_branch=${prefix_1}production
 
 
-# If you want to use credentials from environment variables then do the following.
+## Integration with git-cred.sh "bash Git Credential Helper" (https://github.com/it3xl/git-sync)
+# 
+# git-cred allows you to use credentials from environment variables
+#  that are defined automatically by Jenkins or any other Continues Integration (CI) tool.
+#
+# You can use git-cred as an external tool and tune everything manually.
+# But this integration allows you to call "git-cred  init" only once during your git-sync project creation.
+# Also it will support you during migrations and relocations of you CI.
+#
+# Drawback. If you git-cred will throw an error during creation of a git-sync project then you will have to delete
+# sync-projects/<your-project-folder>
+#
+## Steps
 #
 # Load Git submodules of git-sync (https://github.com/it3xl/git-sync)
-# 
-# Assign the following variable to 1.
+#
+# Assign here (in your sync project settings file) the following variable to 1.
 # use_bash_git_credential_helper=1
-# 
-# Before every use of git-sync define somewhere the following credential environment variables
-# (Jenkins and other CI may create and fill them automatically).
-# For the repo in $url_1
-# git_cred_username_repo_1=some_login
+#
+# Before any call to git-sync.sh or request-git-sync.sh, define in Jenkins the following credential environment variables
+#   For the repo in $url_1
+# git_cred_username_repo_1=some-login
 # git_cred_password_repo_1=some-password
-# For the repo in $url_2
-# git_cred_username_repo_2=some_login
-# git_cred_password_repo_2=some-password
+#   For the repo in $url_2
+# git_cred_username_repo_2=another-login
+# git_cred_password_repo_2=another-password
 
 
 
