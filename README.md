@@ -36,7 +36,7 @@ I've excluded Git-tags from synchronization. Nothing wrong with tags but there a
 
 **Why is everything done so?** - This is a proven and working solution. But it is also modest and supported by a single person, me.<br/>
 **Why do not synchronize everything at once?** - You will spend significant resources to make to professionally.<br/>
-**Is it possible to synchronize all branches and tags?** - Yes. I had other [solutions and ideas](http://blog.it3xl.com/2018/02/approaches-to-synchronize-git-repos.html). No one is interested.<br/>
+**Is it possible to synchronize all branches and tags?** - Yes. I had other [solutions and ideas](https://it3xl.blogspot.com/2018/02/approaches-to-synchronize-git-repos.html). No one is interested.<br/>
 **Why do not sync Git-tags?** - This is disabled also because some popular Git-servers block deletion of tags.
 
 ## I warned you
@@ -64,7 +64,7 @@ I am offering a complete package that includes
 
 * Prevention of an occasional deletion of an entire repository.
 * Deletion and creation of branches from one side repository to another.
-* Auto conflict solving by [Convention over Git](http://blog.it3xl.com/2017/09/convention-over-git.html) (non-fast-forward branch conflicts).
+* Auto conflict solving by [Convention over Git](https://it3xl.blogspot.com/2017/09/convention-over-git.html) (non-fast-forward branch conflicts).
 * Recreation of the synchronization from any position and from scratch.
 * Failover & auto recovery of synchronization is supported. Especially for network troubles.
 * Solution is applied per-repository (not per-server)
@@ -95,7 +95,7 @@ E.g.
 
 ## The Glossary
 
-Here is my [glossary](http://blog.it3xl.com/2018/02/glossary-of-synchronization-of-remote.html) related to the topic.
+Here is my [glossary](https://it3xl.blogspot.com/2018/02/glossary-of-synchronization-of-remote.html) related to the topic.
 
 ## How to Use
 
