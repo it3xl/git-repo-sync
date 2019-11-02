@@ -49,7 +49,7 @@ I am waiting for your notes and wish you luck.
 ## Need help?
 
 Ask me. I'll answer on you questions ASAP.<br/>
-See my contacts at [it3xl](http://it3xl.ru).
+See my contacts at [it3xl.ru](http://it3xl.ru).
 
 If you are not ready to spend your time, then I can do everything for you.<br/>
 I am offering a complete package that includes
