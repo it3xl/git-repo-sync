@@ -45,7 +45,10 @@ Only branches with such the prefixes will be synchronized and visible on both si
 
 Conflicts may occur only if your do merges or commits to another side branches.<br/>
 The prefix owner will win in case of any conflicts.<br/>
-Commits of a loser will be rejected, but he just has to repeat merge or commits again (from his local repository) after a Git update (fetch, pull, merge, etc).<br/>
+Commits of a loser will be rejected, but he just has to repeat merge or commits again (from his local repository) after a Git update (fetch, pull, etc).<br/>
+
+To know if your commit was reflected first run gitSync then do a Git update (fetch, pull, etc) in your local Git repository.  
+Then look at Git commits log.
 
 ## Git-tags
 I've excluded Git-tags from synchronization. Nothing wrong with tags but there are some nervous subtleties with them.
