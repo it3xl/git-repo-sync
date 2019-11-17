@@ -52,9 +52,9 @@ I've excluded Git-tags from synchronization. Nothing wrong with tags but there a
 ## FAQ
 
 **Why is everything done so?** - This is a proven and working solution. But it is also modest and supported by a single person, me.<br/>
-**Why do not synchronize everything at once?** - You will spend significant resources to make to professionally.<br/>
+**Why do not synchronize everything at once?** - You will spend significant resources to do it professionally.<br/>
 **Is it possible to synchronize all branches and tags?** - Yes. I had other [solutions and ideas](https://it3xl.blogspot.com/2018/02/approaches-to-synchronize-git-repos.html). No one is interested.<br/>
-**Why do not sync Git-tags?** - This is disabled also because some popular Git-servers block deletion of tags.
+**Why do not sync Git-tags?** - This is disabled because some popular Git-servers block deletion of tags.
 
 ## I warned you
 
