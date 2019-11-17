@@ -41,7 +41,8 @@ You agreed that
 
 Only branches with such the prefixes will be synchronized and visible on both sides.
 
-**Git conflicts solving**<br/>
+##Git conflicts solving
+
 Conflicts may occur only if your do merges or commits to another side branches.<br/>
 The prefix owner will win in case of any conflicts.<br/>
 Commits of a loser will be rejected, but he just has to repeat merge or commits again (from his local repository) after a Git update (fetch, pull, merge, etc).<br/>
