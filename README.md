@@ -1,8 +1,23 @@
 # gitSync
 
-## git repositories mirroring
+## git remote repositories synchronization
 
-**gitSync** is an automated synchronization of any two remote Git repositories with auto conflict solving.
+**gitSync** synchronizes git-branches between remote git-repositories.
+
+Synchronized branches should follow a naming convention.
+
+The naming convention is [Convention over Git](https://it3xl.blogspot.com/2017/09/convention-over-git.html).
+
+gitSync works over HTTP only. It is because I had no chance to tune it for SSH.
+
+gitSync synchronizes only two remote repositories for simplicity as it is a scripting solution.
+
+gitSync do not synchronize Git-tags anymore. It's because some popular Git-servers block Git-tags deletion.
+
+gitSync has auto conflict solving. That allows to work on the same Git-branch simultaneously.  
+I.e. you can commit and merge to the same branch.
+In case of a conflict you have to repeat your commit.
+More details on this I'll provide later.
 
 ## Scenarios of usage
 
