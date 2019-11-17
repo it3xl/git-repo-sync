@@ -47,7 +47,7 @@ Conflicts may occur only if your do merges or commits to another side branches.<
 The prefix owner will win in case of any conflicts.<br/>
 Commits of a loser will be rejected, but he just has to repeat merge or commits again (from his local repository) after a Git update (fetch, pull, merge, etc).<br/>
 
-**Git-tags**
+## Git-tags
 I've excluded Git-tags from synchronization. Nothing wrong with tags but there are some nervous subtleties with them.
 
 ## FAQ
