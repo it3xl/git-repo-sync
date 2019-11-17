@@ -15,9 +15,9 @@ gitSync synchronizes only two remote repositories for simplicity as it is a scri
 gitSync do not synchronize Git-tags anymore. It's because some popular Git-servers block Git-tags deletion.
 
 gitSync has auto conflict solving. That allows to work on the same Git-branch simultaneously.  
-I.e. you can commit and merge to the same branch.
+I.e. you can commit and merge to the same branch on both remote repositories.
 In case of a conflict you have to repeat your commit.
-More details on this I'll provide later.
+More details on this in **Git conflicts solving**.
 
 ## Scenarios of usage
 
