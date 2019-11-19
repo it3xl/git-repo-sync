@@ -72,15 +72,6 @@ I am waiting for your notes and wish you luck.
 Ask me. I'll answer on you questions ASAP.<br/>
 See my contacts at [it3xl.ru](http://it3xl.ru).
 
-If you are not ready to spend your time, then I can do everything for you.<br/>
-I am offering a complete package that includes
-
-* Working solution
-* One year support
-* Automated backups of your repositories
-* Notifications about conflict solving or branch deletion
-* reasonable customizations for you cases
-
 ## Features
 
 * Prevention of an occasional deletion of an entire repository.
