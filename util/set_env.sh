@@ -75,7 +75,7 @@ export env_notify_solving_file="$path_project_root/$signal_files_folder/notify_s
 export git_cred="$path_git_sync_util/bash-git-credential-helper/git-cred.sh"
 
 (( $run_sample == 1 )) && {
-  source "$path_git_sync_init/sample_init.sh";
+  source "$path_git_sync_util/sample_init.sh";
 }
 
 

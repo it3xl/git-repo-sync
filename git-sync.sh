@@ -4,7 +4,7 @@ echo
 echo Start `basename $0`
 
 invoke_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$invoke_path_util/set_env.sh" "$@"
+source "$invoke_path/util/set_env.sh" "$@"
 
 
 
