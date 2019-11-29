@@ -3,6 +3,7 @@ echo Start `basename "$BASH_SOURCE"`
 
 # The $invoke_path variable comes from an external script.
 export path_git_sync="$invoke_path"
+export path_git_sync_util="$path_git_sync/util"
 
 file_name_repo_settings="${1-}"
 
@@ -71,10 +72,10 @@ export env_modifications_signal_file="$path_project_root/$signal_files_folder/th
 export env_notify_del_file="$path_project_root/$signal_files_folder/notify_del"
 export env_notify_solving_file="$path_project_root/$signal_files_folder/notify_solving"
 
-export git_cred="$path_git_sync/util/bash-git-credential-helper/git-cred.sh"
+export git_cred="$path_git_sync_util/bash-git-credential-helper/git-cred.sh"
 
 (( $run_sample == 1 )) && {
-  source "$path_git_sync/sample_init.sh";
+  source "$path_git_sync_init/sample_init.sh";
 }
 
 

@@ -4,15 +4,17 @@ echo
 echo Start `basename $0`
 
 invoke_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$invoke_path/set_env.sh" "$@"
+source "$invoke_path_util/set_env.sh" "$@"
 
 rm -f "$env_modifications_signal_file"
 
 echo
-source "$path_git_sync/repo_create.sh"
+source "$path_git_sync_util/repo_create.sh"
 cd "$path_sync_repo"
 
-source "$path_git_sync/change_detector.sh"
+source "$path_git_sync_util/restore-after-crash.sh"
+
+source "$path_git_sync_util/change_detector.sh"
 
 echo
 if (( $changes_detected == 1 )); then

@@ -4,22 +4,23 @@ echo
 echo Start `basename $0`
 
 invoke_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$invoke_path/set_env.sh" "$@"
+source "$invoke_path_util/set_env.sh" "$@"
 
 
 
 echo
-source "$path_git_sync/repo_create.sh"
+source "$path_git_sync_util/repo_create.sh"
 cd "$path_sync_repo"
 
 
 rm -f "$env_notify_del_file"
 rm -f "$env_notify_solving_file"
 
+source "$path_git_sync/restore-after-crash.sh"
 
 echo
 if [[ ! -f "$env_modifications_signal_file" ]]; then
-  source "$path_git_sync/change_detector.sh"
+  source "$path_git_sync_util/change_detector.sh"
 
   if (( $changes_detected != 1 )); then
     echo '@' RESULT: Refs are the same. Exit.
@@ -41,7 +42,7 @@ local_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remote
 local_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
 
 refspecs=$(awk \
-  -f "$path_git_sync/state_to_refspec.gawk" \
+  -f "$path_git_sync_util/state_to_refspec.gawk" \
   `# --lint` \
   --assign must_exist_branch=$must_exist_branch \
   --assign origin_1="$origin_1" \
