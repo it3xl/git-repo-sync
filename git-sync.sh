@@ -16,7 +16,7 @@ cd "$path_sync_repo"
 rm -f "$env_notify_del_file"
 rm -f "$env_notify_solving_file"
 
-source "$path_git_sync/restore-after-crash.sh"
+source "$path_git_sync_util/restore-after-crash.sh"
 
 echo
 if [[ ! -f "$env_modifications_signal_file" ]]; then
