@@ -63,7 +63,11 @@ function file_states() {
   }
     
   prefix_name_key();
-  if(index($3, prefix_1) != 1 && index($3, prefix_2) != 1){
+
+  if(index($3, prefix_1) != 1 \
+    && index($3, prefix_2) != 1 \
+    && index($3, prefix_victims) != 1 \
+    ){
     trace("!unexpected " $2 " (" dest ") " $1);
     next;
   }
@@ -110,6 +114,7 @@ function unlock_deletion(rr1, rr2, lr1, lr2){
     return;
   if(!lr1)
     return;
+    
   if(rr1 != rr2)
     return;
   if(lr1 != lr2)
