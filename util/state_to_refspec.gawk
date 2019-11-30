@@ -33,7 +33,7 @@ BEGIN { # Parameters.
   remote_1 = "1 remote ref " prefix_1;
   remote_2 = "2 remote ref " prefix_2;
 }
-BEGINFILE {
+BEGINFILE { # Preparing processing for every portion of refs.
   file_states();
 }
 function file_states() {
@@ -64,7 +64,7 @@ function file_states() {
     
   prefix_name_key();
   if(index($3, prefix_1) != 1 && index($3, prefix_2) != 1){
-    trace("next " $3 " " prefix_1 " " prefix_2);
+    trace("!unexpected " $2 " (" dest ") " $1);
     next;
   }
   

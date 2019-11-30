@@ -43,6 +43,22 @@ fi
 local_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
 local_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
 
+if(( 1 == 1 )); then
+  echo
+  echo remote_refs_1=
+  echo "$remote_refs_1"
+
+  echo remote_refs_2=
+  echo "$remote_refs_2"
+
+  echo local_refs_1=
+  echo "$local_refs_1"
+
+  echo local_refs_2=
+  echo "$local_refs_2"
+fi;
+
+
 refspecs=$(awk \
   -f "$path_git_sync_util/state_to_refspec.gawk" \
   `# --lint` \
