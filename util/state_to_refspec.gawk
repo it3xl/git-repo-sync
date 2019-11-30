@@ -57,8 +57,10 @@ function file_states() {
   }
 }
 { # Ref states preparation.
-  if(!$2)
+  if(!$2){
+    # Empty input stream of an empty refs var.
     next;
+  }
     
   prefix_name_key();
   if(index($3, prefix_1) != 1 && index($3, prefix_2) != 1){

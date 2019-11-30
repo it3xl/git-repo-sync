@@ -44,7 +44,7 @@ url_2=https://git.your-repo2-url.org/my_repo.git
 
 
 # Assign a prefix for branches with conflict solving strategy "The youngest wins".
-victim_branches_prefix=movable@
+victim_branches_prefix=common@
 
 
 
