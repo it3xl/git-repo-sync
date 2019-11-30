@@ -43,6 +43,11 @@ url_2=https://git.your-repo2-url.org/my_repo.git
 
 
 
+# Assign a prefix for branches with conflict solving strategy "The youngest wins".
+victim_branches_prefix=movable@
+
+
+
 # You have to provide some branch-name here if you want to allow deletion of conventional (synced) refs.
 # You can create the real branch later or change it here at any time.
 must_exist_branch=${prefix_1}production

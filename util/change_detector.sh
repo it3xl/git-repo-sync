@@ -5,9 +5,9 @@ if (( $use_fork_join_check == 1)); then
   
   mkdir -p "$path_async_output"
 
-  git ls-remote --heads "$url_1" $prefix_1* $prefix_2* > "$path_async_output/remote_refs_1.txt" &
+  git ls-remote --heads "$url_1" $prefix_1* $prefix_2* ${prefix_victim_branches:+${prefix_victim_branches}*} > "$path_async_output/remote_refs_1.txt" &
   pid_remote_refs_1=$!
-  git ls-remote --heads "$url_2" $prefix_1* $prefix_2* > "$path_async_output/remote_refs_2.txt" &
+  git ls-remote --heads "$url_2" $prefix_1* $prefix_2* ${prefix_victim_branches:+${prefix_victim_branches}*} > "$path_async_output/remote_refs_2.txt" &
   pid_remote_refs_2=$!
 
   err_remote_refs_1=0;
@@ -43,8 +43,8 @@ if (( $use_fork_join_check == 1)); then
 else
   echo '! Sync (sync remote refs check is used)'
   
-  remote_refs_2=$(git ls-remote --heads "$url_2" $prefix_1* $prefix_2*)
-  remote_refs_1=$(git ls-remote --heads "$url_1" $prefix_1* $prefix_2*)
+  remote_refs_2=$(git ls-remote --heads "$url_2" $prefix_1* $prefix_2* ${prefix_victim_branches:+${prefix_victim_branches}*})
+  remote_refs_1=$(git ls-remote --heads "$url_1" $prefix_1* $prefix_2* ${prefix_victim_branches:+${prefix_victim_branches}*})
 fi;
 
 
