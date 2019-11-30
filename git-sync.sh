@@ -51,6 +51,7 @@ refspecs=$(awk \
   --assign origin_2="$origin_2" \
   --assign prefix_1="$prefix_1" \
   --assign prefix_2="$prefix_2" \
+  --assign prefix_victims="$prefix_victims" \
   --assign trace_on=1 \
   <(echo "$remote_refs_1") \
   <(echo "$remote_refs_2") \
@@ -80,6 +81,8 @@ fi;
 
 
 if [[ -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
+  echo $'\n>' Fetch Async
+
   git fetch --no-tags $origin_1 $fetch_spec1 > "$path_async_output/fetch1.txt" &
   pid_fetch1=$!
   git fetch --no-tags $origin_2 $fetch_spec2 > "$path_async_output/fetch2.txt" &
@@ -90,11 +93,10 @@ if [[ -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
   fetch_report2+="> Fetch $origin_2 "
   wait $pid_fetch2 && fetch_report2+="(async success)" || fetch_report2+="(async failure)"
   
-  echo
   echo $fetch_report1
   echo $fetch_spec1
   cat < "$path_async_output/fetch1.txt"
-  echo
+
   echo $fetch_report2
   echo $fetch_spec2
   cat < "$path_async_output/fetch2.txt"
@@ -113,12 +115,16 @@ fi;
 
 
 if [[ -n "$notify_del" ]]; then
+  echo $'\n>' Notify Delition
+
   install -D /dev/null "$env_notify_del_file"
   
   echo > "$env_notify_del_file"
   echo "$notify_del" >> "$env_notify_del_file"
 fi;
 if [[ -n "$notify_solving" ]]; then
+  echo $'\n>' Notify Solving
+
   install -D /dev/null "$env_notify_solving_file"
   
   echo > "$env_notify_solving_file"
@@ -127,6 +133,8 @@ fi;
 
 
 if [[ -n "$push_spec1" && -n "$push_spec2" ]]; then
+  echo $'\n>' Push Async
+
   { git push --verbose $origin_1 $push_spec1 || true; } > "$path_async_output/push1.txt" &
   pid_push1=$!
   { git push --verbose $origin_2 $push_spec2 || true; } > "$path_async_output/push2.txt" &
@@ -137,11 +145,10 @@ if [[ -n "$push_spec1" && -n "$push_spec2" ]]; then
   push_report2+="> Push $origin_2 "
   wait $pid_push2 && push_report2+="(async success)" || push_report2+="(async failure)"
   
-  echo
   echo $push_report1
   echo $push_spec1
   cat < "$path_async_output/push1.txt"
-  echo
+
   echo $push_report2
   echo $push_spec2
   cat < "$path_async_output/push2.txt"
@@ -160,6 +167,8 @@ fi;
 
 
 if [[ -n "$post_fetch_spec1" && -n "$post_fetch_spec2" ]]; then
+  echo $'\n>' Post-fetch Async
+
   git fetch --no-tags $origin_1 $post_fetch_spec1 > "$path_async_output/post_fetch1.txt" &
   pid_post_fetch1=$!
   git fetch --no-tags $origin_2 $post_fetch_spec2 > "$path_async_output/post_fetch2.txt" &
@@ -170,11 +179,10 @@ if [[ -n "$post_fetch_spec1" && -n "$post_fetch_spec2" ]]; then
   post_fetch_report2+="> Post-fetch $origin_2 "
   wait $pid_post_fetch2 && post_fetch_report2+="(async success)" || post_fetch_report2+="(async failure)"
   
-  echo
   echo $post_fetch_report1
   echo $post_fetch_spec1
   cat < "$path_async_output/post_fetch1.txt"
-  echo
+
   echo $post_fetch_report2
   echo $post_fetch_spec2
   cat < "$path_async_output/post_fetch2.txt"

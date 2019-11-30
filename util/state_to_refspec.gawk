@@ -5,7 +5,7 @@ BEGIN { # Constants.
   out_stream_attached = "/dev/stderr";
 }
 BEGIN { # Parameters.
-  write_header("GAWK started");
+  write_after_line("> States To Refspecs started");
   trace("Tracing is ON");
 
   if(!must_exist_branch)
@@ -402,9 +402,6 @@ function refspecs_to_stream(){
 function write(msg){
   print msg >> out_stream_attached;
 }
-function write_header(msg){
-  write("\n" msg "\n");
-}
 function write_after_line(msg){
   write("\n" msg);
 }
@@ -434,6 +431,6 @@ function trace_line(msg){
 }
 
 END{ # Disposing.
-  write_after_line("GAWK end");
+  write("> States To Refspecs end");
   close(out_stream_attached);
 }

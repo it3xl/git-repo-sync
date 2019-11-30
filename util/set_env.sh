@@ -46,19 +46,19 @@ if [[ ${missed_repo_settings:+1} ]]; then
   exit 2
 fi
 
-if [[ ! ${prefix_victim_branches:+1} ]]; then
+if [[ ! ${prefix_victims:+1} ]]; then
   # If this var is empty, then we ignore "The latest wins" conflict solving strategy.
-  prefix_victim_branches=
+  prefix_victims=
 fi;
 
 if [[ $prefix_1 == $prefix_2 \
-    || $prefix_1 == $prefix_victim_branches \
-    || $prefix_2 == $prefix_victim_branches ]];
+    || $prefix_1 == $prefix_victims \
+    || $prefix_2 == $prefix_victims ]];
 then
   echo "Error! Exit! We expect that you assign different letters for all prefixes."
   echo "prefix_1 is $prefix_1"
   echo "prefix_2 is $prefix_2"
-  echo "prefix_victim_branches is $prefix_victim_branches"
+  echo "prefix_victims is $prefix_victims"
 
   exit 3
 fi;
@@ -67,7 +67,7 @@ export prefix_1
 export url_1
 export prefix_2
 export url_2
-export prefix_victim_branches
+export prefix_victims
 export must_exist_branch
 
 prefix_1_safe=${prefix_1: : -1}
