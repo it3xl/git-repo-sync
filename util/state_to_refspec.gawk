@@ -28,10 +28,10 @@ BEGIN { # Parameters.
     exit 1005;
   }
 
-  local_1 = "1 local ref " prefix_1;
-  local_2 = "2 local ref " prefix_2;
-  remote_1 = "1 remote ref " prefix_1;
-  remote_2 = "2 remote ref " prefix_2;
+  local_1 = "local@" prefix_1;
+  local_2 = "local@" prefix_2;
+  remote_1 = "remote@" prefix_1;
+  remote_2 = "remote@" prefix_2;
 }
 BEGINFILE { # Preparing processing for every portion of refs.
   file_states();
@@ -161,7 +161,8 @@ function declare_processing_globs(){
 }
 function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
   if(rr1 == rr2 && lr1 == lr2 && lr1 == rr2){
-    # Nothing to change.
+    # Nothing to change for the current branch.
+
     return;
   }
   
@@ -169,19 +170,30 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
     rr = rr1;
     
     if(!rr){
-      trace("a_restore, no remote refs: " cr);
+      # As we here it means that remote repos don't know the branch but gitSync knows it somehow.
+      # This behaviour supprots independents of gitSync from its remoter repos. I.e. you can replace them at once, as gitSync will be the source of truth.
+      # But if you don't run gitSync for a while and have deleted the branch on both side repos manually then gitSync will recreate it.
+      # Re-delete the branch and use gitSync. Silly))
+
+      trace("action-restore on both remotes; " cr " in unknown");
       a_restore[cr];
+
       return;
     }
+  }
+    
+  if(rr1 == rr2){
+    rr = rr1;
     
     if(lr1 != rr){
-      trace("a_fetch1, net fail: " cr);
+      trace("action-fetch from " origin_1 "; " cr " is " ((lr1) ? "outdated" : "unknow") " locally");
       a_fetch1[cr];
     }
     if(lr2 != rr){
-      trace("a_fetch2, net fail: " cr);
+      trace("action-fetch from " origin_2 "; " cr " is " ((lr2) ? "outdated" : "unknow") " locally");
       a_fetch2[cr];
     }
+
     return;
   }
 
@@ -189,45 +201,58 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
     lr = lr1;
     
     if(!lr){
-      trace("a_solv, no local: " cr);
+      trace("action-solv on both remotes; " cr " is unknow locally");
       a_solv[cr];
+
       return;
     }
+  }
+    
+  if(lr1 == lr2){
+    lr = lr1;
     
     if(!rr1 && rr2 == lr){
       if(deletion_allowed){
-        trace("a_del2: " cr);
+        trace("action-del on " origin_2 "; " cr " is disappeared from " origin_1);
         a_del2[cr];
       }else{
-        trace("a_solv, an unknown remote: " cr);
+        trace("action-solv-as-del-blocked on " origin_2 "; " cr " is disappeared from " origin_1 " and deletion is blocked");
         a_solv[cr];
       }
+
       return;
     }
     if(!rr2 && rr1 == lr){
       if(deletion_allowed){
-        trace("a_del1: " cr);
+        trace("action-del on " origin_1 "; " cr " is disappeared from " origin_2);
         a_del1[cr];
       }else{
-        trace("a_solv, an unknown remote: " cr);
+        trace("action-solv-as-del-blocked on " origin_1 "; " cr " is disappeared from " origin_2 " and deletion is blocked");
         a_solv[cr];
       }
+
       return;
     }
+  }
+    
+  if(lr1 == lr2){
+    lr = lr1;
     
     if(rr1 == lr && rr2 != lr){
-      trace("a_ff_to1: " cr);
+      trace("action-fast-forward on " origin_1 "; " cr " is outdated there");
       a_ff_to1[cr];
+
       return;
     }
     if(rr2 == lr && rr1 != lr){
-      trace("a_ff_to2: " cr);
+      trace("action-fast-forward on " origin_2 "; " cr " is outdated there");
       a_ff_to2[cr];
+
       return;
     }
   }
   
-  trace("a_solv, all others: " cr);
+  trace("action-solv-all-others; " cr " is different locally or/and remotely");
   a_solv[cr];
 }
 function actions_to_operations(    ref, owns_side1, owns_side2){
@@ -421,7 +446,7 @@ function trace(msg){
     return;
   }
   
-  print "| " msg >> out_stream_attached;
+  print "|" msg >> out_stream_attached;
 }
 function trace_header(msg){
   trace();
@@ -435,6 +460,12 @@ function trace_after_line(msg){
 function trace_line(msg){
   trace(msg);
   trace();
+}
+function devtrace(msg){
+  if(0)
+    return;
+
+  trace("| " msg)
 }
 
 END{ # Disposing.
