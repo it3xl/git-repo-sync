@@ -19,7 +19,7 @@ rm -f "$env_notify_solving_file"
 source "$path_git_sync_util/restore-after-crash.sh"
 
 echo
-if [[ ! -f "$env_modifications_signal_file_1" ]]; then
+if [[ ! -f "$env_modifications_signal_file" ]]; then
   source "$path_git_sync_util/change_detector.sh"
 
   if (( $changes_detected != 1 )); then
@@ -35,6 +35,7 @@ else
   remote_refs_1=$(<"$env_modifications_signal_file_1")
   remote_refs_2=$(<"$env_modifications_signal_file_2")
   
+  rm -f "$env_modifications_signal_file"
   rm -f "$env_modifications_signal_file_1"
   rm -f "$env_modifications_signal_file_2"
 fi

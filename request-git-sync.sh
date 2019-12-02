@@ -6,6 +6,7 @@ echo Start `basename $0`
 invoke_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$invoke_path/util/set_env.sh" "$@"
 
+rm -f "$env_modifications_signal_file"
 rm -f "$env_modifications_signal_file_1"
 rm -f "$env_modifications_signal_file_2"
 
@@ -19,6 +20,7 @@ source "$path_git_sync_util/change_detector.sh"
 
 echo
 if (( $changes_detected == 1 )); then
+  install -D /dev/null "$env_modifications_signal_file"
   install -D /dev/null "$env_modifications_signal_file_1"
   install -D /dev/null "$env_modifications_signal_file_2"
   
