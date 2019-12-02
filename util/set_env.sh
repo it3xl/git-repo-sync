@@ -68,6 +68,7 @@ export path_sync_repo="$path_project_root/sync_repo"
 # Catches outputs of the fork-join async implementation.
 export path_async_output="$path_project_root/async_output"
 signal_files_folder=file-signals
+export env_modifications_signal_file="$path_project_root/$signal_files_folder/there-are-modifications"
 export env_modifications_signal_file_1="$path_project_root/$signal_files_folder/there-are-modifications_1"
 export env_modifications_signal_file_2="$path_project_root/$signal_files_folder/there-are-modifications_2"
 export env_notify_del_file="$path_project_root/$signal_files_folder/notify_del"
