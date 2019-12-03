@@ -2,6 +2,7 @@
 Code down a victim branches' support.
   Any side may move victim branches to any commit.
   It uses a last win strategy.
+    git rev-list remotes/orig_1_client_co/common@conflicting remotes/orig_2_vendor_co/common@conflicting --max-count=1
 
 Research to disable post-fetches because we have the "updating local tracking ref" during any Git pushing.
 

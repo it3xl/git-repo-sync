@@ -160,7 +160,7 @@ function declare_processing_globs(){
   out_notify_del;
   out_notify_solving;
 }
-function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
+function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is_victim, solve_key){
   rrEqual = rr1 == rr2;
   lrEqual = lr1 == lr2;
   
@@ -204,17 +204,11 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
   lr = lrEqual ? lr1 : "# local refs are not equal #";
 
   is_victim = index(cr, prefix_victims) == 1;
-
-  if(lrEqual && !lr && is_victim){
-    trace("action-victim-solve; " cr " is unknow locally");
-    a_victim_solve[cr];
-
-    return;
-  }
+  solve_key = is_victim ? "victim-solve" : "solve";
 
   if(lrEqual && !lr){
-    trace("action-solve on both remotes; " cr " is unknow locally");
-    a_solve[cr];
+    trace("action-" solve_key " on both remotes; " cr " is unknow locally");
+    set_solve_action(is_victim, cr);
 
     return;
   }
@@ -225,8 +219,8 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
         trace("action-del on " origin_2 "; " cr " is disappeared from " origin_1);
         a_del2[cr];
       }else{
-        trace("action-solve-as-del-blocked on " origin_2 "; " cr " is disappeared from " origin_1 " and deletion is blocked");
-        a_solve[cr];
+        trace("action-" solve_key "-as-del-blocked on " origin_2 "; " cr " is disappeared from " origin_1 " and deletion is blocked");
+        set_solve_action(is_victim, cr);
       }
 
       return;
@@ -236,8 +230,8 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
         trace("action-del on " origin_1 "; " cr " is disappeared from " origin_2);
         a_del1[cr];
       }else{
-        trace("action-solve-as-del-blocked on " origin_1 "; " cr " is disappeared from " origin_2 " and deletion is blocked");
-        a_solve[cr];
+        trace("action-" solve_key "-as-del-blocked on " origin_1 "; " cr " is disappeared from " origin_2 " and deletion is blocked");
+        set_solve_action(is_victim, cr);
       }
 
       return;
@@ -259,8 +253,15 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
     }
   }
 
-  trace("action-solve-all-others; " cr " is different locally or/and remotely");
-  a_solve[cr];
+  trace("action-" solve_key "-all-others; " cr " is different locally or/and remotely");
+  set_solve_action(is_victim, cr);
+}
+function set_solve_action(is_victim, ref){
+  if(is_victim){
+    a_victim_solve[ref]
+  }else{
+    a_solve[ref]
+  }
 }
 function actions_to_operations(    ref, owns_side1, owns_side2){
   for(ref in a_restore){
@@ -299,6 +300,10 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
     op_fetch1[ref];
     op_push_ff_to2[ref];
     op_fetch_post2[ref];
+  }
+
+  for(ref in a_victim_solve){
+    devtrace("no processing for victime branch " ref);
   }
 
   for(ref in a_solve){
