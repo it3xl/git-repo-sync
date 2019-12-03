@@ -159,32 +159,32 @@ function declare_processing_globs(){
   out_notify_del;
   out_notify_solving;
 }
-function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
-  if(rr1 == rr2 && lr1 == lr2 && lr1 == rr2){
+function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
+  rrEqual = rr1 == rr2;
+  lrEqual = lr1 == lr2;
+  
+  if(rrEqual && lrEqual && lr1 == rr2){
     # Nothing to change for the current branch.
 
     return;
   }
-  
-  if(rr1 == rr2){
-    rr = rr1;
-    
-    if(!rr){
-      # As we here it means that remote repos don't know the branch but gitSync knows it somehow.
-      # This behaviour supprots independents of gitSync from its remoter repos. I.e. you can replace them at once, as gitSync will be the source of truth.
-      # But if you don't run gitSync for a while and have deleted the branch on both side repos manually then gitSync will recreate it.
-      # Re-delete the branch and use gitSync. Silly))
 
-      trace("action-restore on both remotes; " cr " in unknown");
-      a_restore[cr];
+  rr = rrEqual ? rr1 : "# remote refs are not equal #";
+  lr = lrEqual ? lr1 : "# local refs are not equal #";
 
-      return;
-    }
+  if(rrEqual && !rr){
+    # As we here this means that remote repos don't know the branch but gitSync knows it somehow.
+    # This behaviour supprots independents of gitSync from its remoter repos. I.e. you can replace them at once, as gitSync will be the source of truth.
+    # But if you don't run gitSync for a while and have deleted the branch on both side repos manually then gitSync will recreate it.
+    # Re-delete the branch and use gitSync. Silly))
+
+    trace("action-restore on both remotes; " cr " in unknown");
+    a_restore[cr];
+
+    return;
   }
-    
-  if(rr1 == rr2){
-    rr = rr1;
-    
+
+  if(rrEqual){
     if(lr1 != rr){
       trace("action-fetch from " origin_1 "; " cr " is " ((lr1) ? "outdated" : "unknow") " locally");
       a_fetch1[cr];
@@ -197,20 +197,14 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
     return;
   }
 
-  if(lr1 == lr2){
-    lr = lr1;
-    
-    if(!lr){
-      trace("action-solv on both remotes; " cr " is unknow locally");
-      a_solv[cr];
+  if(lrEqual && !lr){
+    trace("action-solv on both remotes; " cr " is unknow locally");
+    a_solv[cr];
 
-      return;
-    }
+    return;
   }
-    
-  if(lr1 == lr2){
-    lr = lr1;
-    
+
+  if(lrEqual){
     if(!rr1 && rr2 == lr){
       if(deletion_allowed){
         trace("action-del on " origin_2 "; " cr " is disappeared from " origin_1);
@@ -234,10 +228,8 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
       return;
     }
   }
-    
-  if(lr1 == lr2){
-    lr = lr1;
-    
+
+  if(lrEqual){
     if(rr1 == lr && rr2 != lr){
       trace("action-fast-forward on " origin_1 "; " cr " is outdated there");
       a_ff_to1[cr];
@@ -251,7 +243,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr){
       return;
     }
   }
-  
+
   trace("action-solv-all-others; " cr " is different locally or/and remotely");
   a_solv[cr];
 }
@@ -282,7 +274,7 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
     op_del_local[ref];
     op_push_del2[ref];
   }
-  
+
   for(ref in a_ff_to1){
     op_fetch2[ref];
     op_push_ff_to1[ref];
@@ -293,18 +285,20 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
     op_push_ff_to2[ref];
     op_fetch_post2[ref];
   }
-  
+
   for(ref in a_solv){
     owns_side1 = index(ref, prefix_1) == 1;
     owns_side2 = index(ref, prefix_2) == 1;
-    if(!owns_side1 && !owns_side2){
+    is_victim = index(ref, prefix_victims) == 1;
+
+    if(!owns_side1 && !owns_side2 && !is_victim){
       continue;
     }
     if(owns_side1 && owns_side2){
       continue;
     }
-    
-    if(owns_side1){
+
+    if(owns_side1 || is_victim){
       if(refs[ref][remote_1]["sha"]){
         if(refs[ref][remote_1]["sha"] != refs[ref][local_1]["sha"]){
           op_fetch1[ref];
@@ -319,7 +313,7 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
         op_fetch_post1[ref];
       }
     }
-    if(owns_side2){
+    if(owns_side2 || is_victim){
       if(refs[ref][remote_2]["sha"]){
         if(refs[ref][remote_2]["sha"] != refs[ref][local_2]["sha"]){
           op_fetch2[ref];
@@ -355,7 +349,7 @@ function operations_to_refspecs(    ref){
       out_fetch2 = out_fetch2 "  +" refs[ref][remote_2]["ref"] ":" refs[ref][local_2]["ref"];
     }
   }
-  
+
   { # op_push_restore1, op_push_restore2
     for(ref in op_push_restore1){
       out_push1 = out_push1 "  " refs[ref][local_1]["ref"] ":" refs[ref][remote_1]["ref"];
@@ -394,7 +388,7 @@ function operations_to_refspecs(    ref){
     for(ref in op_push_nff_to2){
       out_push2 = out_push2 "  +" refs[ref][local_1]["ref"] ":" refs[ref][remote_2]["ref"];
     }
-    
+
     for(ref in op_push_nff_to1){
       if(refs[ref][remote_1]["sha"]){
         out_notify_solving = out_notify_solving  prefix_1  " | conflict-solving | "  refs[ref][remote_1]["ref"]  "   "  refs[ref][remote_1]["sha"]  "\n";
@@ -445,7 +439,7 @@ function trace(msg){
     print "|" >> out_stream_attached;
     return;
   }
-  
+
   print "|" msg >> out_stream_attached;
 }
 function trace_header(msg){
