@@ -143,6 +143,7 @@ function declare_processing_globs(){
   split("", a_del1); split("", a_del2);
   split("", a_ff_to1); split("", a_ff_to2);
   split("", a_solv);
+  split("", a_victim_solv);
   # Operation array variables.
   split("", op_del_local);
   split("", op_fetch1); split("", op_fetch2);
@@ -170,7 +171,6 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
   }
 
   rr = rrEqual ? rr1 : "# remote refs are not equal #";
-  lr = lrEqual ? lr1 : "# local refs are not equal #";
 
   if(rrEqual && !rr){
     # As we here this means that remote repos don't know the branch but gitSync knows it somehow.
@@ -185,14 +185,29 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
   }
 
   if(rrEqual){
-    if(lr1 != rr){
+    if(rr != lr1){
+      # Possibly gitSync or the network was interrupted.
       trace("action-fetch from " origin_1 "; " cr " is " ((lr1) ? "outdated" : "unknow") " locally");
       a_fetch1[cr];
     }
-    if(lr2 != rr){
+    if(rr != lr2){
+      # Possibly gitSync or the network was interrupted.
       trace("action-fetch from " origin_2 "; " cr " is " ((lr2) ? "outdated" : "unknow") " locally");
       a_fetch2[cr];
     }
+
+    return;
+  }
+
+  # ! Or farther actions are for not equal remote refs.
+
+  lr = lrEqual ? lr1 : "# local refs are not equal #";
+
+  is_victim = index(cr, prefix_victims) == 1;
+
+  if(lrEqual && !lr && is_victim){
+    trace("action-victim-solv; " cr " is unknow locally");
+    a_victim_solv[cr];
 
     return;
   }

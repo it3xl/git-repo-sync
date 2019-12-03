@@ -3,6 +3,10 @@ Code down a victim branches' support.
   Any side may move victim branches to any commit.
   It uses a last win strategy.
 
+Research to disable post-fetches because we have the "updating local tracking ref" during any Git pushing.
+
+
+
 Code down some Git timeouts or GNU timeout, or something, instead of the plain wait command.
   Add a fetch wait period config parameters.
   I expect my solution to work from under automaton servers such as Jenkins.
@@ -18,10 +22,6 @@ if prefix_1 or prefix_2 undefined, it blocks migration of correspongind branches
   Do not see enough reasons to implement this yet.
   Use any one line force migration command of Git.
 
-
-
-
-Research to disable post-fetches because we have the "updating local tracking ref" during any Git pushing.
 
 Think about mitigation of any NFF after a long job interruption by a preliminary FF.
   Looks like it is excessive.
