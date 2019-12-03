@@ -1,3 +1,4 @@
+
 BEGIN { # Constants.
   local_refs_prefix = "refs/remotes/";
   remote_refs_prefix = "refs/heads/";
@@ -26,6 +27,11 @@ BEGIN { # Parameters.
   if(!prefix_2){
     write("Error. Parameter prefix_2 is empty");
     exit 1005;
+  }
+  
+  if(!prefix_victims){
+    # Let's prevent emptiness checking all around as prefix_victims var allowed to be empty.
+    prefix_victims = "{prefix_victims var is empty at the input. We use here some forbidden branch name characters to prevent messing with real brah names. .. .~^:}";
   }
 
   local_1 = "local@" prefix_1;
@@ -58,7 +64,7 @@ function file_states() {
 }
 { # Ref states preparation.
   if(!$2){
-    # Empty input stream of an empty refs var.
+    # Empty input stream of an empty refs' var.
     next;
   }
     
@@ -68,7 +74,8 @@ function file_states() {
     && index($3, prefix_2) != 1 \
     && index($3, prefix_victims) != 1 \
     ){
-    trace("!unexpected " $2 " (" dest ") " $1);
+    trace("!unexpected " $2 " (" dest ") " $1 "; branch name (" $3 ") has no allowed prefixes");
+
     next;
   }
   
@@ -309,16 +316,17 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
   for(ref in a_solve){
     owns_side1 = index(ref, prefix_1) == 1;
     owns_side2 = index(ref, prefix_2) == 1;
-    is_victim = index(ref, prefix_victims) == 1;
 
-    if(!owns_side1 && !owns_side2 && !is_victim){
+    if(!owns_side1 && !owns_side2){
+      trace("operation-solve; Ignoring " ref " as it has no allowed prefixes " prefix_1 " or " prefix_2)
       continue;
     }
     if(owns_side1 && owns_side2){
+      trace("operation-solve; Ignoring " ref " as some prefixes are empty; 1:" prefix_1 "; 2:" prefix_2 ";")
       continue;
     }
 
-    if(owns_side1 || is_victim){
+    if(owns_side1){
       if(refs[ref][remote_1]["sha"]){
         if(refs[ref][remote_1]["sha"] != refs[ref][local_1]["sha"]){
           op_fetch1[ref];
@@ -333,7 +341,7 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
         op_fetch_post1[ref];
       }
     }
-    if(owns_side2 || is_victim){
+    if(owns_side2){
       if(refs[ref][remote_2]["sha"]){
         if(refs[ref][remote_2]["sha"] != refs[ref][local_2]["sha"]){
           op_fetch2[ref];
