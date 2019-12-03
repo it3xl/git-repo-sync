@@ -315,7 +315,6 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
   }
 
   for(ref in a_victim_solve){
-    victims_push_requested = 0;
 
     # Update outdated or missing local refs for existing remote refs.
     if(refs[ref][remote_1][sha_key]){
@@ -343,6 +342,7 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
 
     # Stop if non-existing remote refs will be updated.
     if(victims_push_requested){
+      victims_push_requested = 0;
       continue;
     }
 
