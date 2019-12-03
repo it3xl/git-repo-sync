@@ -199,7 +199,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
     return;
   }
 
-  # ! Or farther actions are for not equal remote refs.
+  # ! All further actions suppose that remote refs are not equal.
 
   lr = lrEqual ? lr1 : "# local refs are not equal #";
 
@@ -479,7 +479,7 @@ function devtrace(msg){
   if(0)
     return;
 
-  trace("| " msg)
+  trace("|" msg)
 }
 
 END{ # Disposing.
