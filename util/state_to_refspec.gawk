@@ -2,6 +2,9 @@
 BEGIN { # Constants.
   local_refs_prefix = "refs/remotes/";
   remote_refs_prefix = "refs/heads/";
+
+  sha_key = "sha"
+  ref_key = "ref"
   
   out_stream_attached = "/dev/stderr";
 }
@@ -79,8 +82,8 @@ function file_states() {
     next;
   }
   
-  refs[$3][dest]["sha"] = $1;
-  refs[$3][dest]["ref"] = $2;
+  refs[$3][dest][sha_key] = $1;
+  refs[$3][dest][ref_key] = $2;
 }
 function prefix_name_key() { # Generates a common key for all 4 locations of every ref.
   $3 = $2
@@ -92,10 +95,10 @@ END { # Processing.
 
   deletion_allowed = 0;
   unlock_deletion( \
-    refs[must_exist_branch][remote_1]["sha"], \
-    refs[must_exist_branch][remote_2]["sha"], \
-    refs[must_exist_branch][local_1]["sha"], \
-    refs[must_exist_branch][local_2]["sha"] \
+    refs[must_exist_branch][remote_1][sha_key], \
+    refs[must_exist_branch][remote_2][sha_key], \
+    refs[must_exist_branch][local_1][sha_key], \
+    refs[must_exist_branch][local_2][sha_key] \
   );
   write("Deletion " ((deletion_allowed) ? "allowed" : "blocked") " by " must_exist_branch);
 
@@ -105,10 +108,10 @@ END { # Processing.
   for(currentRef in refs){
     state_to_action( \
       currentRef, \
-      refs[currentRef][remote_1]["sha"], \
-      refs[currentRef][remote_2]["sha"], \
-      refs[currentRef][local_1]["sha"], \
-      refs[currentRef][local_2]["sha"] \
+      refs[currentRef][remote_1][sha_key], \
+      refs[currentRef][remote_2][sha_key], \
+      refs[currentRef][local_1][sha_key], \
+      refs[currentRef][local_2][sha_key] \
     );
   }
   actions_to_operations();
@@ -133,14 +136,14 @@ function unlock_deletion(rr1, rr2, lr1, lr2){
 }
 function generate_missing_refs(){
   for(ref in refs){
-    if(!refs[ref][remote_1]["ref"])
-      refs[ref][remote_1]["ref"] = remote_refs_prefix ref
-    if(!refs[ref][remote_2]["ref"])
-      refs[ref][remote_2]["ref"] = remote_refs_prefix ref
-    if(!refs[ref][local_1]["ref"])
-      refs[ref][local_1]["ref"] = local_refs_prefix origin_1 "/" ref
-    if(!refs[ref][local_2]["ref"])
-      refs[ref][local_2]["ref"] = local_refs_prefix origin_2 "/" ref
+    if(!refs[ref][remote_1][ref_key])
+      refs[ref][remote_1][ref_key] = remote_refs_prefix ref
+    if(!refs[ref][remote_2][ref_key])
+      refs[ref][remote_2][ref_key] = remote_refs_prefix ref
+    if(!refs[ref][local_1][ref_key])
+      refs[ref][local_1][ref_key] = local_refs_prefix origin_1 "/" ref
+    if(!refs[ref][local_2][ref_key])
+      refs[ref][local_2][ref_key] = local_refs_prefix origin_2 "/" ref
   }
 }
 function declare_processing_globs(){
@@ -272,11 +275,11 @@ function set_solve_action(is_victim, ref){
 }
 function actions_to_operations(    ref, owns_side1, owns_side2){
   for(ref in a_restore){
-    if(refs[ref][local_1]["sha"]){
+    if(refs[ref][local_1][sha_key]){
       op_push_restore1[ref];
       op_fetch_post1[ref];
     }
-    if(refs[ref][local_2]["sha"]){
+    if(refs[ref][local_2][sha_key]){
       op_push_restore2[ref];
       op_fetch_post2[ref];
     }
@@ -323,14 +326,14 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
     }
 
     if(owns_side1){
-      if(refs[ref][remote_1]["sha"]){
-        if(refs[ref][remote_1]["sha"] != refs[ref][local_1]["sha"]){
+      if(refs[ref][remote_1][sha_key]){
+        if(refs[ref][remote_1][sha_key] != refs[ref][local_1][sha_key]){
           op_fetch1[ref];
         }
         op_push_nff_to2[ref];
         op_fetch_post2[ref];
-      } else if(refs[ref][remote_2]["sha"]){
-        if(refs[ref][remote_2]["sha"] != refs[ref][local_2]["sha"]){
+      } else if(refs[ref][remote_2][sha_key]){
+        if(refs[ref][remote_2][sha_key] != refs[ref][local_2][sha_key]){
           op_fetch2[ref];
         }
         op_push_nff_to1[ref];
@@ -338,14 +341,14 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
       }
     }
     if(owns_side2){
-      if(refs[ref][remote_2]["sha"]){
-        if(refs[ref][remote_2]["sha"] != refs[ref][local_2]["sha"]){
+      if(refs[ref][remote_2][sha_key]){
+        if(refs[ref][remote_2][sha_key] != refs[ref][local_2][sha_key]){
           op_fetch2[ref];
         }
         op_push_nff_to1[ref];
         op_fetch_post1[ref];
-      } else if(refs[ref][remote_1]["sha"]){
-        if(refs[ref][remote_1]["sha"] != refs[ref][local_1]["sha"]){
+      } else if(refs[ref][remote_1][sha_key]){
+        if(refs[ref][remote_1][sha_key] != refs[ref][local_1][sha_key]){
           op_fetch1[ref];
         }
         op_push_nff_to2[ref];
@@ -357,80 +360,80 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
 function operations_to_refspecs(    ref){
   { # op_del_local
     for(ref in op_del_local){
-      if(refs[ref][local_1]["sha"]){
+      if(refs[ref][local_1][sha_key]){
         out_del = out_del "  " origin_1 "/" ref;
       }
-      if(refs[ref][local_2]["sha"]){
+      if(refs[ref][local_2][sha_key]){
         out_del = out_del "  " origin_2 "/" ref;
       }
     }
   }
   { # op_fetch1, op_fetch2
     for(ref in op_fetch1){
-      out_fetch1 = out_fetch1 "  +" refs[ref][remote_1]["ref"] ":" refs[ref][local_1]["ref"];
+      out_fetch1 = out_fetch1 "  +" refs[ref][remote_1][ref_key] ":" refs[ref][local_1][ref_key];
     }
     for(ref in op_fetch2){
-      out_fetch2 = out_fetch2 "  +" refs[ref][remote_2]["ref"] ":" refs[ref][local_2]["ref"];
+      out_fetch2 = out_fetch2 "  +" refs[ref][remote_2][ref_key] ":" refs[ref][local_2][ref_key];
     }
   }
 
   { # op_push_restore1, op_push_restore2
     for(ref in op_push_restore1){
-      out_push1 = out_push1 "  " refs[ref][local_1]["ref"] ":" refs[ref][remote_1]["ref"];
+      out_push1 = out_push1 "  " refs[ref][local_1][ref_key] ":" refs[ref][remote_1][ref_key];
     }
     for(ref in op_push_restore2){
-      out_push2 = out_push2 "  " refs[ref][local_2]["ref"] ":" refs[ref][remote_2]["ref"];
+      out_push2 = out_push2 "  " refs[ref][local_2][ref_key] ":" refs[ref][remote_2][ref_key];
     }
   }
   { # op_push_del1, op_push_del2
     for(ref in op_push_del1){
-      out_push1 = out_push1 "  :" refs[ref][remote_1]["ref"];
+      out_push1 = out_push1 "  :" refs[ref][remote_1][ref_key];
     }
     for(ref in op_push_del2){
-      out_push2 = out_push2 "  :" refs[ref][remote_2]["ref"];
+      out_push2 = out_push2 "  :" refs[ref][remote_2][ref_key];
     }
     
     for(ref in op_push_del1){
-      out_notify_del = out_notify_del  prefix_1  " | deletion | "  refs[ref][remote_1]["ref"]  "   "  refs[ref][remote_1]["sha"]  "\n";
+      out_notify_del = out_notify_del  prefix_1  " | deletion | "  refs[ref][remote_1][ref_key]  "   "  refs[ref][remote_1][sha_key]  "\n";
     }
     for(ref in op_push_del2){
-      out_notify_del = out_notify_del  prefix_2  " | deletion | "  refs[ref][remote_2]["ref"]  "   "  refs[ref][remote_2]["sha"]  "\n";
+      out_notify_del = out_notify_del  prefix_2  " | deletion | "  refs[ref][remote_2][ref_key]  "   "  refs[ref][remote_2][sha_key]  "\n";
     }
   }
   { # op_push_ff_to1, op_push_ff_to2
     for(ref in op_push_ff_to1){
-      out_push1 = out_push1 "  " refs[ref][local_2]["ref"] ":" refs[ref][remote_1]["ref"];
+      out_push1 = out_push1 "  " refs[ref][local_2][ref_key] ":" refs[ref][remote_1][ref_key];
     }
     for(ref in op_push_ff_to2){
-      out_push2 = out_push2 "  " refs[ref][local_1]["ref"] ":" refs[ref][remote_2]["ref"];
+      out_push2 = out_push2 "  " refs[ref][local_1][ref_key] ":" refs[ref][remote_2][ref_key];
     }
   }
   { # op_push_nff_to1, op_push_nff_to2
     for(ref in op_push_nff_to1){
-      out_push1 = out_push1 "  +" refs[ref][local_2]["ref"] ":" refs[ref][remote_1]["ref"];
+      out_push1 = out_push1 "  +" refs[ref][local_2][ref_key] ":" refs[ref][remote_1][ref_key];
     }
     for(ref in op_push_nff_to2){
-      out_push2 = out_push2 "  +" refs[ref][local_1]["ref"] ":" refs[ref][remote_2]["ref"];
+      out_push2 = out_push2 "  +" refs[ref][local_1][ref_key] ":" refs[ref][remote_2][ref_key];
     }
 
     for(ref in op_push_nff_to1){
-      if(refs[ref][remote_1]["sha"]){
-        out_notify_solving = out_notify_solving  prefix_1  " | conflict-solving | "  refs[ref][remote_1]["ref"]  "   "  refs[ref][remote_1]["sha"]  "\n";
+      if(refs[ref][remote_1][sha_key]){
+        out_notify_solving = out_notify_solving  prefix_1  " | conflict-solving | "  refs[ref][remote_1][ref_key]  "   "  refs[ref][remote_1][sha_key]  "\n";
       }
     }
     for(ref in op_push_nff_to2){
-      if(refs[ref][remote_2]["sha"]){
-        out_notify_solving = out_notify_solving  prefix_2  " | conflict-solving | "  refs[ref][remote_2]["ref"]  "   "  refs[ref][remote_2]["sha"]  "\n";
+      if(refs[ref][remote_2][sha_key]){
+        out_notify_solving = out_notify_solving  prefix_2  " | conflict-solving | "  refs[ref][remote_2][ref_key]  "   "  refs[ref][remote_2][sha_key]  "\n";
       }
     }
   }
 
   { # op_fetch_post1, op_fetch_post2
     for(ref in op_fetch_post1){
-      out_post_fetch1 = out_post_fetch1 "  +" refs[ref][remote_1]["ref"] ":" refs[ref][local_1]["ref"];
+      out_post_fetch1 = out_post_fetch1 "  +" refs[ref][remote_1][ref_key] ":" refs[ref][local_1][ref_key];
     }
     for(ref in op_fetch_post2){
-      out_post_fetch2 = out_post_fetch2 "  +" refs[ref][remote_2]["ref"] ":" refs[ref][local_2]["ref"];
+      out_post_fetch2 = out_post_fetch2 "  +" refs[ref][remote_2][ref_key] ":" refs[ref][local_2][ref_key];
     }
   }
 }
