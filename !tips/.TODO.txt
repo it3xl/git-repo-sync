@@ -1,4 +1,7 @@
 
+Hot TO-DOs
+  replace ||||| in outputes by the new line.
+
 Code down a victim branches' support.
   Any side may move victim branches to any commit.
   It uses a last win strategy.

@@ -1,6 +1,5 @@
 
-use_fork_join_check=1
-if (( $use_fork_join_check == 1)); then
+if [[ $env_allow_async == 1 ]]; then
   echo '! Async (async remote refs check is used)'
   
   mkdir -p "$path_async_output"

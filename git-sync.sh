@@ -78,6 +78,7 @@ refspecs=$(awk \
 
 mapfile -t refspec_list < <(echo "$refspecs")
 
+results_spec="${refspec_list[0]}";
 del_spec="${refspec_list[1]}";
 fetch_spec1="${refspec_list[2]}";
 fetch_spec2="${refspec_list[3]}";
@@ -85,8 +86,31 @@ push_spec1="${refspec_list[4]}";
 push_spec2="${refspec_list[5]}";
 post_fetch_spec1="${refspec_list[6]}";
 post_fetch_spec2="${refspec_list[7]}";
-notify_del="${refspec_list[8]}";
-notify_solving="${refspec_list[9]}";
+rev_list="${refspec_list[8]}";
+notify_del="${refspec_list[9]}";
+notify_solving="${refspec_list[10]}";
+end_of_results="${refspec_list[11]}";
+
+results_spec_expected='{[results-spec: 0-results-spec; 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results;]}'
+# This comparison must have double quotes on the second operand. Otherwise it doesn't work.
+if [[ $results_spec != "$results_spec_expected" ]]; then
+  echo '@' ERROR: An unexpected internal processing results specification. Exit.
+  echo
+  
+  # !!! EXIT !!!
+  exit 2001;
+fi
+
+end_of_results_expected='{[end-of-results]}';
+# This comparison must have double quotes on the second operand. Otherwise it doesn't work.
+if [[ $end_of_results != "$end_of_results_expected" ]]; then
+  echo '@' ERROR: An unexpected internal processing results end. Exit.
+  echo
+  
+  # !!! EXIT !!!
+  exit 2002;
+fi
+
 
 mkdir -p "$path_async_output"
 
@@ -97,7 +121,7 @@ if [[ -n "$del_spec" ]]; then
 fi;
 
 
-if [[ -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
+if [[ $env_allow_async == 1 && -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
   echo $'\n>' Fetch Async
 
   git fetch --no-tags $origin_1 $fetch_spec1 > "$path_async_output/fetch1.txt" &
@@ -149,12 +173,12 @@ if [[ -n "$notify_solving" ]]; then
 fi;
 
 
-if [[ -n "$push_spec1" && -n "$push_spec2" ]]; then
+if [[ $env_allow_async == 1 && -n "$push_spec1" && -n "$push_spec2" ]]; then
   echo $'\n>' Push Async
 
-  { git push --verbose $origin_1 $push_spec1 || true; } > "$path_async_output/push1.txt" &
+  { git push $origin_1 $push_spec1 || true; } > "$path_async_output/push1.txt" &
   pid_push1=$!
-  { git push --verbose $origin_2 $push_spec2 || true; } > "$path_async_output/push2.txt" &
+  { git push $origin_2 $push_spec2 || true; } > "$path_async_output/push2.txt" &
   pid_push2=$!
   
   push_report1="> Push $origin_1 "
@@ -173,17 +197,17 @@ else
   if [[ -n "$push_spec1" ]]; then
     echo $'\n>' Push $origin_1
     echo $push_spec1
-    git push --verbose $origin_1 $push_spec1 || true
+    git push $origin_1 $push_spec1 || true
   fi;
   if [[ -n "$push_spec2" ]]; then
     echo $'\n>' Push $origin_2
     echo $push_spec2
-    git push --verbose $origin_2 $push_spec2 || true
+    git push $origin_2 $push_spec2 || true
   fi;
 fi;
 
 
-if [[ -n "$post_fetch_spec1" && -n "$post_fetch_spec2" ]]; then
+if [[ $env_allow_async == 1 && -n "$post_fetch_spec1" && -n "$post_fetch_spec2" ]]; then
   echo $'\n>' Post-fetch Async
 
   git fetch --no-tags $origin_1 $post_fetch_spec1 > "$path_async_output/post_fetch1.txt" &

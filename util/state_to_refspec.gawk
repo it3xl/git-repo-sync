@@ -162,15 +162,17 @@ function declare_processing_globs(){
   split("", op_push_ff_to1); split("", op_push_ff_to2);
   split("", op_push_nff_to1); split("", op_push_nff_to2);
   split("", op_fetch_post1); split("", op_fetch_post2);
+  split("", op_victim_winner_search);
   # Output Git refspec variables.
   out_del;
   out_fetch1; out_fetch2;
   out_push1; out_push2;
   out_post_fetch1; out_post_fetch2;
+  out_rev_list;
   out_notify_del;
   out_notify_solving;
 }
-function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is_victim, solve_key){
+function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is_victim, action_solve_key){
   rrEqual = rr1 == rr2;
   lrEqual = lr1 == lr2;
   
@@ -214,10 +216,10 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
   lr = lrEqual ? lr1 : "# local refs are not equal #";
 
   is_victim = index(cr, prefix_victims) == 1;
-  solve_key = is_victim ? "victim-solve" : "solve";
+  action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
 
   if(lrEqual && !lr){
-    trace("action-" solve_key " on both remotes; " cr " is unknow locally");
+    trace(action_solve_key " on both remotes; " cr " is unknow locally");
     set_solve_action(is_victim, cr);
 
     return;
@@ -229,7 +231,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
         trace("action-del on " origin_2 "; " cr " is disappeared from " origin_1);
         a_del2[cr];
       }else{
-        trace("action-" solve_key "-as-del-blocked on " origin_2 "; " cr " is disappeared from " origin_1 " and deletion is blocked");
+        trace(action_solve_key "-as-del-blocked on " origin_2 "; " cr " is disappeared from " origin_1 " and deletion is blocked");
         set_solve_action(is_victim, cr);
       }
 
@@ -240,7 +242,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
         trace("action-del on " origin_1 "; " cr " is disappeared from " origin_2);
         a_del1[cr];
       }else{
-        trace("action-" solve_key "-as-del-blocked on " origin_1 "; " cr " is disappeared from " origin_2 " and deletion is blocked");
+        trace(action_solve_key "-as-del-blocked on " origin_1 "; " cr " is disappeared from " origin_2 " and deletion is blocked");
         set_solve_action(is_victim, cr);
       }
 
@@ -263,7 +265,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
     }
   }
 
-  trace("action-" solve_key "-all-others; " cr " is different locally or/and remotely");
+  trace(action_solve_key "-all-others; " cr " is different locally or/and remotely");
   set_solve_action(is_victim, cr);
 }
 function set_solve_action(is_victim, ref){
@@ -273,7 +275,7 @@ function set_solve_action(is_victim, ref){
     a_solve[ref]
   }
 }
-function actions_to_operations(    ref, owns_side1, owns_side2){
+function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_requested){
   for(ref in a_restore){
     if(refs[ref][local_1][sha_key]){
       op_push_restore1[ref];
@@ -313,7 +315,38 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
   }
 
   for(ref in a_victim_solve){
-    devtrace("no processing for victime branch " ref);
+    victims_push_requested = 0;
+
+    # Update outdated or missing local refs for existing remote refs.
+    if(refs[ref][remote_1][sha_key]){
+        if(refs[ref][remote_1][sha_key] != refs[ref][local_1][sha_key]){
+          op_fetch1[ref];
+        }
+    }
+    if(refs[ref][remote_2][sha_key]){
+      if(refs[ref][remote_2][sha_key] != refs[ref][local_2][sha_key]){
+        op_fetch2[ref];
+      }
+    }
+
+    # Update non-existing remote refs.
+    if(!refs[ref][remote_1][sha_key] && refs[ref][remote_2][sha_key]){
+      victims_push_requested = 1;
+      op_push_ff_to1[ref];
+      op_fetch_post1[ref];
+    }
+    if(!refs[ref][remote_2][sha_key] && refs[ref][remote_1][sha_key]){
+      victims_push_requested = 1;
+      op_push_ff_to2[ref];
+      op_fetch_post2[ref];
+    }
+
+    # Stop if non-existing remote refs will be updated.
+    if(victims_push_requested){
+      continue;
+    }
+
+    op_victim_winner_search[ref];
   }
 
   for(ref in a_solve){
@@ -357,7 +390,7 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
     }
   }
 }
-function operations_to_refspecs(    ref){
+function operations_to_refspecs(    ref, delimiter){
   { # op_del_local
     for(ref in op_del_local){
       if(refs[ref][local_1][sha_key]){
@@ -394,10 +427,12 @@ function operations_to_refspecs(    ref){
     }
     
     for(ref in op_push_del1){
-      out_notify_del = out_notify_del  prefix_1  " | deletion | "  refs[ref][remote_1][ref_key]  "   "  refs[ref][remote_1][sha_key]  "\n";
+      delimiter = out_notify_del ? "|||||" : "";
+      out_notify_del = out_notify_del delimiter prefix_1  " | deletion | "  refs[ref][remote_1][ref_key]  "   "  refs[ref][remote_1][sha_key];
     }
     for(ref in op_push_del2){
-      out_notify_del = out_notify_del  prefix_2  " | deletion | "  refs[ref][remote_2][ref_key]  "   "  refs[ref][remote_2][sha_key]  "\n";
+      delimiter = out_notify_del ? "|||||" : "";
+      out_notify_del = out_notify_del delimiter prefix_2  " | deletion | "  refs[ref][remote_2][ref_key]  "   "  refs[ref][remote_2][sha_key];
     }
   }
   { # op_push_ff_to1, op_push_ff_to2
@@ -418,13 +453,23 @@ function operations_to_refspecs(    ref){
 
     for(ref in op_push_nff_to1){
       if(refs[ref][remote_1][sha_key]){
-        out_notify_solving = out_notify_solving  prefix_1  " | conflict-solving | "  refs[ref][remote_1][ref_key]  "   "  refs[ref][remote_1][sha_key]  "\n";
+        delimiter = out_notify_solving ? "|||||" : "";
+        out_notify_solving = out_notify_solving delimiter prefix_1  " | conflict-solving | "  refs[ref][remote_1][ref_key]  "   "  refs[ref][remote_1][sha_key];
       }
     }
     for(ref in op_push_nff_to2){
       if(refs[ref][remote_2][sha_key]){
-        out_notify_solving = out_notify_solving  prefix_2  " | conflict-solving | "  refs[ref][remote_2][ref_key]  "   "  refs[ref][remote_2][sha_key]  "\n";
+        delimiter = out_notify_solving ? "|||||" : "";
+        out_notify_solving = out_notify_solving delimiter prefix_2  " | conflict-solving | "  refs[ref][remote_2][ref_key]  "   "  refs[ref][remote_2][sha_key];
       }
+    }
+  }
+  { # op_victim_winner_search
+    for(ref in op_victim_winner_search){
+      # git rev-list remotes/orig_1_client_co/common@conflicting remotes/orig_2_vendor_co/common@conflicting --max-count=1
+
+      delimiter = out_rev_list ? "|||||" : "";
+      out_rev_list = out_rev_list delimiter "git rev-list " ref;
     }
   }
 
@@ -438,17 +483,30 @@ function operations_to_refspecs(    ref){
   }
 }
 function refspecs_to_stream(){
-  print "{[Results: 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch;]}"
+  # 0
+  print "{[results-spec: 0-results-spec; 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results;]}"
+  # 1
   print out_del;
+  # 2
   print out_fetch1;
+  # 3
   print out_fetch2;
+  # 4
   print out_push1;
+  # 5
   print out_push2;
+  # 6
   print out_post_fetch1;
+  # 7
   print out_post_fetch2;
+  # 8
+  print out_rev_list;
+  # 9
   print out_notify_del;
+  # 10
   print out_notify_solving;
-  print "{[End of results]}";
+  # 11
+  print "{[end-of-results]}"
 }
 
 

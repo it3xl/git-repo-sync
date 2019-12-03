@@ -14,11 +14,11 @@ initial_commit_branch=initial-commit
 second_branch=${prefix_2}develop
 non_conflicting_common_branch=${prefix_victims}non-conflicting
 conflicting_common_branch=${prefix_victims}conflicting
-non_conflicting_common_branch_one_side=${prefix_victims}non-conflicting-one-side
+non_conflicting_common_branch_one_side=${prefix_victims}one-side-non-conflicting
 
 if [[ ! -f "$url_1/config" ]]; then
   echo
-  echo '@ Creation of sample repos. 2 remote & 2 local'
+  echo '@ Creation of sample repos with 2 remote & 2 local repositories'
 
   rm -rf "$url_local"
 
