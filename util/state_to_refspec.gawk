@@ -28,7 +28,7 @@ BEGIN { # Parameters.
     write("Error. Parameter prefix_2 is empty");
     exit 1005;
   }
-  
+
   if(!prefix_victims){
     # Let's prevent emptiness checking all around as prefix_victims var allowed to be empty.
     prefix_victims = "{prefix_victims var is empty at the input. We use here some forbidden branch name characters to prevent messing with real brah names. .. .~^:}";
@@ -319,10 +319,6 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
 
     if(!owns_side1 && !owns_side2){
       trace("operation-solve; Ignoring " ref " as it has no allowed prefixes " prefix_1 " or " prefix_2)
-      continue;
-    }
-    if(owns_side1 && owns_side2){
-      trace("operation-solve; Ignoring " ref " as some prefixes are empty; 1:" prefix_1 "; 2:" prefix_2 ";")
       continue;
     }
 
