@@ -142,8 +142,8 @@ function declare_processing_globs(){
   split("", a_fetch1); split("", a_fetch2);
   split("", a_del1); split("", a_del2);
   split("", a_ff_to1); split("", a_ff_to2);
-  split("", a_solv);
-  split("", a_victim_solv);
+  split("", a_solve);
+  split("", a_victim_solve);
   # Operation array variables.
   split("", op_del_local);
   split("", op_fetch1); split("", op_fetch2);
@@ -206,15 +206,15 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
   is_victim = index(cr, prefix_victims) == 1;
 
   if(lrEqual && !lr && is_victim){
-    trace("action-victim-solv; " cr " is unknow locally");
-    a_victim_solv[cr];
+    trace("action-victim-solve; " cr " is unknow locally");
+    a_victim_solve[cr];
 
     return;
   }
 
   if(lrEqual && !lr){
-    trace("action-solv on both remotes; " cr " is unknow locally");
-    a_solv[cr];
+    trace("action-solve on both remotes; " cr " is unknow locally");
+    a_solve[cr];
 
     return;
   }
@@ -225,8 +225,8 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
         trace("action-del on " origin_2 "; " cr " is disappeared from " origin_1);
         a_del2[cr];
       }else{
-        trace("action-solv-as-del-blocked on " origin_2 "; " cr " is disappeared from " origin_1 " and deletion is blocked");
-        a_solv[cr];
+        trace("action-solve-as-del-blocked on " origin_2 "; " cr " is disappeared from " origin_1 " and deletion is blocked");
+        a_solve[cr];
       }
 
       return;
@@ -236,8 +236,8 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
         trace("action-del on " origin_1 "; " cr " is disappeared from " origin_2);
         a_del1[cr];
       }else{
-        trace("action-solv-as-del-blocked on " origin_1 "; " cr " is disappeared from " origin_2 " and deletion is blocked");
-        a_solv[cr];
+        trace("action-solve-as-del-blocked on " origin_1 "; " cr " is disappeared from " origin_2 " and deletion is blocked");
+        a_solve[cr];
       }
 
       return;
@@ -259,8 +259,8 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    lr, rr, rrEqual, lrEqual){
     }
   }
 
-  trace("action-solv-all-others; " cr " is different locally or/and remotely");
-  a_solv[cr];
+  trace("action-solve-all-others; " cr " is different locally or/and remotely");
+  a_solve[cr];
 }
 function actions_to_operations(    ref, owns_side1, owns_side2){
   for(ref in a_restore){
@@ -301,7 +301,7 @@ function actions_to_operations(    ref, owns_side1, owns_side2){
     op_fetch_post2[ref];
   }
 
-  for(ref in a_solv){
+  for(ref in a_solve){
     owns_side1 = index(ref, prefix_1) == 1;
     owns_side2 = index(ref, prefix_2) == 1;
     is_victim = index(ref, prefix_victims) == 1;
