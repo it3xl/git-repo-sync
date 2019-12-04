@@ -44,7 +44,7 @@ fi
 local_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
 local_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
 
-if(( 1 == 1 )); then
+if(( 1 == 2 )); then
   echo
   echo remote_refs_1=
   echo "$remote_refs_1"
@@ -59,6 +59,8 @@ if(( 1 == 1 )); then
   echo "$local_refs_2"
 fi;
 
+# The way we receive data from gawk we can't use new line char in the output. So we are using a substitution.
+env_awk_newline_substitution='|||||'
 
 refspecs=$(awk \
   -f "$path_git_sync_util/state_to_refspec.gawk" \
@@ -69,6 +71,7 @@ refspecs=$(awk \
   --assign prefix_1="$prefix_1" \
   --assign prefix_2="$prefix_2" \
   --assign prefix_victims="$prefix_victims" \
+  --assign newline_substitution="$env_awk_newline_substitution" \
   --assign trace_on=1 \
   <(echo "$remote_refs_1") \
   <(echo "$remote_refs_2") \
@@ -86,9 +89,9 @@ push_spec1="${refspec_list[4]}";
 push_spec2="${refspec_list[5]}";
 post_fetch_spec1="${refspec_list[6]}";
 post_fetch_spec2="${refspec_list[7]}";
-rev_list="${refspec_list[8]}";
-notify_del="${refspec_list[9]}";
-notify_solving="${refspec_list[10]}";
+rev_list="${refspec_list[8]//$env_awk_newline_substitution/$'\n'}";
+notify_del="${refspec_list[9]//$env_awk_newline_substitution/$'\n'}";
+notify_solving="${refspec_list[10]//$env_awk_newline_substitution/$'\n'}";
 end_of_results="${refspec_list[11]}";
 
 results_spec_expected='{[results-spec: 0-results-spec; 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results;]}'

@@ -37,6 +37,11 @@ BEGIN { # Parameters.
     prefix_victims = "{prefix_victims var is empty at the input. We use here some forbidden branch name characters to prevent messing with real brah names. .. .~^:}";
   }
 
+  if(!newline_substitution){
+    write("Error. Parameter newline_substitution is empty");
+    exit 1006;
+  }
+
   local_1 = "local@" prefix_1;
   local_2 = "local@" prefix_2;
   remote_1 = "remote@" prefix_1;
@@ -427,11 +432,11 @@ function operations_to_refspecs(    ref, delimiter){
     }
     
     for(ref in op_push_del1){
-      delimiter = out_notify_del ? "|||||" : "";
+      delimiter = out_notify_del ? newline_substitution : "";
       out_notify_del = out_notify_del delimiter prefix_1  " | deletion | "  refs[ref][remote_1][ref_key]  "   "  refs[ref][remote_1][sha_key];
     }
     for(ref in op_push_del2){
-      delimiter = out_notify_del ? "|||||" : "";
+      delimiter = out_notify_del ? newline_substitution : "";
       out_notify_del = out_notify_del delimiter prefix_2  " | deletion | "  refs[ref][remote_2][ref_key]  "   "  refs[ref][remote_2][sha_key];
     }
   }
@@ -453,13 +458,13 @@ function operations_to_refspecs(    ref, delimiter){
 
     for(ref in op_push_nff_to1){
       if(refs[ref][remote_1][sha_key]){
-        delimiter = out_notify_solving ? "|||||" : "";
+        delimiter = out_notify_solving ? newline_substitution : "";
         out_notify_solving = out_notify_solving delimiter prefix_1  " | conflict-solving | "  refs[ref][remote_1][ref_key]  "   "  refs[ref][remote_1][sha_key];
       }
     }
     for(ref in op_push_nff_to2){
       if(refs[ref][remote_2][sha_key]){
-        delimiter = out_notify_solving ? "|||||" : "";
+        delimiter = out_notify_solving ? newline_substitution : "";
         out_notify_solving = out_notify_solving delimiter prefix_2  " | conflict-solving | "  refs[ref][remote_2][ref_key]  "   "  refs[ref][remote_2][sha_key];
       }
     }
@@ -468,7 +473,7 @@ function operations_to_refspecs(    ref, delimiter){
     for(ref in op_victim_winner_search){
       # git rev-list remotes/orig_1_client_co/common@conflicting remotes/orig_2_vendor_co/common@conflicting --max-count=1
 
-      delimiter = out_rev_list ? "|||||" : "";
+      delimiter = out_rev_list ? newline_substitution : "";
       out_rev_list = out_rev_list delimiter "git rev-list " ref;
     }
   }
@@ -549,5 +554,8 @@ function devtrace(msg){
 
 END{ # Disposing.
   write("> States To Refspecs end");
+
+  # Possibly the colse here is excessive.
+  #https://www.gnu.org/software/gawk/manual/html_node/Close-Files-And-Pipes.html#Close-Files-And-Pipes
   close(out_stream_attached);
 }
