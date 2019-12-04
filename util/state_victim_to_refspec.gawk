@@ -1,8 +1,4 @@
 
-BEGIN { # Constants.
-    out_push_spec1;
-    out_push_spec2;
-}
 {
     git_rev_list_cmd = $0;
 
@@ -27,7 +23,7 @@ BEGIN { # Constants.
     if(newest_sha == sha1){
         out_push_spec2 = out_push_spec2 push_spec2;
     }
-    if(newest_sha == sha1){
+    if(newest_sha == sha2){
         out_push_spec1 = out_push_spec1 push_spec1;
     }
 }

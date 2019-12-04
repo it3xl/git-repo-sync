@@ -337,12 +337,12 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
     if(!refs[ref][remote_1][sha_key] && refs[ref][remote_2][sha_key]){
       victims_push_requested = 1;
       op_push_ff_to1[ref];
-      op_fetch_post1[ref];
+      #op_fetch_post1[ref];
     }
     if(!refs[ref][remote_2][sha_key] && refs[ref][remote_1][sha_key]){
       victims_push_requested = 1;
       op_push_ff_to2[ref];
-      op_fetch_post2[ref];
+      #op_fetch_post2[ref];
     }
 
     # Stop if non-existing remote refs will be updated.
@@ -471,8 +471,6 @@ function operations_to_refspecs(    ref, delimiter){
   }
   { # op_victim_winner_search
     for(ref in op_victim_winner_search){
-      # git rev-list remotes/orig_1_client_co/common@conflicting remotes/orig_2_vendor_co/common@conflicting --max-count=1
-
       delimiter = out_victim_data ? newline_substitution : "";
       out_victim_data = out_victim_data delimiter "git rev-list " refs[ref][local_1][ref_key] " " refs[ref][local_2][ref_key] " --max-count=1";
       delimiter = newline_substitution;

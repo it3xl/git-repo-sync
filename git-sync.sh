@@ -159,7 +159,6 @@ fi;
 
 
 
-
 victim_refspecs=$(awk \
   --file="$path_git_sync_util/state_victim_to_refspec.gawk" \
   <(echo "$victim_data") \
@@ -172,6 +171,8 @@ push_victim_spec2="${victim_refspec_list[2]}";
 
 push_spec1="$push_spec1$push_victim_spec1"
 push_spec2="$push_spec2$push_victim_spec2"
+
+
 
 if [[ -n "$notify_del" ]]; then
   echo $'\n>' Notify Deletion
