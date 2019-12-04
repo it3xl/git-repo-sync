@@ -173,7 +173,7 @@ function declare_processing_globs(){
   out_fetch1; out_fetch2;
   out_push1; out_push2;
   out_post_fetch1; out_post_fetch2;
-  out_rev_list;
+  out_victim_data;
   out_notify_del;
   out_notify_solving;
 }
@@ -473,8 +473,12 @@ function operations_to_refspecs(    ref, delimiter){
     for(ref in op_victim_winner_search){
       # git rev-list remotes/orig_1_client_co/common@conflicting remotes/orig_2_vendor_co/common@conflicting --max-count=1
 
-      delimiter = out_rev_list ? newline_substitution : "";
-      out_rev_list = out_rev_list delimiter "git rev-list " ref;
+      delimiter = out_victim_data ? newline_substitution : "";
+      out_victim_data = out_victim_data delimiter "git rev-list " refs[ref][local_1][ref_key] " " refs[ref][local_2][ref_key] " --max-count=1";
+      delimiter = newline_substitution;
+      out_victim_data = out_victim_data delimiter refs[ref][remote_1][sha_key] " " refs[ref][local_2][sha_key];
+      out_victim_data = out_victim_data delimiter "  +" refs[ref][local_1][ref_key] ":" refs[ref][remote_2][ref_key];
+      out_victim_data = out_victim_data delimiter "  +" refs[ref][local_2][ref_key] ":" refs[ref][remote_1][ref_key];
     }
   }
 
@@ -505,12 +509,14 @@ function refspecs_to_stream(){
   # 7
   print out_post_fetch2;
   # 8
-  print out_rev_list;
+  print out_victim_data;
   # 9
   print out_notify_del;
   # 10
   print out_notify_solving;
+
   # 11
+  # Must print finishing line otherwise previous empty lines will be ignored by mapfile command in bash.
   print "{[end-of-results]}"
 }
 

@@ -63,7 +63,7 @@ fi;
 env_awk_newline_substitution='|||||'
 
 refspecs=$(awk \
-  -f "$path_git_sync_util/state_to_refspec.gawk" \
+  --file="$path_git_sync_util/state_to_refspec.gawk" \
   `# --lint` \
   --assign must_exist_branch=$must_exist_branch \
   --assign origin_1="$origin_1" \
@@ -89,7 +89,7 @@ push_spec1="${refspec_list[4]}";
 push_spec2="${refspec_list[5]}";
 post_fetch_spec1="${refspec_list[6]}";
 post_fetch_spec2="${refspec_list[7]}";
-rev_list="${refspec_list[8]//$env_awk_newline_substitution/$'\n'}";
+victim_data="${refspec_list[8]//$env_awk_newline_substitution/$'\n'}";
 notify_del="${refspec_list[9]//$env_awk_newline_substitution/$'\n'}";
 notify_solving="${refspec_list[10]//$env_awk_newline_substitution/$'\n'}";
 end_of_results="${refspec_list[11]}";
@@ -118,7 +118,7 @@ fi
 mkdir -p "$path_async_output"
 
 if [[ -n "$del_spec" ]]; then
-  echo $'\n>' Delete local branch
+  echo $'\n>' Delete local branches
   echo $del_spec
   git branch --delete --force --remotes $del_spec
 fi;
@@ -157,6 +157,21 @@ else
   fi;
 fi;
 
+
+
+
+victim_refspecs=$(awk \
+  --file="$path_git_sync_util/state_victim_to_refspec.gawk" \
+  <(echo "$victim_data") \
+)
+
+mapfile -t victim_refspec_list < <(echo "$victim_refspecs")
+
+push_victim_spec1="${victim_refspec_list[1]}";
+push_victim_spec2="${victim_refspec_list[2]}";
+
+push_spec1="$push_spec1$push_victim_spec1"
+push_spec2="$push_spec2$push_victim_spec2"
 
 if [[ -n "$notify_del" ]]; then
   echo $'\n>' Notify Deletion
