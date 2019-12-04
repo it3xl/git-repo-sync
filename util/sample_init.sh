@@ -62,7 +62,7 @@ if [[ ! -f "$url_1/config" ]]; then
 
 
   echo
-  echo "@@ Creationg 2 remote repo by copying from 1 remote repo"
+  echo "@@ Creating 2 remote repo by copying from 1 remote repo"
   cp -r "$url_1"/ "$url_2"/
   cd "$url_2"
   git symbolic-ref HEAD refs/heads/$second_branch
@@ -96,7 +96,7 @@ if [[ ! -f "$url_1/config" ]]; then
   cd "$url_local_2"
 
   echo
-  echo "@@ 2 local repo. Ohter test file commit"
+  echo "@@ 2 local repo. Other test file commit"
   echo other test file >> other_test_file.txt
   git add --all
   git commit -m "Other test file commit"

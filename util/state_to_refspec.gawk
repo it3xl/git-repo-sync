@@ -34,7 +34,7 @@ BEGIN { # Parameters.
 
   if(!prefix_victims){
     # Let's prevent emptiness checking all around as prefix_victims var allowed to be empty.
-    prefix_victims = "{prefix_victims var is empty at the input. We use here some forbidden branch name characters to prevent messing with real brah names. .. .~^:}";
+    prefix_victims = "{prefix_victims var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
   }
 
   if(!newline_substitution){
@@ -191,7 +191,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
 
   if(rrEqual && !rr){
     # As we here this means that remote repos don't know the branch but gitSync knows it somehow.
-    # This behaviour supprots independents of gitSync from its remoter repos. I.e. you can replace them at once, as gitSync will be the source of truth.
+    # This behavior supports independents of gitSync from its remoter repos. I.e. you can replace them at once, as gitSync will be the source of truth.
     # But if you don't run gitSync for a while and have deleted the branch on both side repos manually then gitSync will recreate it.
     # Re-delete the branch and use gitSync. Silly))
 
@@ -204,12 +204,12 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
   if(rrEqual){
     if(rr != lr1){
       # Possibly gitSync or the network was interrupted.
-      trace("action-fetch from " origin_1 "; " cr " is " ((lr1) ? "outdated" : "unknow") " locally");
+      trace("action-fetch from " origin_1 "; " cr " is " ((lr1) ? "outdated" : "unknown") " locally");
       a_fetch1[cr];
     }
     if(rr != lr2){
       # Possibly gitSync or the network was interrupted.
-      trace("action-fetch from " origin_2 "; " cr " is " ((lr2) ? "outdated" : "unknow") " locally");
+      trace("action-fetch from " origin_2 "; " cr " is " ((lr2) ? "outdated" : "unknown") " locally");
       a_fetch2[cr];
     }
 
@@ -224,7 +224,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
   action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
 
   if(lrEqual && !lr){
-    trace(action_solve_key " on both remotes; " cr " is unknow locally");
+    trace(action_solve_key " on both remotes; " cr " is unknown locally");
     set_solve_action(is_victim, cr);
 
     return;
@@ -555,7 +555,7 @@ function devtrace(msg){
 END{ # Disposing.
   write("> States To Refspecs end");
 
-  # Possibly the colse here is excessive.
+  # Possibly the close here is excessive.
   #https://www.gnu.org/software/gawk/manual/html_node/Close-Files-And-Pipes.html#Close-Files-And-Pipes
   close(out_stream_attached);
 }

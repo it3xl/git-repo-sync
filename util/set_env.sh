@@ -15,14 +15,14 @@ run_sample=0
 }
 
 relative_settings_file="$path_git_sync/$file_name_repo_settings"
-absolut_settings_file="$file_name_repo_settings"
+absolute_settings_file="$file_name_repo_settings"
 subfolder_settings_file="$path_git_sync/repo_settings/$file_name_repo_settings"
 if [[ -f "$relative_settings_file" ]]; then
   echo Settings. Using relative. $relative_settings_file
   source "$relative_settings_file"
-elif [[ -f "$absolut_settings_file" ]]; then
-  echo Settings. Using absolute. $absolut_settings_file
-  source "$absolut_settings_file"
+elif [[ -f "$absolute_settings_file" ]]; then
+  echo Settings. Using absolute. $absolute_settings_file
+  source "$absolute_settings_file"
 elif [[ -f "$subfolder_settings_file" ]]; then
   echo Settings. Using repo_settings subfolder. $subfolder_settings_file
   source "$subfolder_settings_file"

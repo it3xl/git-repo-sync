@@ -1,6 +1,7 @@
 
 Hot TO-DOs
-  replace ||||| in outputes by the new line.
+
+
 
 Code down a victim branches' support.
   Any side may move victim branches to any commit.
@@ -23,7 +24,7 @@ Recreate sync repos if parameters were changed.
   Do not see enough reasons to implement this yet.
   We are solving problems here, not playing games.
 
-if prefix_1 or prefix_2 undefined, it blocks migration of correspongind branches.
+if prefix_1 or prefix_2 undefined, it blocks migration of corresponding branches.
   Do not see enough reasons to implement this yet.
   Use any one line force migration command of Git.
 

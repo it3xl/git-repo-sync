@@ -159,7 +159,7 @@ fi;
 
 
 if [[ -n "$notify_del" ]]; then
-  echo $'\n>' Notify Delition
+  echo $'\n>' Notify Deletion
 
   install -D /dev/null "$env_notify_del_file"
   
