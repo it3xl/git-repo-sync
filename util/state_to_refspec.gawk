@@ -284,11 +284,11 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
   for(ref in a_restore){
     if(refs[ref][local_1][sha_key]){
       op_push_restore1[ref];
-      op_fetch_post1[ref];
+      #op_fetch_post1[ref];
     }
     if(refs[ref][local_2][sha_key]){
       op_push_restore2[ref];
-      op_fetch_post2[ref];
+      #op_fetch_post2[ref];
     }
   }
 
@@ -311,12 +311,12 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
   for(ref in a_ff_to1){
     op_fetch2[ref];
     op_push_ff_to1[ref];
-    op_fetch_post1[ref];
+    #op_fetch_post1[ref];
   }
   for(ref in a_ff_to2){
     op_fetch1[ref];
     op_push_ff_to2[ref];
-    op_fetch_post2[ref];
+    #op_fetch_post2[ref];
   }
 
   for(ref in a_victim_solve){
@@ -369,13 +369,13 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
           op_fetch1[ref];
         }
         op_push_nff_to2[ref];
-        op_fetch_post2[ref];
+        #op_fetch_post2[ref];
       } else if(refs[ref][remote_2][sha_key]){
         if(refs[ref][remote_2][sha_key] != refs[ref][local_2][sha_key]){
           op_fetch2[ref];
         }
         op_push_nff_to1[ref];
-        op_fetch_post1[ref];
+        #op_fetch_post1[ref];
       }
     }
     if(owns_side2){
@@ -384,13 +384,13 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
           op_fetch2[ref];
         }
         op_push_nff_to1[ref];
-        op_fetch_post1[ref];
+        #op_fetch_post1[ref];
       } else if(refs[ref][remote_1][sha_key]){
         if(refs[ref][remote_1][sha_key] != refs[ref][local_1][sha_key]){
           op_fetch1[ref];
         }
         op_push_nff_to2[ref];
-        op_fetch_post2[ref];
+        #op_fetch_post2[ref];
       }
     }
   }

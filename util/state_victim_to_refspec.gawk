@@ -17,6 +17,9 @@ BEGIN{
 }
 {
     git_rev_list_cmd = $0;
+    if(!git_rev_list_cmd){
+        next;
+    }
 
     getline;
     branch=$1;
