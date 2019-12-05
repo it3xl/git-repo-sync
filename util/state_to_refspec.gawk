@@ -255,7 +255,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
     }
   }
 
-  if(lrEqual){
+  if(lrEqual && !is_victim){
     if(rr1 == lr && rr2 != lr){
       trace("action-fast-forward on " origin_1 "; " cr " is outdated there");
       a_ff_to1[cr];
