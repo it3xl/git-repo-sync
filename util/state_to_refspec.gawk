@@ -10,7 +10,7 @@ BEGIN { # Constants.
 }
 BEGIN { # Parameters.
   write_after_line("> refs processing");
-  trace("Tracing is ON");
+  #trace("Tracing is ON");
 
   if(!must_exist_branch)
     write("Deletion is blocked. Parameter must_exist_branch is empty");
@@ -195,7 +195,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
     # But if you don't run gitSync for a while and have deleted the branch on both side repos manually then gitSync will recreate it.
     # Re-delete the branch and use gitSync. Silly))
 
-    trace("action-restore on both remotes; " cr " in unknown");
+    trace(cr " action-restore on both remotes; is unknown");
     a_restore[cr];
 
     return;
@@ -204,12 +204,12 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
   if(rrEqual){
     if(rr != lr1){
       # Possibly gitSync or the network was interrupted.
-      trace("action-fetch from " origin_1 "; " cr " track ref is " ((lr1) ? "outdated" : "unknown"));
+      trace(cr " action-fetch from " origin_1 "; track ref is " ((lr1) ? "outdated" : "unknown"));
       a_fetch1[cr];
     }
     if(rr != lr2){
       # Possibly gitSync or the network was interrupted.
-      trace("action-fetch from " origin_2 "; " cr " track ref is " ((lr2) ? "outdated" : "unknown"));
+      trace(cr " action-fetch from " origin_2 "; track ref is " ((lr2) ? "outdated" : "unknown"));
       a_fetch2[cr];
     }
 
@@ -224,7 +224,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
   action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
 
   if(lrEqual && !lr){
-    trace(action_solve_key " on both remotes; " cr " is not tracked");
+    trace(cr " " action_solve_key " on both remotes; is not tracked");
     set_solve_action(is_victim, cr);
 
     return;
@@ -233,10 +233,10 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
   if(lrEqual){
     if(!rr1 && rr2 == lr){
       if(deletion_allowed){
-        trace("action-del on " origin_2 "; " cr " is disappeared from " origin_1);
+        trace(cr " action-del on " origin_2 "; is disappeared from " origin_1);
         a_del2[cr];
       }else{
-        trace(action_solve_key "-as-del-blocked on " origin_2 "; " cr " is disappeared from " origin_1 " and deletion is blocked");
+        trace(cr " " action_solve_key "-as-del-blocked on " origin_2 "; is disappeared from " origin_1 " and deletion is blocked");
         set_solve_action(is_victim, cr);
       }
 
@@ -244,10 +244,10 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
     }
     if(!rr2 && rr1 == lr){
       if(deletion_allowed){
-        trace("action-del on " origin_1 "; " cr " is disappeared from " origin_2);
+        trace(cr " action-del on " origin_1 "; is disappeared from " origin_2);
         a_del1[cr];
       }else{
-        trace(action_solve_key "-as-del-blocked on " origin_1 "; " cr " is disappeared from " origin_2 " and deletion is blocked");
+        trace(cr " " action_solve_key "-as-del-blocked on " origin_1 "; is disappeared from " origin_2 " and deletion is blocked");
         set_solve_action(is_victim, cr);
       }
 
@@ -257,20 +257,20 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
 
   if(lrEqual && !is_victim){
     if(rr1 == lr && rr2 != lr){
-      trace("action-fast-forward on " origin_1 "; " cr " is outdated there");
+      trace(cr " action-fast-forward on " origin_1 "; is outdated there");
       a_ff_to1[cr];
 
       return;
     }
     if(rr2 == lr && rr1 != lr){
-      trace("action-fast-forward on " origin_2 "; " cr " is outdated there");
+      trace(cr " action-fast-forward on " origin_2 "; is outdated there");
       a_ff_to2[cr];
 
       return;
     }
   }
 
-  trace(action_solve_key "-all-others; " cr " is different track or/and remote branch commits");
+  trace(cr " " action_solve_key "-all-others; is different track or/and remote branch commits");
   set_solve_action(is_victim, cr);
 }
 function set_solve_action(is_victim, ref){

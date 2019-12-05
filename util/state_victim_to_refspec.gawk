@@ -4,7 +4,7 @@ BEGIN { # Constants.
 }
 BEGIN{
   write_after_line("> victim refs processing");
-  trace("Tracing is ON");
+  #trace("Tracing is ON");
 
   if(!origin_1){
     write("Error. Parameter origin_1 is empty");

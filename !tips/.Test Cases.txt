@@ -1,4 +1,12 @@
 
+FF-updating of another side branch will be synced successfully.
+    One sync pass is enough.
+
+NFF-updating of another side branch will be reverted.
+    This is moving back in Git-history or jumping to another ref.
+    Two sync passes are required to solve sync collision.
+        Try to migrate to the single pass solving.
+
 After a recreation of one remote repo synchronized refs are restored right.
     One sync pass is enough.
 
@@ -9,6 +17,9 @@ A branch deletion on owning side is synchronized right.
     One sync pass is enough.
 
 A deletion of a branch that belongs to another side is synchronized right.
+    One sync pass is enough.
+
+A victim branch deletion is synchronized right.
     One sync pass is enough.
 
 A victim branch updating on one side is synchronized right.
@@ -22,7 +33,7 @@ A victim branch moved to any commit that differentiated from the last used commi
     
     One sync pass is enough.
 
-A victim branch moving back on one side is synchronized right to the other side.
+A victim branch NFF-change or moving back on one side is synchronized right to the other side.
     One sync pass is enough.
 
 A conventions branch moving back from the owner side is synchronized right.
