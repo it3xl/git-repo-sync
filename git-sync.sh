@@ -120,7 +120,7 @@ fi
 mkdir -p "$path_async_output"
 
 if [[ -n "$del_spec" ]]; then
-  echo $'\n>' Delete track branches
+  echo $'\n>' Delete branches
   #echo $del_spec
   git branch --delete --force --remotes $del_spec
 fi;

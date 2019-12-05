@@ -159,19 +159,24 @@ function declare_processing_globs(){
   split("", a_ff_to1); split("", a_ff_to2);
   split("", a_solve);
   split("", a_victim_solve);
+
   # Operation array variables.
   split("", op_del_track);
   split("", op_fetch1); split("", op_fetch2);
   split("", op_push_restore1); split("", op_push_restore2);
   split("", op_push_del1); split("", op_push_del2);
   split("", op_push_ff_to1); split("", op_push_ff_to2);
+  split("", op_ff_vs_nff_1); split("", op_ff_vs_nff_2);
   split("", op_push_nff_to1); split("", op_push_nff_to2);
   split("", op_fetch_post1); split("", op_fetch_post2);
   split("", op_victim_winner_search);
+
   # Output Git refspec variables.
   out_del;
   out_fetch1; out_fetch2;
   out_push1; out_push2;
+  # Post fetching is used to fix FF-updating fails by two pass syncing. The fail appears if NFF updating of an another side brach was considered as FF updating.
+  # But any FF pushing may catch this trouble.
   out_post_fetch1; out_post_fetch2;
   out_victim_data;
   out_notify_del;
@@ -312,13 +317,17 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
   # This is a case when a sync-collision will be solved with two sync passes.
   for(ref in a_ff_to1){
     op_fetch2[ref];
-    op_push_ff_to1[ref];
-    op_fetch_post1[ref];
+    
+    op_ff_vs_nff_1[ref];
+    #op_push_ff_to1[ref];
+    #op_fetch_post1[ref];
   }
   for(ref in a_ff_to2){
     op_fetch1[ref];
-    op_push_ff_to2[ref];
-    op_fetch_post2[ref];
+    
+    op_ff_vs_nff_2[ref];
+    #op_push_ff_to2[ref];
+    #op_fetch_post2[ref];
   }
 
   for(ref in a_victim_solve){
@@ -338,12 +347,12 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
     # Update non-existing remote refs.
     if(!refs[ref][remote_1][sha_key] && refs[ref][remote_2][sha_key]){
       victims_push_requested = 1;
-      op_push_ff_to1[ref];
+      op_push_nff_to1[ref];
       #op_fetch_post1[ref];
     }
     if(!refs[ref][remote_2][sha_key] && refs[ref][remote_1][sha_key]){
       victims_push_requested = 1;
-      op_push_ff_to2[ref];
+      op_push_nff_to2[ref];
       #op_fetch_post2[ref];
     }
 
@@ -419,18 +428,18 @@ function operations_to_refspecs(    ref, delimiter, victim_sha1, victim_sha2){
 
   { # op_push_restore1, op_push_restore2
     for(ref in op_push_restore1){
-      out_push1 = out_push1 "  " refs[ref][track_1][ref_key] ":" refs[ref][remote_1][ref_key];
+      out_push1 = out_push1 "  +" refs[ref][track_1][ref_key] ":" refs[ref][remote_1][ref_key];
     }
     for(ref in op_push_restore2){
-      out_push2 = out_push2 "  " refs[ref][track_2][ref_key] ":" refs[ref][remote_2][ref_key];
+      out_push2 = out_push2 "  +" refs[ref][track_2][ref_key] ":" refs[ref][remote_2][ref_key];
     }
   }
   { # op_push_del1, op_push_del2
     for(ref in op_push_del1){
-      out_push1 = out_push1 "  :" refs[ref][remote_1][ref_key];
+      out_push1 = out_push1 "  +:" refs[ref][remote_1][ref_key];
     }
     for(ref in op_push_del2){
-      out_push2 = out_push2 "  :" refs[ref][remote_2][ref_key];
+      out_push2 = out_push2 "  +:" refs[ref][remote_2][ref_key];
     }
     
     for(ref in op_push_del1){
@@ -469,6 +478,14 @@ function operations_to_refspecs(    ref, delimiter, victim_sha1, victim_sha2){
         delimiter = out_notify_solving ? newline_substitution : "";
         out_notify_solving = out_notify_solving delimiter prefix_2  " | conflict-solving | "  refs[ref][remote_2][ref_key]  "   "  refs[ref][remote_2][sha_key];
       }
+    }
+  }
+  { # op_ff_vs_nff_1, op_ff_vs_nff_2
+    for(ref in op_ff_vs_nff_1){
+      
+    }
+    for(ref in op_ff_vs_nff_2){
+
     }
   }
   { # op_victim_winner_search

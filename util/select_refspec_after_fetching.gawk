@@ -17,15 +17,29 @@ BEGIN{
 }
 {
     if(!$0){
-        next;
+        trace("We do not expect empty lines here!")
+        exit 1300;
     }
 
     algorithm = $1;
 
+    switch (algorithm) {
+      case "ff-vs-nff":
+        break;
+      case "victim":
+        victim_processing();
+        break;
+      default:
+        trace("We do not expect to have unknown algorithms here.");
+        exit 1301;
+    }
+}
+
+function victim_processing(){
     branch=$2;
     sha1=$3;
     sha2=$4;
-    
+
     getline git_rev_list_cmd;
     getline push_spec2;
     getline push_spec1;
