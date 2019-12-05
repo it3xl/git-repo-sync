@@ -474,16 +474,17 @@ function operations_to_refspecs(    ref, delimiter, victim_sha1, victim_sha2){
   { # op_victim_winner_search
     for(ref in op_victim_winner_search){
       delimiter = out_victim_data ? newline_substitution : "";
-      out_victim_data = out_victim_data delimiter "git rev-list " refs[ref][track_1][ref_key] " " refs[ref][track_2][ref_key] " --max-count=1";
-      
+
       # We expects that "no sha" cases will be processed in by solving actions.
       # But this approach with variables helped to solve a severe. It makes code more resilient.
       victim_sha1 = refs[ref][remote_1][sha_key] ? refs[ref][remote_1][sha_key] : ("no sha for " remote_1)
       victim_sha2 = refs[ref][remote_2][sha_key] ? refs[ref][remote_2][sha_key] : ("no sha for " remote_2)
 
+      out_victim_data = out_victim_data delimiter "victim " ref " " victim_sha1 " " victim_sha2;
+      
       delimiter = newline_substitution;
       
-      out_victim_data = out_victim_data delimiter ref " " victim_sha1 " " victim_sha2;
+      out_victim_data = out_victim_data delimiter "git rev-list " refs[ref][track_1][ref_key] " " refs[ref][track_2][ref_key] " --max-count=1";
       out_victim_data = out_victim_data delimiter "  +" refs[ref][track_1][ref_key] ":" refs[ref][remote_2][ref_key];
       out_victim_data = out_victim_data delimiter "  +" refs[ref][track_2][ref_key] ":" refs[ref][remote_1][ref_key];
     }

@@ -16,16 +16,17 @@ BEGIN{
   }
 }
 {
-    git_rev_list_cmd = $0;
-    if(!git_rev_list_cmd){
+    if(!$0){
         next;
     }
 
-    getline;
-    branch=$1;
-    sha1=$2;
-    sha2=$3;
+    algorithm = $1;
 
+    branch=$2;
+    sha1=$3;
+    sha2=$4;
+    
+    getline git_rev_list_cmd;
     getline push_spec2;
     getline push_spec1;
 
