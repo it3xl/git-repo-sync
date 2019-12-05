@@ -6,10 +6,6 @@ Hot TO-DOs
 Test cases to check for victim refs
   Any side may move victim branches to any commit.
 
-Research to disable post-fetches because we have the "updating local tracking ref" during any Git pushing.
-  After pushes Git outputs the message "updating local tracking ref <ref-name>"
-
-
 
 Code down some Git timeouts or GNU timeout, or something, instead of the plain wait command.
   Add a fetch wait period config parameters.
