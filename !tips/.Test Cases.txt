@@ -1,4 +1,11 @@
+
 Recreation of one remote repo.
     One pass is enough.
 Recreation of both remote repos.
     One pass is enough.
+
+A branch deletion right synchronization.
+
+
+
+

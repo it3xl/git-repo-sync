@@ -121,7 +121,7 @@ mkdir -p "$path_async_output"
 
 if [[ -n "$del_spec" ]]; then
   echo $'\n>' Delete local branches
-  echo $del_spec
+  #echo $del_spec
   git branch --delete --force --remotes $del_spec
 fi;
 
