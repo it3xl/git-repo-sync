@@ -308,8 +308,8 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
     op_push_del2[ref];
   }
 
-  # Warning! We need post fetches here because a ref's change in fact may be not a FF-change. And without the post fetch the sync will not be resolver.
-  # This is a case when a sync-collision will be solved by two sync passes
+  # Warning! We need post fetching here because a ref's change may be not a FF-change. And without the post fetch the sync will not be resolved ever.
+  # This is a case when a sync-collision will be solved with two sync passes.
   for(ref in a_ff_to1){
     op_fetch2[ref];
     op_push_ff_to1[ref];
