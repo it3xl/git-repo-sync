@@ -162,7 +162,7 @@ fi;
 
 
 victim_refspecs=$(awk \
-  --file="$path_git_sync_util/state_victim_to_refspec.gawk" \
+  --file="$path_git_sync_util/select_refspec_after_fetching.gawk" \
   `# --lint` \
   --assign origin_1="$origin_1" \
   --assign origin_2="$origin_2" \
