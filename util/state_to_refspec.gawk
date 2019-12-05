@@ -9,7 +9,7 @@ BEGIN { # Constants.
   out_stream_attached = "/dev/stderr";
 }
 BEGIN { # Parameters.
-  write_after_line("> States To Refspecs started");
+  write_after_line("> refs processing");
   trace("Tracing is ON");
 
   if(!must_exist_branch)
@@ -395,7 +395,7 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
     }
   }
 }
-function operations_to_refspecs(    ref, delimiter){
+function operations_to_refspecs(    ref, delimiter, victim_sha1, victim_sha2){
   { # op_del_local
     for(ref in op_del_local){
       if(refs[ref][local_1][sha_key]){
@@ -473,8 +473,15 @@ function operations_to_refspecs(    ref, delimiter){
     for(ref in op_victim_winner_search){
       delimiter = out_victim_data ? newline_substitution : "";
       out_victim_data = out_victim_data delimiter "git rev-list " refs[ref][local_1][ref_key] " " refs[ref][local_2][ref_key] " --max-count=1";
+      
+      # We expects that "no sha" cases will be processed in by solving actions.
+      # But this approach with variables helped to solve a severe. It makes code more resilient.
+      victim_sha1 = refs[ref][remote_1][sha_key] ? refs[ref][remote_1][sha_key] : ("no sha for " remote_1)
+      victim_sha2 = refs[ref][remote_2][sha_key] ? refs[ref][remote_2][sha_key] : ("no sha for " remote_2)
+
       delimiter = newline_substitution;
-      out_victim_data = out_victim_data delimiter refs[ref][remote_1][sha_key] " " refs[ref][local_2][sha_key];
+      
+      out_victim_data = out_victim_data delimiter ref " " victim_sha1 " " victim_sha2;
       out_victim_data = out_victim_data delimiter "  +" refs[ref][local_1][ref_key] ":" refs[ref][remote_2][ref_key];
       out_victim_data = out_victim_data delimiter "  +" refs[ref][local_2][ref_key] ":" refs[ref][remote_1][ref_key];
     }
@@ -491,7 +498,7 @@ function operations_to_refspecs(    ref, delimiter){
 }
 function refspecs_to_stream(){
   # 0
-  print "{[results-spec: 0-results-spec; 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results;]}"
+  print "{[results-spec: 0-results-spec; 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results-required-mark;]}"
   # 1
   print out_del;
   # 2
@@ -549,7 +556,7 @@ function trace_line(msg){
   trace(msg);
   trace();
 }
-function devtrace(msg){
+function dTrace(msg){
   if(0)
     return;
 
@@ -557,7 +564,7 @@ function devtrace(msg){
 }
 
 END{ # Disposing.
-  write("> States To Refspecs end");
+  write("> refs processing end");
 
   # Possibly the close here is excessive.
   #https://www.gnu.org/software/gawk/manual/html_node/Close-Files-And-Pipes.html#Close-Files-And-Pipes

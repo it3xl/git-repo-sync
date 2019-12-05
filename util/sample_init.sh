@@ -1,5 +1,4 @@
 
-echo Start `basename "$BASH_SOURCE"`
 
 url_local="$path_project_root/material_repos"
 
@@ -17,6 +16,7 @@ conflicting_common_branch=${prefix_victims}conflicting
 non_conflicting_common_branch_one_side=${prefix_victims}one-side-non-conflicting
 
 if [[ ! -f "$url_1/config" ]]; then
+  echo @ `basename "$BASH_SOURCE"` started
   echo
   echo '@ Creation of sample repos with 2 remote & 2 local repositories'
 
@@ -121,10 +121,8 @@ if [[ ! -f "$url_1/config" ]]; then
   echo "@@ Pushing from 2 local repo to 2 remote repo"
   git push --all "origin"
 
+  echo @ `basename "$BASH_SOURCE"` ended
 fi
-
-echo
-echo End `basename "$BASH_SOURCE"`
 
 
 

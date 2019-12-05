@@ -1,7 +1,7 @@
 set -euf +x -o pipefail
 
-echo
-echo Start `basename $0`
+#echo
+#echo Start `basename $0`
 
 invoke_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$invoke_path/util/set_env.sh" "$@"
@@ -62,8 +62,9 @@ fi;
 # The way we receive data from gawk we can't use new line char in the output. So we are using a substitution.
 env_awk_newline_substitution='|||||'
 
+state_to_refspec='state_to_refspec.gawk'
 refspecs=$(awk \
-  --file="$path_git_sync_util/state_to_refspec.gawk" \
+  --file="$path_git_sync_util/$state_to_refspec" \
   `# --lint` \
   --assign must_exist_branch=$must_exist_branch \
   --assign origin_1="$origin_1" \
@@ -94,10 +95,11 @@ notify_del="${refspec_list[9]//$env_awk_newline_substitution/$'\n'}";
 notify_solving="${refspec_list[10]//$env_awk_newline_substitution/$'\n'}";
 end_of_results="${refspec_list[11]}";
 
-results_spec_expected='{[results-spec: 0-results-spec; 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results;]}'
+results_spec_expected='{[results-spec: 0-results-spec; 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results-required-mark;]}'
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
 if [[ $results_spec != "$results_spec_expected" ]]; then
-  echo '@' ERROR: An unexpected internal processing results specification. Exit.
+  echo '@' ERROR: An unexpected internal processing results specification returned from $state_to_refspec
+  echo Exit
   echo
   
   # !!! EXIT !!!
@@ -161,6 +163,10 @@ fi;
 
 victim_refspecs=$(awk \
   --file="$path_git_sync_util/state_victim_to_refspec.gawk" \
+  `# --lint` \
+  --assign origin_1="$origin_1" \
+  --assign origin_2="$origin_2" \
+  --assign trace_on=1 \
   <(echo "$victim_data") \
 )
 
@@ -261,5 +267,5 @@ else
 fi;
 
 
-echo
-echo End `basename $0`
+#echo
+#echo End `basename $0`

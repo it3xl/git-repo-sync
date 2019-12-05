@@ -1,7 +1,5 @@
 set -euf +x -o pipefail
 
-echo Start `basename "$BASH_SOURCE"`
-
 
 function delete_project_repo_and_exit() {
     echo Deletion of "$path_sync_repo" to allow restart git-cred initializing.
@@ -16,6 +14,8 @@ function repo_create_main(){
   if [[ -f "$path_sync_repo/.git/config" ]]; then
     return
   fi
+
+  echo @ `basename "$BASH_SOURCE"` started
 
   mkdir -p "$path_sync_repo"
   cd "$path_sync_repo"
@@ -50,11 +50,11 @@ function repo_create_main(){
 
 
   echo Repo created at $path_sync_repo
+
+  echo @ `basename "$BASH_SOURCE"` ended
 }
 repo_create_main
 
-
-echo End `basename "$BASH_SOURCE"`
 
 
 

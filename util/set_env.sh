@@ -83,7 +83,7 @@ export origin_2=orig_2_$prefix_2_safe
 
 export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 
-export env_allow_async=0
+export env_allow_async=1
 
 path_project_root="$path_git_sync/sync-projects/$project_folder"
 export path_sync_repo="$path_project_root/sync_repo"
