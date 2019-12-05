@@ -41,8 +41,8 @@ else
 fi
 
 
-local_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
-local_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
+track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
+track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
 
 if(( 1 == 2 )); then
   echo
@@ -52,11 +52,11 @@ if(( 1 == 2 )); then
   echo remote_refs_2=
   echo "$remote_refs_2"
 
-  echo local_refs_1=
-  echo "$local_refs_1"
+  echo track_refs_1=
+  echo "$track_refs_1"
 
-  echo local_refs_2=
-  echo "$local_refs_2"
+  echo track_refs_2=
+  echo "$track_refs_2"
 fi;
 
 # The way we receive data from gawk we can't use new line char in the output. So we are using a substitution.
@@ -76,8 +76,8 @@ refspecs=$(awk \
   --assign trace_on=1 \
   <(echo "$remote_refs_1") \
   <(echo "$remote_refs_2") \
-  <(echo "$local_refs_1") \
-  <(echo "$local_refs_2") \
+  <(echo "$track_refs_1") \
+  <(echo "$track_refs_2") \
 )
 
 mapfile -t refspec_list < <(echo "$refspecs")
@@ -95,7 +95,7 @@ notify_del="${refspec_list[9]//$env_awk_newline_substitution/$'\n'}";
 notify_solving="${refspec_list[10]//$env_awk_newline_substitution/$'\n'}";
 end_of_results="${refspec_list[11]}";
 
-results_spec_expected='{[results-spec: 0-results-spec; 1-del local; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results-required-mark;]}'
+results_spec_expected='{[results-spec: 0-results-spec; 1-del track; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results-required-mark;]}'
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
 if [[ $results_spec != "$results_spec_expected" ]]; then
   echo '@' ERROR: An unexpected internal processing results specification returned from $state_to_refspec
@@ -120,7 +120,7 @@ fi
 mkdir -p "$path_async_output"
 
 if [[ -n "$del_spec" ]]; then
-  echo $'\n>' Delete local branches
+  echo $'\n>' Delete track branches
   #echo $del_spec
   git branch --delete --force --remotes $del_spec
 fi;

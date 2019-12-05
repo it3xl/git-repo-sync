@@ -4,7 +4,7 @@
 # git merge-base --is-ancestor A B
 
 # https://stackoverflow.com/questions/24504400/whats-the-correct-way-to-check-if-its-possible-to-perform-a-fast-forward-merge/31500335#31500335
-# git rev-list --max-count 1 $local_branch..$remote_branch
+# git rev-list --max-count 1 $track_branch..$remote_branch
 
 # https://git-scm.com/docs/git-rev-list
 
