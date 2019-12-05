@@ -1,10 +1,34 @@
 
-Recreation of one remote repo.
-    One pass is enough.
-Recreation of both remote repos.
-    One pass is enough.
+After a recreation of one remote repo synchronized refs are restored right.
+    One sync pass is enough.
 
-A branch deletion right synchronization.
+After a recreation of both remote repos synchronized refs are restored right.
+    One sync pass is enough.
+
+A branch deletion on owning side is synchronized right.
+    One sync pass is enough.
+
+A deletion of a branch that belongs to another side is synchronized right.
+    One sync pass is enough.
+
+A victim branch updating on one side is synchronized right.
+    One sync pass is enough.
+
+A victim branch updating differently on both sides (conflict) between syncs is synchronized right.
+    The newest will win.
+    One sync pass is enough.
+
+A victim branch moved to any commit that differentiated from the last used commit is synchronized right.
+    
+    One sync pass is enough.
+
+A victim branch moving back on one side is synchronized right to the other side.
+    One sync pass is enough.
+
+A conventions branch moving back from the owner side is synchronized right.
+    It will be migrated to the back commit.
+    One sync pass is enough.
+
 
 
 
