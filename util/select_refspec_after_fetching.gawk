@@ -25,6 +25,7 @@ BEGIN{
 
     switch (algorithm) {
       case "ff-vs-nff":
+        ff_vs_nff_processing();
         break;
       case "victim":
         victim_processing();
@@ -35,6 +36,8 @@ BEGIN{
     }
 }
 
+function ff_vs_nff_processing(){
+}
 function victim_processing(){
     branch=$2;
     sha1=$3;
