@@ -67,10 +67,10 @@ refspecs=$(awk \
   --file="$path_git_sync_util/$state_to_refspec" \
   `# --lint` \
   --assign must_exist_branch=$must_exist_branch \
-  --assign origin_1="$origin_1" \
-  --assign origin_2="$origin_2" \
-  --assign prefix_1="$prefix_1" \
-  --assign prefix_2="$prefix_2" \
+  --assign origin_a="$origin_1" \
+  --assign origin_b="$origin_2" \
+  --assign prefix_a="$prefix_1" \
+  --assign prefix_b="$prefix_2" \
   --assign prefix_victims="$prefix_victims" \
   --assign newline_substitution="$env_awk_newline_substitution" \
   --assign trace_on=1 \
@@ -109,10 +109,10 @@ if [[ $end_of_results != "$end_of_results_expected" ]]; then
   exit 2002;
 fi;
 
-echo "$ff_vs_nff_push_data_1"
-echo
-echo "$ff_vs_nff_push_data_2"
-exit;
+# echo "$ff_vs_nff_push_data_1"
+# echo
+# echo "$ff_vs_nff_push_data_2"
+# exit;
 
 
 mkdir -p "$path_async_output"
