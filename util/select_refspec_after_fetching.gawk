@@ -1,19 +1,19 @@
 
 BEGIN { # Constants.
-  out_stream_attached = "/dev/stderr";
+    out_stream_attached = "/dev/stderr";
 }
 BEGIN{
-  write_after_line("> victim refs processing");
-  #trace("Tracing is ON");
+    write_after_line("> victim refs processing");
+    #trace("Tracing is ON");
 
-  if(!origin_1){
-    write("Error. Parameter origin_1 is empty");
-    exit 1102;
-  }
-  if(!origin_2){
-    write("Error. Parameter origin_2 is empty");
-    exit 1103;
-  }
+    if(!origin_1){
+        write("Error. Parameter origin_1 is empty");
+        exit 1102;
+    }
+    if(!origin_2){
+        write("Error. Parameter origin_2 is empty");
+        exit 1103;
+    }
 }
 {
     if(!$0){
@@ -37,6 +37,7 @@ BEGIN{
 }
 
 function ff_vs_nff_processing(){
+    # git merge-base --is-ancestor remotes/orig_2_vendor_co/client_co/production remotes/orig_1_client_co/common@conflicting && echo ff || echo nff
 }
 function victim_processing(){
     branch=$2;
@@ -69,27 +70,27 @@ function victim_processing(){
 }
 
 function write(msg){
-  print msg >> out_stream_attached;
+    print msg >> out_stream_attached;
 }
 function write_after_line(msg){
-  write("\n" msg);
+    write("\n" msg);
 }
 function trace(msg){
-  if(!trace_on)
-    return;
+    if(!trace_on)
+        return;
 
-  if(!msg){
-    print "|" >> out_stream_attached;
-    return;
-  }
+    if(!msg){
+        print "|" >> out_stream_attached;
+        return;
+    }
 
-  print "|" msg >> out_stream_attached;
+    print "|" msg >> out_stream_attached;
 }
 function dTrace(msg){
-  if(0)
-    return;
+    if(0)
+        return;
 
-  trace("|" msg)
+    trace("|" msg)
 }
 
 END{
@@ -102,9 +103,9 @@ END{
     print "{[end-of-results]}"
 }
 END{ # Disposing.
-  write("> victim refs processing end");
+    write("> victim refs processing end");
 
-  # Possibly the close here is excessive.
-  #https://www.gnu.org/software/gawk/manual/html_node/Close-Files-And-Pipes.html#Close-Files-And-Pipes
-  close(out_stream_attached);
+    # Possibly the close here is excessive.
+    #https://www.gnu.org/software/gawk/manual/html_node/Close-Files-And-Pipes.html#Close-Files-And-Pipes
+    close(out_stream_attached);
 }
