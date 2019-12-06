@@ -80,31 +80,24 @@ refspecs=$(awk \
   <(echo "$track_refs_2") \
 )
 
+# echo "$refspecs"
+# exit;
+
 mapfile -t refspec_list < <(echo "$refspecs")
 
-results_spec="${refspec_list[0]}";
-del_spec="${refspec_list[1]}";
-fetch_spec1="${refspec_list[2]}";
-fetch_spec2="${refspec_list[3]}";
-push_spec1="${refspec_list[4]}";
-push_spec2="${refspec_list[5]}";
-post_fetch_spec1="${refspec_list[6]}";
-post_fetch_spec2="${refspec_list[7]}";
-victim_data="${refspec_list[8]//$env_awk_newline_substitution/$'\n'}";
-notify_del="${refspec_list[9]//$env_awk_newline_substitution/$'\n'}";
-notify_solving="${refspec_list[10]//$env_awk_newline_substitution/$'\n'}";
-end_of_results="${refspec_list[11]}";
-
-results_spec_expected='{[results-spec: 0-results-spec; 1-del track; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results-required-mark;]}'
-# This comparison must have double quotes on the second operand. Otherwise it doesn't work.
-if [[ $results_spec != "$results_spec_expected" ]]; then
-  echo '@' ERROR: An unexpected internal processing results specification returned from $state_to_refspec
-  echo Exit
-  echo
-  
-  # !!! EXIT !!!
-  exit 2001;
-fi
+del_spec="${refspec_list[0]}";
+fetch_spec1="${refspec_list[1]}";
+fetch_spec2="${refspec_list[2]}";
+ff_vs_nff_push_data_1="${refspec_list[3]//$env_awk_newline_substitution/$'\n'}";
+ff_vs_nff_push_data_2="${refspec_list[4]//$env_awk_newline_substitution/$'\n'}";
+victim_data="${refspec_list[5]//$env_awk_newline_substitution/$'\n'}";
+push_spec1="${refspec_list[6]}";
+push_spec2="${refspec_list[7]}";
+post_fetch_spec1="${refspec_list[8]}";
+post_fetch_spec2="${refspec_list[9]}";
+notify_del="${refspec_list[10]//$env_awk_newline_substitution/$'\n'}";
+notify_solving="${refspec_list[11]//$env_awk_newline_substitution/$'\n'}";
+end_of_results="${refspec_list[12]}";
 
 end_of_results_expected='{[end-of-results]}';
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
@@ -114,7 +107,12 @@ if [[ $end_of_results != "$end_of_results_expected" ]]; then
   
   # !!! EXIT !!!
   exit 2002;
-fi
+fi;
+
+echo "$ff_vs_nff_push_data_1"
+echo
+echo "$ff_vs_nff_push_data_2"
+exit;
 
 
 mkdir -p "$path_async_output"
@@ -167,6 +165,8 @@ victim_refspecs=$(awk \
   --assign origin_1="$origin_1" \
   --assign origin_2="$origin_2" \
   --assign trace_on=1 \
+  <(echo "$ff_vs_nff_push_data_1") \
+  <(echo "$ff_vs_nff_push_data_2") \
   <(echo "$victim_data") \
 )
 

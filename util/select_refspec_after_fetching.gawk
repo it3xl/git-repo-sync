@@ -17,8 +17,7 @@ BEGIN{
 }
 {
     if(!$0){
-        trace("We do not expect empty lines here!")
-        exit 1300;
+        next;
     }
 
     algorithm = $1;
@@ -37,12 +36,21 @@ BEGIN{
 }
 
 function ff_vs_nff_processing(){
-    # git merge-base --is-ancestor remotes/orig_2_vendor_co/client_co/production remotes/orig_1_client_co/common@conflicting && echo ff || echo nff
+    branch = $2;
+    ancestor_updated_sha = $3;
+    descendant_sha = $4;
+
+    getline git_merge_base__is_ancestor_cmd;
+    getline push_ff_spec;
+
+    git_merge_base__is_ancestor_cmd | getline result_action;
+    close(git_merge_base__is_ancestor_cmd);
+
 }
-function victim_processing(){
-    branch=$2;
-    sha1=$3;
-    sha2=$4;
+function victim_processing(    branch, sha1, sha2){
+    branch = $2;
+    sha1 = $3;
+    sha2 = $4;
 
     getline git_rev_list_cmd;
     getline push_spec2;

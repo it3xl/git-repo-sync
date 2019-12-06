@@ -3,8 +3,10 @@ BEGIN { # Constants.
     track_refs_prefix = "refs/remotes/";
     remote_refs_prefix = "refs/heads/";
 
-    sha_key = "sha"
-    ref_key = "ref"
+    sha_key = "sha";
+    ref_key = "ref";
+
+    val = "val";
 
     out_stream_attached = "/dev/stderr";
 }
@@ -166,7 +168,7 @@ function declare_processing_globs(){
     split("", op_push_restore1); split("", op_push_restore2);
     split("", op_push_del1); split("", op_push_del2);
     split("", op_push_ff_to1); split("", op_push_ff_to2);
-    split("", op_ff_vs_nff_1); split("", op_ff_vs_nff_2);
+    split("", op_ff_vs_nff_to1); split("", op_ff_vs_nff_to2);
     split("", op_push_nff_to1); split("", op_push_nff_to2);
     split("", op_fetch_post1); split("", op_fetch_post2);
     split("", op_victim_winner_search);
@@ -178,11 +180,12 @@ function declare_processing_globs(){
     # Post fetching is used to fix FF-updating fails by two pass syncing. The fail appears if NFF updating of an another side brach was considered as FF updating.
     # But any FF pushing may catch this trouble.
     out_post_fetch1; out_post_fetch2;
+    split("", out_ff_vs_nff_data);
     out_victim_data;
     out_notify_del;
     out_notify_solving;
 }
-function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is_victim, action_solve_key){
+function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is_victim, action_solve_key, arr){
     rrEqual = rr1 == rr2;
     lrEqual = lr1 == lr2;
     
@@ -262,13 +265,13 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
 
     if(lrEqual && !is_victim){
         if(rr1 == lr && rr2 != lr){
-            trace(cr " action-fast-forward on " origin_1 "; is outdated there");
+            trace(cr " action-fast-forward; outdated on " origin_1);
             a_ff_to1[cr];
 
             return;
         }
         if(rr2 == lr && rr1 != lr){
-            trace(cr " action-fast-forward on " origin_2 "; is outdated there");
+            trace(cr " action-fast-forward; outdated on " origin_2);
             a_ff_to2[cr];
 
             return;
@@ -280,9 +283,9 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
 }
 function set_solve_action(is_victim, ref){
     if(is_victim){
-        a_victim_solve[ref]
+        a_victim_solve[ref];
     }else{
-        a_solve[ref]
+        a_solve[ref];
     }
 }
 function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_requested){
@@ -318,14 +321,14 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
     for(ref in a_ff_to1){
         op_fetch2[ref];
         
-        op_ff_vs_nff_1[ref];
+        op_ff_vs_nff_to1[ref];
         #op_push_ff_to1[ref];
         #op_fetch_post1[ref];
     }
     for(ref in a_ff_to2){
         op_fetch1[ref];
         
-        op_ff_vs_nff_2[ref];
+        op_ff_vs_nff_to2[ref];
         #op_push_ff_to2[ref];
         #op_fetch_post2[ref];
     }
@@ -406,7 +409,7 @@ function actions_to_operations(    ref, owns_side1, owns_side2, victims_push_req
         }
     }
 }
-function operations_to_refspecs(    ref, delimiter, victim_sha1, victim_sha2){
+function operations_to_refspecs(    ref, delimiter){
     { # op_del_track
         for(ref in op_del_track){
             if(refs[ref][track_1][sha_key]){
@@ -480,32 +483,8 @@ function operations_to_refspecs(    ref, delimiter, victim_sha1, victim_sha2){
             }
         }
     }
-    { # op_ff_vs_nff_1, op_ff_vs_nff_2
-        for(ref in op_ff_vs_nff_1){
-        
-        }
-        for(ref in op_ff_vs_nff_2){
-
-        }
-    }
-    { # op_victim_winner_search
-        for(ref in op_victim_winner_search){
-            delimiter = out_victim_data ? newline_substitution : "";
-
-            # We expects that "no sha" cases will be processed in by solving actions.
-            # But this approach with variables helped to solve a severe. It makes code more resilient.
-            victim_sha1 = refs[ref][remote_1][sha_key] ? refs[ref][remote_1][sha_key] : ("no sha for " remote_1)
-            victim_sha2 = refs[ref][remote_2][sha_key] ? refs[ref][remote_2][sha_key] : ("no sha for " remote_2)
-
-            out_victim_data = out_victim_data delimiter "victim " ref " " victim_sha1 " " victim_sha2;
-            
-            delimiter = newline_substitution;
-            
-            out_victim_data = out_victim_data delimiter "git rev-list " refs[ref][track_1][ref_key] " " refs[ref][track_2][ref_key] " --max-count=1";
-            out_victim_data = out_victim_data delimiter "  +" refs[ref][track_1][ref_key] ":" refs[ref][remote_2][ref_key];
-            out_victim_data = out_victim_data delimiter "  +" refs[ref][track_2][ref_key] ":" refs[ref][remote_1][ref_key];
-        }
-    }
+    set_ff_vs_nff_push_data_1();
+    set_victim_data();
 
     { # op_fetch_post1, op_fetch_post2
         for(ref in op_fetch_post1){
@@ -516,31 +495,86 @@ function operations_to_refspecs(    ref, delimiter, victim_sha1, victim_sha2){
         }
     }
 }
+function set_ff_vs_nff_push_data_1(    descendant_sha, ancestor_sha){
+    for(ref in op_ff_vs_nff_to1){
+        # 1 is an ancestor, update target.
+        # 2 is a descendant (possibly), update source.
+        ancestor_sha = refs[ref][remote_1][sha_key] ? refs[ref][remote_1][sha_key] : ("no sha for " remote_1);
+        descendant_sha = refs[ref][remote_2][sha_key] ? refs[ref][remote_2][sha_key] : ("no sha for " remote_2);
+
+        append_by_side(out_ff_vs_nff_data, 1, "ff-vs-nff " ref " " ancestor_sha " " descendant_sha);
+        
+        # --is-ancestor <ancestor> <descendant>
+        append_by_side(out_ff_vs_nff_data, 1, "git merge-base --is-ancestor " refs[ref][track_1][ref_key] " " refs[ref][track_2][ref_key] " && echo ff || echo nff");
+        
+        append_by_side(out_ff_vs_nff_data, 1, refs[ref][track_2][ref_key] ":" refs[ref][remote_1][ref_key]);
+    }
+    for(ref in op_ff_vs_nff_to2){
+        # 2 is an ancestor, update target.
+        # 1 is a descendant (possibly), update source.
+        ancestor_sha = refs[ref][remote_2][sha_key] ? refs[ref][remote_2][sha_key] : ("no sha for " remote_2);
+        descendant_sha = refs[ref][remote_1][sha_key] ? refs[ref][remote_1][sha_key] : ("no sha for " remote_1);
+
+        append_by_side(out_ff_vs_nff_data, 2, "ff-vs-nff " ref " " ancestor_sha " " descendant_sha);
+        
+        # --is-ancestor <ancestor> <descendant>
+        append_by_side(out_ff_vs_nff_data, 2, "git merge-base --is-ancestor " refs[ref][track_2][ref_key] " " refs[ref][track_1][ref_key] " && echo ff || echo nff");
+        
+        append_by_side(out_ff_vs_nff_data, 2, refs[ref][track_1][ref_key] ":" refs[ref][remote_2][ref_key]);
+    }
+}
+function append_by_side(host, side_id, addition){
+    host[side_id] = host[side_id] (host[side_id] ? newline_substitution : "") addition;
+}
+function append_by_val(host, addition){
+    host[val] = host[val] (host[val] ? newline_substitution : "") addition;
+}
+function set_victim_data(    ref, delimiter, sha1, sha2){
+    for(ref in op_victim_winner_search){
+        delimiter = out_victim_data ? newline_substitution : "";
+
+        # We expects that "no sha" cases will be processed in by solving actions.
+        # But this approach with variables helped to solve a severe. It makes code more resilient.
+        sha1 = refs[ref][remote_1][sha_key] ? refs[ref][remote_1][sha_key] : ("no sha for " remote_1);
+        sha2 = refs[ref][remote_2][sha_key] ? refs[ref][remote_2][sha_key] : ("no sha for " remote_2);
+
+        out_victim_data = out_victim_data delimiter "victim " ref " " sha1 " " sha2;
+        
+        delimiter = newline_substitution;
+        
+        out_victim_data = out_victim_data delimiter "git rev-list " refs[ref][track_1][ref_key] " " refs[ref][track_2][ref_key] " --max-count=1";
+        
+        out_victim_data = out_victim_data delimiter "  +" refs[ref][track_1][ref_key] ":" refs[ref][remote_2][ref_key];
+        out_victim_data = out_victim_data delimiter "  +" refs[ref][track_2][ref_key] ":" refs[ref][remote_1][ref_key];
+    }
+}
 function refspecs_to_stream(){
     # 0
-    print "{[results-spec: 0-results-spec; 1-del track; 2,3-fetch; 4,5-push; 6,7-post fetch; 8-rev-list; 9-notify-del; 10-notify-solving; 11-end-of-results-required-mark;]}"
-    # 1
     print out_del;
-    # 2
+    # 1
     print out_fetch1;
-    # 3
+    # 2
     print out_fetch2;
+    # 3
+    print out_ff_vs_nff_data[1];
     # 4
-    print out_push1;
+    print out_ff_vs_nff_data[2];
     # 5
-    print out_push2;
-    # 6
-    print out_post_fetch1;
-    # 7
-    print out_post_fetch2;
-    # 8
     print out_victim_data;
+    # 6
+    print out_push1;
+    # 7
+    print out_push2;
+    # 8
+    print out_post_fetch1;
     # 9
-    print out_notify_del;
+    print out_post_fetch2;
     # 10
+    print out_notify_del;
+    # 11
     print out_notify_solving;
 
-    # 11
+    # 12
     # Must print finishing line otherwise previous empty lines will be ignored by mapfile command in bash.
     print "{[end-of-results]}"
 }
