@@ -62,9 +62,9 @@ fi;
 # The way we receive data from gawk we can't use new line char in the output. So we are using a substitution.
 env_awk_newline_substitution='|||||'
 
-state_to_refspec='state_to_refspec.gawk'
-refspecs=$(awk \
-  --file="$path_git_sync_util/$state_to_refspec" \
+pre_fetch_processing='pre_fetch_processing.gawk'
+refspecs=$(gawk \
+  --file="$path_git_sync_util/$pre_fetch_processing" \
   `# --lint` \
   --assign must_exist_branch=$must_exist_branch \
   --assign origin_a="$origin_1" \
@@ -117,15 +117,6 @@ fi;
 # exit;
 
 
-mkdir -p "$path_async_output"
-
-if [[ -n "$del_spec" ]]; then
-  echo $'\n>' Delete branches
-  #echo $del_spec
-  git branch --delete --force --remotes $del_spec
-fi;
-
-
 if [[ $env_allow_async == 1 && -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
   echo $'\n>' Fetch Async
 
@@ -161,7 +152,7 @@ fi;
 
 
 
-victim_refspecs=$(awk \
+victim_refspecs=$(gawk \
   --file="$path_git_sync_util/select_refspec_after_fetching.gawk" \
   `# --lint` \
   --assign origin_1="$origin_1" \
@@ -180,6 +171,14 @@ push_victim_spec2="${victim_refspec_list[2]}";
 push_spec1="$push_spec1$push_victim_spec1"
 push_spec2="$push_spec2$push_victim_spec2"
 
+
+mkdir -p "$path_async_output"
+
+if [[ -n "$del_spec" ]]; then
+  echo $'\n>' Delete branches
+  #echo $del_spec
+  git branch --delete --force --remotes $del_spec
+fi;
 
 
 if [[ -n "$notify_del" ]]; then

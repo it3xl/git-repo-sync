@@ -187,10 +187,10 @@ function generate_missing_refs(    ref){
     }
 }
 function state_to_action(cr,    rr, tr, side, is_victim, action_solve_key){
-    rr[side_a] = refs[cr][remote[side_a]][sha_key];
-    rr[side_b] = refs[cr][remote[side_b]][sha_key];
-    tr[side_a] = refs[cr][track[side_a]][sha_key];
-    tr[side_b] = refs[cr][track[side_b]][sha_key];
+    for(side in sides){
+        rr[side] = refs[cr][remote[side]][sha_key];
+        tr[side] = refs[cr][track[side]][sha_key];
+    }
 
     rr[equal] = rr[side_a] == rr[side_b];
     tr[equal] = tr[side_a] == tr[side_b];
@@ -370,12 +370,11 @@ function actions_to_operations(    side, aside, ref, owner_side){
     }
 }
 function operations_to_refspecs(    side, aside, ref){
-    for(ref in op_del_track){
-        if(refs[ref][track[side_a]][sha_key]){
-            out_del = out_del "  " origin[side_a] "/" ref;
-        }
-        if(refs[ref][track[side_b]][sha_key]){
-            out_del = out_del "  " origin[side_b] "/" ref;
+    for(side in sides){
+        for(ref in op_del_track){
+            if(refs[ref][track[side]][sha_key]){
+                out_del = out_del "  " origin[side] "/" ref;
+            }
         }
     }
 
@@ -462,8 +461,8 @@ function set_victim_data(    ref, sha_a, sha_b){
     }
 }
 
-function append_by_side(host, side_id, addition){
-    host[side_id] = host[side_id] (host[side_id] ? newline_substitution : "") addition;
+function append_by_side(host, side, addition){
+    host[side] = host[side] (host[side] ? newline_substitution : "") addition;
 }
 function append_by_val(host, addition){
     host[val] = host[val] (host[val] ? newline_substitution : "") addition;
