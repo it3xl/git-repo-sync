@@ -14,11 +14,14 @@ BEGIN { # Constants.
     out_stream_attached = "/dev/stderr";
 }
 BEGIN { # Globals.
-    sides[1] = 1;
-    sides[2] = 2;
+    side_a = 1;
+    side_b = 2;
+
+    sides[side_a] = 1;
+    sides[side_b] = 2;
     
-    asides[1] = sides[2]
-    asides[2] = sides[1]
+    asides[side_a] = sides[side_b]
+    asides[side_b] = sides[side_a]
 
     split("", origin);
     split("", prefix);
@@ -39,28 +42,28 @@ function initial_states_processing(    side){
         write("Error. Parameter origin_a is empty");
         exit 1002;
     }
-    origin[1] = origin_a;
+    origin[side_a] = origin_a;
     origin_a = ""
     
     if(!origin_b){
         write("Error. Parameter origin_b is empty");
         exit 1003;
     }
-    origin[2] = origin_b;
+    origin[side_b] = origin_b;
     origin_b = ""
     
     if(!prefix_a){
         write("Error. Parameter prefix_a is empty");
         exit 1004;
     }
-    prefix[1] = prefix_a;
+    prefix[side_a] = prefix_a;
     prefix_a = ""
     
     if(!prefix_b){
         write("Error. Parameter prefix_b is empty");
         exit 1005;
     }
-    prefix[2] = prefix_b;
+    prefix[side_b] = prefix_b;
     prefix_b = ""
 
     if(!prefix_victims){
@@ -84,20 +87,20 @@ BEGINFILE { # Preparing processing for every portion of refs.
 function file_states_processing() {
     switch (++file_num) {
         case 1:
-            dest = remote[1];
+            dest = remote[side_a];
             ref_prefix = remote_refs_prefix;
             break;
         case 2:
-            dest = remote[2];
+            dest = remote[side_b];
             ref_prefix = remote_refs_prefix;
             break;
         case 3:
-            dest = track[1];
-            ref_prefix = track_refs_prefix origin[1] "/";
+            dest = track[side_a];
+            ref_prefix = track_refs_prefix origin[side_a] "/";
             break;
         case 4:
-            dest = track[2];
-            ref_prefix = track_refs_prefix origin[2] "/";
+            dest = track[side_b];
+            ref_prefix = track_refs_prefix origin[side_b] "/";
             break;
     }
 }
@@ -109,8 +112,8 @@ function file_states_processing() {
         
     prefix_name_key();
 
-    if(index($3, prefix[1]) != 1 \
-        && index($3, prefix[2]) != 1 \
+    if(index($3, prefix[side_a]) != 1 \
+        && index($3, prefix[side_b]) != 1 \
         && index($3, prefix_victims) != 1 \
         ){
         trace("!unexpected " $2 " (" dest ") " $1 "; branch name (" $3 ") has no allowed prefixes");
@@ -145,61 +148,61 @@ function main_processing(    ref){
     operations_to_refspecs();
     refspecs_to_stream();
 }
-function unlock_deletion(    rr1, rr2, tr1, tr2){
-    rr1 = refs[must_exist_branch][remote[1]][sha_key];
-    if(!rr1)
+function unlock_deletion(    rr_a, rr_b, tr_a, tr_b){
+    rr_a = refs[must_exist_branch][remote[side_a]][sha_key];
+    if(!rr_a)
         return;
 
-    tr1 = refs[must_exist_branch][track[1]][sha_key];
-    if(!tr1)
+    tr_a = refs[must_exist_branch][track[side_a]][sha_key];
+    if(!tr_a)
         return;
 
-    rr2 = refs[must_exist_branch][remote[2]][sha_key];
-    if(rr1 != rr2)
+    rr_b = refs[must_exist_branch][remote[side_b]][sha_key];
+    if(rr_a != rr_b)
         return;
 
-    tr2 = refs[must_exist_branch][track[2]][sha_key];
-    if(tr1 != tr2)
+    tr_b = refs[must_exist_branch][track[side_b]][sha_key];
+    if(tr_a != tr_b)
         return;
         
-    if(rr1 != tr2)
+    if(rr_a != tr_b)
         return;
     
     deletion_allowed = 1;
 }
 function generate_missing_refs(    ref){
     for(ref in refs){
-        if(!refs[ref][remote[1]][ref_key]){
-            refs[ref][remote[1]][ref_key] = remote_refs_prefix ref;
+        if(!refs[ref][remote[side_a]][ref_key]){
+            refs[ref][remote[side_a]][ref_key] = remote_refs_prefix ref;
         }
-        if(!refs[ref][remote[2]][ref_key]){
-            refs[ref][remote[2]][ref_key] = remote_refs_prefix ref;
+        if(!refs[ref][remote[side_b]][ref_key]){
+            refs[ref][remote[side_b]][ref_key] = remote_refs_prefix ref;
         }
-        if(!refs[ref][track[1]][ref_key]){
-            refs[ref][track[1]][ref_key] = track_refs_prefix origin[1] "/" ref;
+        if(!refs[ref][track[side_a]][ref_key]){
+            refs[ref][track[side_a]][ref_key] = track_refs_prefix origin[side_a] "/" ref;
         }
-        if(!refs[ref][track[2]][ref_key]){
-            refs[ref][track[2]][ref_key] = track_refs_prefix origin[2] "/" ref;
+        if(!refs[ref][track[side_b]][ref_key]){
+            refs[ref][track[side_b]][ref_key] = track_refs_prefix origin[side_b] "/" ref;
         }
     }
 }
 function state_to_action(cr,    rr, tr, side, is_victim, action_solve_key){
-    rr[1] = refs[cr][remote[1]][sha_key];
-    rr[2] = refs[cr][remote[2]][sha_key];
-    tr[1] = refs[cr][track[1]][sha_key];
-    tr[2] = refs[cr][track[2]][sha_key];
+    rr[side_a] = refs[cr][remote[side_a]][sha_key];
+    rr[side_b] = refs[cr][remote[side_b]][sha_key];
+    tr[side_a] = refs[cr][track[side_a]][sha_key];
+    tr[side_b] = refs[cr][track[side_b]][sha_key];
 
-    rr[equal] = rr[1] == rr[2];
-    tr[equal] = tr[1] == tr[2];
+    rr[equal] = rr[side_a] == rr[side_b];
+    tr[equal] = tr[side_a] == tr[side_b];
     
-    if(rr[equal] && tr[equal] && tr[1] == rr[2]){
+    if(rr[equal] && tr[equal] && tr[side_a] == rr[side_b]){
         # Nothing to change for the current branch.
 
         return;
     }
 
-    rr[common] = rr[equal] ? rr[1] : "";
-    rr[empty] = !(rr[1] || rr[2]);
+    rr[common] = rr[equal] ? rr[side_a] : "";
+    rr[empty] = !(rr[side_a] || rr[side_b]);
 
     if(rr[empty]){
         # As we here this means that remote repos don't know the current branch but gitSync knows it somehow.
@@ -228,8 +231,8 @@ function state_to_action(cr,    rr, tr, side, is_victim, action_solve_key){
 
     # ! All further actions suppose that remote refs are not equal.
 
-    tr[common] = tr[equal] ? tr[1] : "";
-    tr[empty] = !(tr[1] || tr[2]);
+    tr[common] = tr[equal] ? tr[side_a] : "";
+    tr[empty] = !(tr[side_a] || tr[side_b]);
 
     is_victim = index(cr, prefix_victims) == 1;
     action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
@@ -343,53 +346,53 @@ function actions_to_operations(    side, aside, ref, owns_side){
 
     split("", owns_side);
     for(ref in a_solve){
-        owns_side[1] = index(ref, prefix[1]) == 1;
-        owns_side[2] = index(ref, prefix[2]) == 1;
+        owns_side[side_a] = index(ref, prefix[side_a]) == 1;
+        owns_side[side_b] = index(ref, prefix[side_b]) == 1;
 
-        if(!owns_side[1] && !owns_side[2]){
-            trace("operation-solve; Ignoring " ref " as it has no allowed prefixes " prefix[1] " or " prefix[2])
+        if(!owns_side[side_a] && !owns_side[side_b]){
+            trace("operation-solve; Ignoring " ref " as it has no allowed prefixes " prefix[side_a] " or " prefix[side_b])
             continue;
         }
 
-        if(owns_side[1]){
-            if(refs[ref][remote[1]][sha_key]){
-                if(refs[ref][remote[1]][sha_key] != refs[ref][track[1]][sha_key]){
-                    op_fetch[1][ref];
+        if(owns_side[side_a]){
+            if(refs[ref][remote[side_a]][sha_key]){
+                if(refs[ref][remote[side_a]][sha_key] != refs[ref][track[side_a]][sha_key]){
+                    op_fetch[side_a][ref];
                 }
-                op_push_nff[2][ref];
-                #op_fetch_post[2][ref];
-            } else if(refs[ref][remote[2]][sha_key]){
-                if(refs[ref][remote[2]][sha_key] != refs[ref][track[2]][sha_key]){
-                    op_fetch[2][ref];
+                op_push_nff[side_b][ref];
+                #op_fetch_post[side_b][ref];
+            } else if(refs[ref][remote[side_b]][sha_key]){
+                if(refs[ref][remote[side_b]][sha_key] != refs[ref][track[side_b]][sha_key]){
+                    op_fetch[side_b][ref];
                 }
-                op_push_nff[1][ref];
-                #op_fetch_post[1][ref];
+                op_push_nff[side_a][ref];
+                #op_fetch_post[side_a][ref];
             }
         }
-        if(owns_side[2]){
-            if(refs[ref][remote[2]][sha_key]){
-                if(refs[ref][remote[2]][sha_key] != refs[ref][track[2]][sha_key]){
-                    op_fetch[2][ref];
+        if(owns_side[side_b]){
+            if(refs[ref][remote[side_b]][sha_key]){
+                if(refs[ref][remote[side_b]][sha_key] != refs[ref][track[side_b]][sha_key]){
+                    op_fetch[side_b][ref];
                 }
-                op_push_nff[1][ref];
-                #op_fetch_post[1][ref];
-            } else if(refs[ref][remote[1]][sha_key]){
-                if(refs[ref][remote[1]][sha_key] != refs[ref][track[1]][sha_key]){
-                    op_fetch[1][ref];
+                op_push_nff[side_a][ref];
+                #op_fetch_post[side_a][ref];
+            } else if(refs[ref][remote[side_a]][sha_key]){
+                if(refs[ref][remote[side_a]][sha_key] != refs[ref][track[side_a]][sha_key]){
+                    op_fetch[side_a][ref];
                 }
-                op_push_nff[2][ref];
-                #op_fetch_post[2][ref];
+                op_push_nff[side_b][ref];
+                #op_fetch_post[side_b][ref];
             }
         }
     }
 }
 function operations_to_refspecs(    side, aside, ref){
     for(ref in op_del_track){
-        if(refs[ref][track[1]][sha_key]){
-            out_del = out_del "  " origin[1] "/" ref;
+        if(refs[ref][track[side_a]][sha_key]){
+            out_del = out_del "  " origin[side_a] "/" ref;
         }
-        if(refs[ref][track[2]][sha_key]){
-            out_del = out_del "  " origin[2] "/" ref;
+        if(refs[ref][track[side_b]][sha_key]){
+            out_del = out_del "  " origin[side_b] "/" ref;
         }
     }
 
@@ -460,19 +463,19 @@ function set_ff_vs_nff_push_data(    side, aside, descendant_sha, ancestor_sha){
         }
     }
 }
-function set_victim_data(    ref, sha1, sha2){
+function set_victim_data(    ref, sha_a, sha_b){
     for(ref in op_victim_winner_search){
         # We expects that "no sha" cases will be processed in by solving actions.
         # But this approach with variables helped to solve a severe. It makes code more resilient.
-        sha1 = refs[ref][remote[1]][sha_key] ? refs[ref][remote[1]][sha_key] : ("no sha for " remote[1]);
-        sha2 = refs[ref][remote[2]][sha_key] ? refs[ref][remote[2]][sha_key] : ("no sha for " remote[2]);
+        sha_a = refs[ref][remote[side_a]][sha_key] ? refs[ref][remote[side_a]][sha_key] : ("no sha for " remote[side_a]);
+        sha_b = refs[ref][remote[side_b]][sha_key] ? refs[ref][remote[side_b]][sha_key] : ("no sha for " remote[side_b]);
 
-        append_by_val(out_victim_data, "victim " ref " " sha1 " " sha2);
+        append_by_val(out_victim_data, "victim " ref " " sha_a " " sha_b);
         
-        append_by_val(out_victim_data, "git rev-list " refs[ref][track[1]][ref_key] " " refs[ref][track[2]][ref_key] " --max-count=1");
+        append_by_val(out_victim_data, "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1");
         
-        append_by_val(out_victim_data, "  +" refs[ref][track[1]][ref_key] ":" refs[ref][remote[2]][ref_key]);
-        append_by_val(out_victim_data, "  +" refs[ref][track[2]][ref_key] ":" refs[ref][remote[1]][ref_key]);
+        append_by_val(out_victim_data, "  +" refs[ref][track[side_a]][ref_key] ":" refs[ref][remote[side_b]][ref_key]);
+        append_by_val(out_victim_data, "  +" refs[ref][track[side_b]][ref_key] ":" refs[ref][remote[side_a]][ref_key]);
     }
 }
 
@@ -487,23 +490,23 @@ function refspecs_to_stream(){
     # 0
     print out_del;
     # 1
-    print out_fetch[1];
+    print out_fetch[side_a];
     # 2
-    print out_fetch[2];
+    print out_fetch[side_b];
     # 3
-    print out_ff_vs_nff_data[1];
+    print out_ff_vs_nff_data[side_a];
     # 4
-    print out_ff_vs_nff_data[2];
+    print out_ff_vs_nff_data[side_b];
     # 5
     print out_victim_data[val];
     # 6
-    print out_push[1];
+    print out_push[side_a];
     # 7
-    print out_push[2];
+    print out_push[side_b];
     # 8
-    print out_post_fetch[1];
+    print out_post_fetch[side_a];
     # 9
-    print out_post_fetch[2];
+    print out_post_fetch[side_b];
     # 10
     print out_notify_del[val];
     # 11
