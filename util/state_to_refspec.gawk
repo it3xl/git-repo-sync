@@ -7,7 +7,9 @@ BEGIN { # Constants.
     ref_key = "ref";
 
     val = "val";
-    all = "all";
+    common = "common";
+    equal = "equal";
+    empty = "empty";
 
     out_stream_attached = "/dev/stderr";
 }
@@ -77,9 +79,9 @@ function initial_states_processing(    side){
     }
 }
 BEGINFILE { # Preparing processing for every portion of refs.
-    file_states();
+    file_states_processing();
 }
-function file_states() {
+function file_states_processing() {
     switch (++file_num) {
         case 1:
             dest = remote[1];
@@ -124,7 +126,10 @@ function prefix_name_key() { # Generates a common key for all 4 locations of eve
     split($3, split_refs, ref_prefix);
     $3 = split_refs[2];
 }
-END { # Processing.
+END {
+    main_processing();
+}
+function main_processing(    ref){
     dest = ""; ref_prefix = "";
 
     deletion_allowed = 0;
@@ -133,14 +138,13 @@ END { # Processing.
 
     generate_missing_refs();
 
-    for(processed_ref in refs){
-        state_to_action(processed_ref);
+    for(ref in refs){
+        state_to_action(ref);
     }
     actions_to_operations();
     operations_to_refspecs();
     refspecs_to_stream();
 }
-
 function unlock_deletion(    rr1, rr2, tr1, tr2){
     rr1 = refs[must_exist_branch][remote[1]][sha_key];
     if(!rr1)
@@ -179,25 +183,26 @@ function generate_missing_refs(    ref){
         }
     }
 }
-function state_to_action(cr,    rr1, rr2, tr1, tr2, rrEqual, lrEqual, rr, lr, is_victim, action_solve_key, arr){
-    rr1 = refs[cr][remote[1]][sha_key];
-    rr2 = refs[cr][remote[2]][sha_key];
-    tr1 = refs[cr][track[1]][sha_key];
-    tr2 = refs[cr][track[2]][sha_key];
+function state_to_action(cr,    rr, tr, side, is_victim, action_solve_key){
+    rr[1] = refs[cr][remote[1]][sha_key];
+    rr[2] = refs[cr][remote[2]][sha_key];
+    tr[1] = refs[cr][track[1]][sha_key];
+    tr[2] = refs[cr][track[2]][sha_key];
 
-    rrEqual = rr1 == rr2;
-    lrEqual = tr1 == tr2;
+    rr[equal] = rr[1] == rr[2];
+    tr[equal] = tr[1] == tr[2];
     
-    if(rrEqual && lrEqual && tr1 == rr2){
+    if(rr[equal] && tr[equal] && tr[1] == rr[2]){
         # Nothing to change for the current branch.
 
         return;
     }
 
-    rr = rrEqual ? rr1 : "# remote refs are not equal #";
+    rr[common] = rr[equal] ? rr[1] : "";
+    rr[empty] = !(rr[1] || rr[2]);
 
-    if(rrEqual && !rr){
-        # As we here this means that remote repos don't know the branch but gitSync knows it somehow.
+    if(rr[empty]){
+        # As we here this means that remote repos don't know the current branch but gitSync knows it somehow.
         # This behavior supports independents of gitSync from its remoter repos. I.e. you can replace them at once, as gitSync will be the source of truth.
         # But if you don't run gitSync for a while and have deleted the branch on both side repos manually then gitSync will recreate it.
         # Re-delete the branch and use gitSync. Silly))
@@ -208,16 +213,14 @@ function state_to_action(cr,    rr1, rr2, tr1, tr2, rrEqual, lrEqual, rr, lr, is
         return;
     }
 
-    if(rrEqual){
-        if(rr != tr1){
+    if(rr[equal]){
+        for(side in sides){
+            if(rr[common] == tr[side]){
+                continue;
+            }
             # Possibly gitSync or the network was interrupted.
-            trace(cr " action-fetch from " origin[1] "; track ref is " ((tr1) ? "outdated" : "unknown"));
-            a_fetch[1][cr];
-        }
-        if(rr != tr2){
-            # Possibly gitSync or the network was interrupted.
-            trace(cr " action-fetch from " origin[2] "; track ref is " ((tr2) ? "outdated" : "unknown"));
-            a_fetch[2][cr];
+            trace(cr " action-fetch from " origin[side] "; track ref is " ((tr[side]) ? "outdated" : "unknown"));
+            a_fetch[side][cr];
         }
 
         return;
@@ -225,55 +228,45 @@ function state_to_action(cr,    rr1, rr2, tr1, tr2, rrEqual, lrEqual, rr, lr, is
 
     # ! All further actions suppose that remote refs are not equal.
 
-    lr = lrEqual ? tr1 : "# track refs are not equal #";
+    tr[common] = tr[equal] ? tr[1] : "";
+    tr[empty] = !(tr[1] || tr[2]);
 
     is_victim = index(cr, prefix_victims) == 1;
     action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
 
-    if(lrEqual && !lr){
+    if(tr[empty]){
         trace(cr " " action_solve_key " on both remotes; is not tracked");
         set_solve_action(is_victim, cr);
 
         return;
     }
 
-    if(lrEqual){
-        if(!rr1 && rr2 == lr){
-            if(deletion_allowed){
-                trace(cr " action-del on " origin[2] "; is disappeared from " origin[1]);
-                a_del[2][cr];
-            }else{
-                trace(cr " " action_solve_key "-as-del-blocked on " origin[2] "; is disappeared from " origin[1] " and deletion is blocked");
-                set_solve_action(is_victim, cr);
-            }
+    if(tr[equal]){
+        for(side in sides){
+            aside = asides[side];
+            if(!rr[side] && rr[aside] == tr[common]){
+                if(deletion_allowed){
+                    trace(cr " action-del on " origin[aside] "; is disappeared from " origin[side]);
+                    a_del[aside][cr];
+                }else{
+                    trace(cr " " action_solve_key "-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
+                    set_solve_action(is_victim, cr);
+                }
 
-            return;
-        }
-        if(!rr2 && rr1 == lr){
-            if(deletion_allowed){
-                trace(cr " action-del on " origin[1] "; is disappeared from " origin[2]);
-                a_del[1][cr];
-            }else{
-                trace(cr " " action_solve_key "-as-del-blocked on " origin[1] "; is disappeared from " origin[2] " and deletion is blocked");
-                set_solve_action(is_victim, cr);
+                return;
             }
-
-            return;
         }
     }
 
-    if(lrEqual && !is_victim){
-        if(rr1 == lr && rr2 != lr){
-            trace(cr " action-fast-forward; outdated on " origin[1]);
-            a_ff[1][cr];
+    if(tr[equal] && !is_victim){
+        for(side in sides){
+            aside = asides[side];
+            if(rr[side] == tr[common] && rr[aside] != tr[common]){
+                trace(cr " action-fast-forward; outdated on " origin[side]);
+                a_ff[side][cr];
 
-            return;
-        }
-        if(rr2 == lr && rr1 != lr){
-            trace(cr " action-fast-forward; outdated on " origin[2]);
-            a_ff[2][cr];
-
-            return;
+                return;
+            }
         }
     }
 
