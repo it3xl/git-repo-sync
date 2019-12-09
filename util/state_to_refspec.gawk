@@ -280,7 +280,7 @@ function set_solve_action(is_victim, ref){
         a_solve[ref];
     }
 }
-function actions_to_operations(    side, aside, ref, owns_side, victims_push_requested){
+function actions_to_operations(    side, aside, ref, owns_side){
     for(ref in a_restore){
         for(side in sides){
             if(!refs[ref][track[side]][sha_key]){
@@ -317,39 +317,28 @@ function actions_to_operations(    side, aside, ref, owns_side, victims_push_req
         }
     }
 
-    for(ref in a_victim_solve){
+    for(side in sides){
+        aside = asides[side];
+        for(ref in a_victim_solve){
 
-        # Update outdated or missing track refs for existing remote refs.
-        if(refs[ref][remote[1]][sha_key]){
-            if(refs[ref][remote[1]][sha_key] != refs[ref][track[1]][sha_key]){
-                op_fetch[1][ref];
+            # Update outdated or missing track refs for existing remote refs.
+            if(refs[ref][remote[side]][sha_key]){
+                if(refs[ref][remote[side]][sha_key] != refs[ref][track[side]][sha_key]){
+                    op_fetch[side][ref];
+                }
             }
-        }
-        if(refs[ref][remote[2]][sha_key]){
-            if(refs[ref][remote[2]][sha_key] != refs[ref][track[2]][sha_key]){
-                op_fetch[2][ref];
+
+            # Update non-existing remote refs.
+            if(!refs[ref][remote[side]][sha_key] && refs[ref][remote[aside]][sha_key]){
+                op_push_nff[side][ref];
+                #op_fetch_post[side][ref];
+
+                # Stop if non-existing remote refs will be updated.
+                continue;
             }
-        }
 
-        # Update non-existing remote refs.
-        if(!refs[ref][remote[1]][sha_key] && refs[ref][remote[2]][sha_key]){
-            victims_push_requested = 1;
-            op_push_nff[1][ref];
-            #op_fetch_post[1][ref];
+            op_victim_winner_search[ref];
         }
-        if(!refs[ref][remote[2]][sha_key] && refs[ref][remote[1]][sha_key]){
-            victims_push_requested = 1;
-            op_push_nff[2][ref];
-            #op_fetch_post[2][ref];
-        }
-
-        # Stop if non-existing remote refs will be updated.
-        if(victims_push_requested){
-            victims_push_requested = 0;
-            continue;
-        }
-
-        op_victim_winner_search[ref];
     }
 
     split("", owns_side);
