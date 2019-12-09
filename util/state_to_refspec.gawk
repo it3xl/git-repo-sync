@@ -132,7 +132,6 @@ END { # Processing.
     write("Deletion " ((deletion_allowed) ? "allowed" : "blocked") " by " must_exist_branch);
 
     generate_missing_refs();
-    declare_processing_globs();
 
     for(currentRef in refs){
         state_to_action( \
@@ -174,13 +173,6 @@ function generate_missing_refs(){
         if(!refs[ref][track[2]][ref_key])
             refs[ref][track[2]][ref_key] = track_refs_prefix origin[2] "/" ref;
     }
-}
-function declare_processing_globs(){
-    # Action array variables.
-    # split("", a_del1); split("", a_del2);
-    split("", a_ff_to1); split("", a_ff_to2);
-    split("", a_solve);
-    split("", a_victim_solve);
 }
 function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is_victim, action_solve_key, arr){
     rrEqual = rr1 == rr2;
@@ -263,13 +255,13 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
     if(lrEqual && !is_victim){
         if(rr1 == lr && rr2 != lr){
             trace(cr " action-fast-forward; outdated on " origin[1]);
-            a_ff_to1[cr];
+            a_ff[1][cr];
 
             return;
         }
         if(rr2 == lr && rr1 != lr){
             trace(cr " action-fast-forward; outdated on " origin[2]);
-            a_ff_to2[cr];
+            a_ff[2][cr];
 
             return;
         }
@@ -285,7 +277,7 @@ function set_solve_action(is_victim, ref){
         a_solve[ref];
     }
 }
-function actions_to_operations(    side, ref, owns_side, victims_push_requested){
+function actions_to_operations(    side, aside, ref, owns_side, victims_push_requested){
     for(ref in a_restore){
         for(side in sides){
             if(!refs[ref][track[side]][sha_key]){
@@ -311,19 +303,15 @@ function actions_to_operations(    side, ref, owns_side, victims_push_requested)
 
     # Warning! We need post fetching here because a ref's change may be not a FF-change. And without the post fetch the sync will not be resolved ever.
     # This is a case when a sync-collision will be solved with two sync passes.
-    for(ref in a_ff_to1){
-        op_fetch[2][ref];
-        
-        op_ff_vs_nff[1][ref];
-        #op_push_ff[1][ref];
-        #op_fetch_post[1][ref];
-    }
-    for(ref in a_ff_to2){
-        op_fetch[1][ref];
-        
-        op_ff_vs_nff[2][ref];
-        #op_push_ff[2][ref];
-        #op_fetch_post[2][ref];
+    for(side in a_ff){
+        aside = asides[side];
+        for(ref in a_ff[side]){
+            op_fetch[aside][ref];
+            
+            op_ff_vs_nff[side][ref];
+            #op_push_ff[side][ref];
+            #op_fetch_post[side][ref];
+        }
     }
 
     for(ref in a_victim_solve){
