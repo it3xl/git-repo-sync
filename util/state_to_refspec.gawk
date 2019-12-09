@@ -283,7 +283,7 @@ function set_solve_action(is_victim, ref){
         a_solve[ref];
     }
 }
-function actions_to_operations(    side, aside, ref, owns_side){
+function actions_to_operations(    side, aside, ref, owner_side){
     for(ref in a_restore){
         for(side in sides){
             if(!refs[ref][track[side]][sha_key]){
@@ -344,44 +344,27 @@ function actions_to_operations(    side, aside, ref, owns_side){
         }
     }
 
-    split("", owns_side);
-    for(ref in a_solve){
-        owns_side[side_a] = index(ref, prefix[side_a]) == 1;
-        owns_side[side_b] = index(ref, prefix[side_b]) == 1;
+    for(side in sides){
+        aside = asides[side];
+        for(ref in a_solve){
+            owner_side = index(ref, prefix[side]) == 1;
 
-        if(!owns_side[side_a] && !owns_side[side_b]){
-            trace("operation-solve; Ignoring " ref " as it has no allowed prefixes " prefix[side_a] " or " prefix[side_b])
-            continue;
-        }
-
-        if(owns_side[side_a]){
-            if(refs[ref][remote[side_a]][sha_key]){
-                if(refs[ref][remote[side_a]][sha_key] != refs[ref][track[side_a]][sha_key]){
-                    op_fetch[side_a][ref];
-                }
-                op_push_nff[side_b][ref];
-                #op_fetch_post[side_b][ref];
-            } else if(refs[ref][remote[side_b]][sha_key]){
-                if(refs[ref][remote[side_b]][sha_key] != refs[ref][track[side_b]][sha_key]){
-                    op_fetch[side_b][ref];
-                }
-                op_push_nff[side_a][ref];
-                #op_fetch_post[side_a][ref];
+            if(!owner_side){
+                continue;
             }
-        }
-        if(owns_side[side_b]){
-            if(refs[ref][remote[side_b]][sha_key]){
-                if(refs[ref][remote[side_b]][sha_key] != refs[ref][track[side_b]][sha_key]){
-                    op_fetch[side_b][ref];
+
+            if(refs[ref][remote[side]][sha_key]){
+                if(refs[ref][remote[side]][sha_key] != refs[ref][track[side]][sha_key]){
+                    op_fetch[side][ref];
                 }
-                op_push_nff[side_a][ref];
-                #op_fetch_post[side_a][ref];
-            } else if(refs[ref][remote[side_a]][sha_key]){
-                if(refs[ref][remote[side_a]][sha_key] != refs[ref][track[side_a]][sha_key]){
-                    op_fetch[side_a][ref];
+                op_push_nff[aside][ref];
+                #op_fetch_post[aside][ref];
+            } else if(refs[ref][remote[aside]][sha_key]){
+                if(refs[ref][remote[aside]][sha_key] != refs[ref][track[aside]][sha_key]){
+                    op_fetch[aside][ref];
                 }
-                op_push_nff[side_b][ref];
-                #op_fetch_post[side_b][ref];
+                op_push_nff[side][ref];
+                #op_fetch_post[side][ref];
             }
         }
     }
