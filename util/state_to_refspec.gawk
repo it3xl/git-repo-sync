@@ -13,8 +13,8 @@ BEGIN { # Constants.
 BEGIN { # Globals.
     sides[1] = 1;
     sides[2] = 2;
-    aside[1] = sides[2]
-    aside[2] = sides[1]
+    asides[1] = sides[2]
+    asides[2] = sides[1]
 
     split("", origin);
     split("", prefix);
@@ -181,17 +181,6 @@ function declare_processing_globs(){
     split("", a_ff_to1); split("", a_ff_to2);
     split("", a_solve);
     split("", a_victim_solve);
-
-    # Operation array variables.
-    split("", op_del_track);
-    # split("", op_fetch1); split("", op_fetch2);
-    # split("", op_push_restore1); split("", op_push_restore2);
-    # split("", op_push_del1); split("", op_push_del2);
-    split("", op_push_ff_to1); split("", op_push_ff_to2);
-    split("", op_ff_vs_nff_to1); split("", op_ff_vs_nff_to2);
-    split("", op_push_nff_to1); split("", op_push_nff_to2);
-    # split("", op_fetch_post1); split("", op_fetch_post2);
-    # split("", op_victim_winner_search);
 }
 function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is_victim, action_solve_key, arr){
     rrEqual = rr1 == rr2;
@@ -325,15 +314,15 @@ function actions_to_operations(    side, ref, owns_side, victims_push_requested)
     for(ref in a_ff_to1){
         op_fetch[2][ref];
         
-        op_ff_vs_nff_to1[ref];
-        #op_push_ff_to1[ref];
+        op_ff_vs_nff[1][ref];
+        #op_push_ff[1][ref];
         #op_fetch_post[1][ref];
     }
     for(ref in a_ff_to2){
         op_fetch[1][ref];
         
-        op_ff_vs_nff_to2[ref];
-        #op_push_ff_to2[ref];
+        op_ff_vs_nff[2][ref];
+        #op_push_ff[2][ref];
         #op_fetch_post[2][ref];
     }
 
@@ -354,12 +343,12 @@ function actions_to_operations(    side, ref, owns_side, victims_push_requested)
         # Update non-existing remote refs.
         if(!refs[ref][remote[1]][sha_key] && refs[ref][remote[2]][sha_key]){
             victims_push_requested = 1;
-            op_push_nff_to1[ref];
+            op_push_nff[1][ref];
             #op_fetch_post[1][ref];
         }
         if(!refs[ref][remote[2]][sha_key] && refs[ref][remote[1]][sha_key]){
             victims_push_requested = 1;
-            op_push_nff_to2[ref];
+            op_push_nff[2][ref];
             #op_fetch_post[2][ref];
         }
 
@@ -387,13 +376,13 @@ function actions_to_operations(    side, ref, owns_side, victims_push_requested)
                 if(refs[ref][remote[1]][sha_key] != refs[ref][track[1]][sha_key]){
                     op_fetch[1][ref];
                 }
-                op_push_nff_to2[ref];
+                op_push_nff[2][ref];
                 #op_fetch_post[2][ref];
             } else if(refs[ref][remote[2]][sha_key]){
                 if(refs[ref][remote[2]][sha_key] != refs[ref][track[2]][sha_key]){
                     op_fetch[2][ref];
                 }
-                op_push_nff_to1[ref];
+                op_push_nff[1][ref];
                 #op_fetch_post[1][ref];
             }
         }
@@ -402,34 +391,31 @@ function actions_to_operations(    side, ref, owns_side, victims_push_requested)
                 if(refs[ref][remote[2]][sha_key] != refs[ref][track[2]][sha_key]){
                     op_fetch[2][ref];
                 }
-                op_push_nff_to1[ref];
+                op_push_nff[1][ref];
                 #op_fetch_post[1][ref];
             } else if(refs[ref][remote[1]][sha_key]){
                 if(refs[ref][remote[1]][sha_key] != refs[ref][track[1]][sha_key]){
                     op_fetch[1][ref];
                 }
-                op_push_nff_to2[ref];
+                op_push_nff[2][ref];
                 #op_fetch_post[2][ref];
             }
         }
     }
 }
-function operations_to_refspecs(    side, ref){
-    { # op_del_track
-        for(ref in op_del_track){
-            if(refs[ref][track[1]][sha_key]){
-                out_del = out_del "  " origin[1] "/" ref;
-            }
-            if(refs[ref][track[2]][sha_key]){
-                out_del = out_del "  " origin[2] "/" ref;
-            }
+function operations_to_refspecs(    side, aside, ref){
+    for(ref in op_del_track){
+        if(refs[ref][track[1]][sha_key]){
+            out_del = out_del "  " origin[1] "/" ref;
+        }
+        if(refs[ref][track[2]][sha_key]){
+            out_del = out_del "  " origin[2] "/" ref;
         }
     }
-    { # op_fetch1, op_fetch2
-        for(side in op_fetch){
-            for(ref in op_fetch[side]){
-                out_fetch[side] = out_fetch[side] "  +" refs[ref][remote[side]][ref_key] ":" refs[ref][track[side]][ref_key];
-            }
+
+    for(side in op_fetch){
+        for(ref in op_fetch[side]){
+            out_fetch[side] = out_fetch[side] "  +" refs[ref][remote[side]][ref_key] ":" refs[ref][track[side]][ref_key];
         }
     }
 
@@ -447,30 +433,20 @@ function operations_to_refspecs(    side, ref){
         }
     }
 
-    { # op_push_ff_to1, op_push_ff_to2
-        for(ref in op_push_ff_to1){
-            out_push[1] = out_push[1] "  " refs[ref][track[2]][ref_key] ":" refs[ref][remote[1]][ref_key];
-        }
-        for(ref in op_push_ff_to2){
-            out_push[2] = out_push[2] "  " refs[ref][track[1]][ref_key] ":" refs[ref][remote[2]][ref_key];
+    for(side in op_push_ff){
+        aside = asides[side];
+        for(ref in op_push_ff[side]){
+            out_push[side] = out_push[side] "  " refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key];
         }
     }
-    { # op_push_nff_to1, op_push_nff_to2
-        for(ref in op_push_nff_to1){
-            out_push[1] = out_push[1] "  +" refs[ref][track[2]][ref_key] ":" refs[ref][remote[1]][ref_key];
-        }
-        for(ref in op_push_nff_to2){
-            out_push[2] = out_push[2] "  +" refs[ref][track[1]][ref_key] ":" refs[ref][remote[2]][ref_key];
-        }
 
-        for(ref in op_push_nff_to1){
-            if(refs[ref][remote[1]][sha_key]){
-                append_by_val(out_notify_solving, prefix[1]  " | conflict-solving | "  refs[ref][remote[1]][ref_key]  "   "  refs[ref][remote[1]][sha_key]);
-            }
-        }
-        for(ref in op_push_nff_to2){
-            if(refs[ref][remote[2]][sha_key]){
-                append_by_val(out_notify_solving, prefix[2]  " | conflict-solving | "  refs[ref][remote[2]][ref_key]  "   "  refs[ref][remote[2]][sha_key]);
+    for(side in op_push_nff){
+        aside = asides[side];
+        for(ref in op_push_nff[side]){
+            out_push[side] = out_push[side] "  +" refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key];
+
+            if(refs[ref][remote[side]][sha_key]){
+                append_by_val(out_notify_solving, prefix[side]  " | conflict-solving | "  refs[ref][remote[side]][ref_key]  "   "  refs[ref][remote[side]][sha_key]);
             }
         }
     }
@@ -484,32 +460,24 @@ function operations_to_refspecs(    side, ref){
         }
     }
 }
-function set_ff_vs_nff_push_data(    descendant_sha, ancestor_sha){
-    for(ref in op_ff_vs_nff_to1){
-        # 1 is an ancestor, update target.
-        # 2 is a descendant (possibly), update source.
-        ancestor_sha = refs[ref][remote[1]][sha_key] ? refs[ref][remote[1]][sha_key] : ("no sha for " remote[1]);
-        descendant_sha = refs[ref][remote[2]][sha_key] ? refs[ref][remote[2]][sha_key] : ("no sha for " remote[2]);
+function set_ff_vs_nff_push_data(    side, aside, descendant_sha, ancestor_sha){
+    for(side in op_ff_vs_nff){
+        aside = asides[side];
 
-        append_by_side(out_ff_vs_nff_data, 1, "ff-vs-nff " ref " " ancestor_sha " " descendant_sha);
+        for(ref in op_ff_vs_nff[side]){
+        # ancestor is update target.
+        ancestor_sha = refs[ref][remote[side]][sha_key] ? refs[ref][remote[side]][sha_key] : ("no sha for " remote[side]);
+
+        # descendant is (possibly) update source.
+        descendant_sha = refs[ref][remote[aside]][sha_key] ? refs[ref][aside][sha_key] : ("no sha for " remote[aside]);
+
+        append_by_side(out_ff_vs_nff_data, side, "ff-vs-nff " ref " " ancestor_sha " " descendant_sha);
         
         # --is-ancestor <ancestor> <descendant>
-        append_by_side(out_ff_vs_nff_data, 1, "git merge-base --is-ancestor " refs[ref][track[1]][ref_key] " " refs[ref][track[2]][ref_key] " && echo ff || echo nff");
+        append_by_side(out_ff_vs_nff_data, side, "git merge-base --is-ancestor " refs[ref][track[side]][ref_key] " " refs[ref][track[aside]][ref_key] " && echo ff || echo nff");
         
-        append_by_side(out_ff_vs_nff_data, 1, refs[ref][track[2]][ref_key] ":" refs[ref][remote[1]][ref_key]);
-    }
-    for(ref in op_ff_vs_nff_to2){
-        # 2 is an ancestor, update target.
-        # 1 is a descendant (possibly), update source.
-        ancestor_sha = refs[ref][remote[2]][sha_key] ? refs[ref][remote[2]][sha_key] : ("no sha for " remote[2]);
-        descendant_sha = refs[ref][remote[1]][sha_key] ? refs[ref][remote[1]][sha_key] : ("no sha for " remote[1]);
-
-        append_by_side(out_ff_vs_nff_data, 2, "ff-vs-nff " ref " " ancestor_sha " " descendant_sha);
-        
-        # --is-ancestor <ancestor> <descendant>
-        append_by_side(out_ff_vs_nff_data, 2, "git merge-base --is-ancestor " refs[ref][track[2]][ref_key] " " refs[ref][track[1]][ref_key] " && echo ff || echo nff");
-        
-        append_by_side(out_ff_vs_nff_data, 2, refs[ref][track[1]][ref_key] ":" refs[ref][remote[2]][ref_key]);
+        append_by_side(out_ff_vs_nff_data, side, refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key]);
+        }
     }
 }
 function set_victim_data(    ref, sha1, sha2){
