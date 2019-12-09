@@ -80,7 +80,7 @@ refspecs=$(awk \
   <(echo "$track_refs_2") \
 )
 
-# echo "$refspecs"
+echo "$refspecs"
 # exit;
 
 mapfile -t refspec_list < <(echo "$refspecs")
@@ -112,6 +112,8 @@ fi;
 # echo "$ff_vs_nff_push_data_1"
 # echo
 # echo "$ff_vs_nff_push_data_2"
+# echo
+# echo "$victim_data"
 # exit;
 
 
@@ -267,5 +269,7 @@ else
 fi;
 
 
+echo
+echo @ RESULT: Successfully completed.
 #echo
 #echo End `basename $0`

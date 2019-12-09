@@ -3,7 +3,7 @@ BEGIN { # Constants.
     out_stream_attached = "/dev/stderr";
 }
 BEGIN{
-    write_after_line("> victim refs processing");
+    write_after_line("> refs rechecking");
     #trace("Tracing is ON");
 
     if(!origin_1){
@@ -111,7 +111,7 @@ END{
     print "{[end-of-results]}"
 }
 END{ # Disposing.
-    write("> victim refs processing end");
+    write("> refs rechecking end");
 
     # Possibly the close here is excessive.
     #https://www.gnu.org/software/gawk/manual/html_node/Close-Files-And-Pipes.html#Close-Files-And-Pipes
