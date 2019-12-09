@@ -7,12 +7,14 @@ BEGIN { # Constants.
     ref_key = "ref";
 
     val = "val";
+    all = "all";
 
     out_stream_attached = "/dev/stderr";
 }
 BEGIN { # Globals.
     sides[1] = 1;
     sides[2] = 2;
+    
     asides[1] = sides[2]
     asides[2] = sides[1]
 
@@ -25,6 +27,9 @@ BEGIN { # Parameters.
     write_after_line("> refs processing");
     #trace("Tracing is ON");
 
+    initial_states_processing();
+}
+function initial_states_processing(    side){
     if(!must_exist_branch)
         write("Deletion is blocked. Parameter must_exist_branch is empty");
         
@@ -66,9 +71,9 @@ BEGIN { # Parameters.
         exit 1006;
     }
 
-    for(key in sides){
-        track[key] = "track@" prefix[key];
-        remote[key] = "remote@" prefix[key];
+    for(side in sides){
+        track[side] = "track@" prefix[side];
+        remote[side] = "remote@" prefix[side];
     }
 }
 BEGINFILE { # Preparing processing for every portion of refs.
@@ -123,62 +128,67 @@ END { # Processing.
     dest = ""; ref_prefix = "";
 
     deletion_allowed = 0;
-    unlock_deletion( \
-        refs[must_exist_branch][remote[1]][sha_key], \
-        refs[must_exist_branch][remote[2]][sha_key], \
-        refs[must_exist_branch][track[1]][sha_key], \
-        refs[must_exist_branch][track[2]][sha_key] \
-    );
+    unlock_deletion();
     write("Deletion " ((deletion_allowed) ? "allowed" : "blocked") " by " must_exist_branch);
 
     generate_missing_refs();
 
-    for(currentRef in refs){
-        state_to_action( \
-        currentRef, \
-        refs[currentRef][remote[1]][sha_key], \
-        refs[currentRef][remote[2]][sha_key], \
-        refs[currentRef][track[1]][sha_key], \
-        refs[currentRef][track[2]][sha_key] \
-        );
+    for(processed_ref in refs){
+        state_to_action(processed_ref);
     }
     actions_to_operations();
     operations_to_refspecs();
     refspecs_to_stream();
 }
 
-function unlock_deletion(rr1, rr2, lr1, lr2){
+function unlock_deletion(    rr1, rr2, tr1, tr2){
+    rr1 = refs[must_exist_branch][remote[1]][sha_key];
     if(!rr1)
         return;
-    if(!lr1)
+
+    tr1 = refs[must_exist_branch][track[1]][sha_key];
+    if(!tr1)
         return;
-        
+
+    rr2 = refs[must_exist_branch][remote[2]][sha_key];
     if(rr1 != rr2)
         return;
-    if(lr1 != lr2)
+
+    tr2 = refs[must_exist_branch][track[2]][sha_key];
+    if(tr1 != tr2)
         return;
-    if(rr1 != lr2)
+        
+    if(rr1 != tr2)
         return;
     
     deletion_allowed = 1;
 }
-function generate_missing_refs(){
+function generate_missing_refs(    ref){
     for(ref in refs){
-        if(!refs[ref][remote[1]][ref_key])
+        if(!refs[ref][remote[1]][ref_key]){
             refs[ref][remote[1]][ref_key] = remote_refs_prefix ref;
-        if(!refs[ref][remote[2]][ref_key])
+        }
+        if(!refs[ref][remote[2]][ref_key]){
             refs[ref][remote[2]][ref_key] = remote_refs_prefix ref;
-        if(!refs[ref][track[1]][ref_key])
+        }
+        if(!refs[ref][track[1]][ref_key]){
             refs[ref][track[1]][ref_key] = track_refs_prefix origin[1] "/" ref;
-        if(!refs[ref][track[2]][ref_key])
+        }
+        if(!refs[ref][track[2]][ref_key]){
             refs[ref][track[2]][ref_key] = track_refs_prefix origin[2] "/" ref;
+        }
     }
 }
-function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is_victim, action_solve_key, arr){
+function state_to_action(cr,    rr1, rr2, tr1, tr2, rrEqual, lrEqual, rr, lr, is_victim, action_solve_key, arr){
+    rr1 = refs[cr][remote[1]][sha_key];
+    rr2 = refs[cr][remote[2]][sha_key];
+    tr1 = refs[cr][track[1]][sha_key];
+    tr2 = refs[cr][track[2]][sha_key];
+
     rrEqual = rr1 == rr2;
-    lrEqual = lr1 == lr2;
+    lrEqual = tr1 == tr2;
     
-    if(rrEqual && lrEqual && lr1 == rr2){
+    if(rrEqual && lrEqual && tr1 == rr2){
         # Nothing to change for the current branch.
 
         return;
@@ -199,14 +209,14 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
     }
 
     if(rrEqual){
-        if(rr != lr1){
+        if(rr != tr1){
             # Possibly gitSync or the network was interrupted.
-            trace(cr " action-fetch from " origin[1] "; track ref is " ((lr1) ? "outdated" : "unknown"));
+            trace(cr " action-fetch from " origin[1] "; track ref is " ((tr1) ? "outdated" : "unknown"));
             a_fetch[1][cr];
         }
-        if(rr != lr2){
+        if(rr != tr2){
             # Possibly gitSync or the network was interrupted.
-            trace(cr " action-fetch from " origin[2] "; track ref is " ((lr2) ? "outdated" : "unknown"));
+            trace(cr " action-fetch from " origin[2] "; track ref is " ((tr2) ? "outdated" : "unknown"));
             a_fetch[2][cr];
         }
 
@@ -215,7 +225,7 @@ function state_to_action(cr, rr1, rr2, lr1, lr2,    rrEqual, lrEqual, rr, lr, is
 
     # ! All further actions suppose that remote refs are not equal.
 
-    lr = lrEqual ? lr1 : "# track refs are not equal #";
+    lr = lrEqual ? tr1 : "# track refs are not equal #";
 
     is_victim = index(cr, prefix_victims) == 1;
     action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
