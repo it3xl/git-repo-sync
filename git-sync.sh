@@ -64,7 +64,7 @@ env_awk_newline_substitution='|||||'
 
 pre_fetch_processing='pre_fetch_processing.gawk'
 refspecs=$(gawk \
-  --file="$path_git_sync_util/$pre_fetch_processing" \
+  --file="$path_git_sync_util/gawk/$pre_fetch_processing" \
   `# --lint` \
   --assign must_exist_branch=$must_exist_branch \
   --assign origin_a="$origin_1" \
@@ -153,7 +153,7 @@ fi;
 
 
 victim_refspecs=$(gawk \
-  --file="$path_git_sync_util/select_refspec_after_fetching.gawk" \
+  --file="$path_git_sync_util/gawk/select_refspec_after_fetching.gawk" \
   `# --lint` \
   --assign origin_1="$origin_1" \
   --assign origin_2="$origin_2" \

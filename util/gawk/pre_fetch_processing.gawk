@@ -1,134 +1,7 @@
 
-BEGIN { # Constants.
-    track_refs_prefix = "refs/remotes/";
-    remote_refs_prefix = "refs/heads/";
+@include base.gawk
+@include input_processing.gawk
 
-    sha_key = "sha";
-    ref_key = "ref";
-
-    val = "val";
-    common = "common";
-    equal = "equal";
-    empty = "empty";
-
-    out_stream_attached = "/dev/stderr";
-}
-BEGIN { # Globals.
-    side_a = 1;
-    side_b = 2;
-
-    sides[side_a] = 1;
-    sides[side_b] = 2;
-    
-    asides[side_a] = sides[side_b]
-    asides[side_b] = sides[side_a]
-
-    split("", origin);
-    split("", prefix);
-    split("", track);
-    split("", remote);
-}
-BEGIN { # Parameters.
-    write_after_line("> refs processing");
-    #trace("Tracing is ON");
-
-    initial_states_processing();
-}
-function initial_states_processing(    side){
-    if(!must_exist_branch)
-        write("Deletion is blocked. Parameter must_exist_branch is empty");
-        
-    if(!origin_a){
-        write("Error. Parameter origin_a is empty");
-        exit 1002;
-    }
-    origin[side_a] = origin_a;
-    origin_a = ""
-    
-    if(!origin_b){
-        write("Error. Parameter origin_b is empty");
-        exit 1003;
-    }
-    origin[side_b] = origin_b;
-    origin_b = ""
-    
-    if(!prefix_a){
-        write("Error. Parameter prefix_a is empty");
-        exit 1004;
-    }
-    prefix[side_a] = prefix_a;
-    prefix_a = ""
-    
-    if(!prefix_b){
-        write("Error. Parameter prefix_b is empty");
-        exit 1005;
-    }
-    prefix[side_b] = prefix_b;
-    prefix_b = ""
-
-    if(!prefix_victims){
-        # Let's prevent emptiness checking all around as prefix_victims var allowed to be empty.
-        prefix_victims = "{prefix_victims var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
-    }
-
-    if(!newline_substitution){
-        write("Error. Parameter newline_substitution is empty");
-        exit 1006;
-    }
-
-    for(side in sides){
-        track[side] = "track@" prefix[side];
-        remote[side] = "remote@" prefix[side];
-    }
-}
-BEGINFILE { # Preparing processing for every portion of refs.
-    file_states_processing();
-}
-function file_states_processing() {
-    switch (++file_num) {
-        case 1:
-            dest = remote[side_a];
-            ref_prefix = remote_refs_prefix;
-            break;
-        case 2:
-            dest = remote[side_b];
-            ref_prefix = remote_refs_prefix;
-            break;
-        case 3:
-            dest = track[side_a];
-            ref_prefix = track_refs_prefix origin[side_a] "/";
-            break;
-        case 4:
-            dest = track[side_b];
-            ref_prefix = track_refs_prefix origin[side_b] "/";
-            break;
-    }
-}
-{ # Ref states preparation.
-    if(!$2){
-        # Empty input stream of an empty refs' var.
-        next;
-    }
-        
-    prefix_name_key();
-
-    if(index($3, prefix[side_a]) != 1 \
-        && index($3, prefix[side_b]) != 1 \
-        && index($3, prefix_victims) != 1 \
-        ){
-        trace("!unexpected " $2 " (" dest ") " $1 "; branch name (" $3 ") has no allowed prefixes");
-
-        next;
-    }
-    
-    refs[$3][dest][sha_key] = $1;
-    refs[$3][dest][ref_key] = $2;
-}
-function prefix_name_key() { # Generates a common key for all 4 locations of every ref.
-    $3 = $2
-    split($3, split_refs, ref_prefix);
-    $3 = split_refs[2];
-}
 END {
     main_processing();
 }
@@ -147,44 +20,6 @@ function main_processing(    ref){
     actions_to_operations();
     operations_to_refspecs();
     refspecs_to_stream();
-}
-function unlock_deletion(    rr_a, rr_b, tr_a, tr_b){
-    rr_a = refs[must_exist_branch][remote[side_a]][sha_key];
-    if(!rr_a)
-        return;
-
-    tr_a = refs[must_exist_branch][track[side_a]][sha_key];
-    if(!tr_a)
-        return;
-
-    rr_b = refs[must_exist_branch][remote[side_b]][sha_key];
-    if(rr_a != rr_b)
-        return;
-
-    tr_b = refs[must_exist_branch][track[side_b]][sha_key];
-    if(tr_a != tr_b)
-        return;
-        
-    if(rr_a != tr_b)
-        return;
-    
-    deletion_allowed = 1;
-}
-function generate_missing_refs(    ref){
-    for(ref in refs){
-        if(!refs[ref][remote[side_a]][ref_key]){
-            refs[ref][remote[side_a]][ref_key] = remote_refs_prefix ref;
-        }
-        if(!refs[ref][remote[side_b]][ref_key]){
-            refs[ref][remote[side_b]][ref_key] = remote_refs_prefix ref;
-        }
-        if(!refs[ref][track[side_a]][ref_key]){
-            refs[ref][track[side_a]][ref_key] = track_refs_prefix origin[side_a] "/" ref;
-        }
-        if(!refs[ref][track[side_b]][ref_key]){
-            refs[ref][track[side_b]][ref_key] = track_refs_prefix origin[side_b] "/" ref;
-        }
-    }
 }
 function state_to_action(cr,    rr, tr, side, is_victim, action_solve_key){
     for(side in sides){
@@ -302,7 +137,7 @@ function actions_to_operations(    side, aside, ref, owner_side){
 
     for(side in a_del){
         for(ref in a_del[side]){
-            op_del_track[ref];
+            op_del[ref];
             op_push_del[side][ref];
         }
     }
@@ -371,7 +206,7 @@ function actions_to_operations(    side, aside, ref, owner_side){
 }
 function operations_to_refspecs(    side, aside, ref){
     for(side in sides){
-        for(ref in op_del_track){
+        for(ref in op_del){
             if(refs[ref][track[side]][sha_key]){
                 out_del = out_del "  " origin[side] "/" ref;
             }
@@ -461,13 +296,6 @@ function set_victim_data(    ref, sha_a, sha_b){
     }
 }
 
-function append_by_side(host, side, addition){
-    host[side] = host[side] (host[side] ? newline_substitution : "") addition;
-}
-function append_by_val(host, addition){
-    host[val] = host[val] (host[val] ? newline_substitution : "") addition;
-}
-
 function refspecs_to_stream(){
     # 0
     print out_del;
@@ -500,47 +328,3 @@ function refspecs_to_stream(){
 }
 
 
-function write(msg){
-    print msg >> out_stream_attached;
-}
-function write_after_line(msg){
-    write("\n" msg);
-}
-function trace(msg){
-    if(!trace_on)
-        return;
-
-    if(!msg){
-        print "|" >> out_stream_attached;
-        return;
-    }
-
-    print "|" msg >> out_stream_attached;
-}
-function trace_header(msg){
-    trace();
-    trace(msg);
-    trace();
-}
-function trace_after_line(msg){
-    trace();
-    trace(msg);
-}
-function trace_line(msg){
-    trace(msg);
-    trace();
-}
-function dTrace(msg){
-    if(0)
-        return;
-
-    trace("|" msg)
-}
-
-END{ # Disposing.
-    write("> refs processing end");
-
-    # Possibly the close here is excessive.
-    #https://www.gnu.org/software/gawk/manual/html_node/Close-Files-And-Pipes.html#Close-Files-And-Pipes
-    close(out_stream_attached);
-}
