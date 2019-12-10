@@ -153,14 +153,23 @@ fi;
 
 
 victim_refspecs=$(gawk \
-  --file="$path_git_sync_util/gawk/select_refspec_after_fetching.gawk" \
+  --file="$path_git_sync_util/gawk/post_fetch_processing.gawk" \
   `# --lint` \
-  --assign origin_1="$origin_1" \
-  --assign origin_2="$origin_2" \
+  --assign must_exist_branch=$must_exist_branch \
+  --assign origin_a="$origin_1" \
+  --assign origin_b="$origin_2" \
+  --assign prefix_a="$prefix_1" \
+  --assign prefix_b="$prefix_2" \
+  --assign prefix_victims="$prefix_victims" \
+  --assign newline_substitution="$env_awk_newline_substitution" \
   --assign trace_on=1 \
   <(echo "$ff_vs_nff_push_data_1") \
   <(echo "$ff_vs_nff_push_data_2") \
   <(echo "$victim_data") \
+  <(echo "$remote_refs_1") \
+  <(echo "$remote_refs_2") \
+  <(echo "$track_refs_1") \
+  <(echo "$track_refs_2") \
 )
 
 mapfile -t victim_refspec_list < <(echo "$victim_refspecs")

@@ -11,8 +11,6 @@ BEGIN { # Constants.
     common = "common";
     equal = "equal";
     empty = "empty";
-
-    out_stream_attached = "/dev/stderr";
 }
 BEGIN { # Globals.
     side_a = 1;

@@ -1,5 +1,9 @@
 
 
+BEGIN { # Constants.
+    out_stream_attached = "/dev/stderr";
+}
+
 function write(msg){
     print msg >> out_stream_attached;
 }
@@ -30,7 +34,7 @@ function trace_line(msg){
     trace(msg);
     trace();
 }
-function dTrace(msg){
+function d_trace(msg){ # Development trace.
     if(0)
         return;
 

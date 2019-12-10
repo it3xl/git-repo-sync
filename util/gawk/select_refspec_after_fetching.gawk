@@ -1,7 +1,6 @@
 
-BEGIN { # Constants.
-    out_stream_attached = "/dev/stderr";
-}
+@include base.gawk
+
 BEGIN{
     write_after_line("> refs rechecking");
     #trace("Tracing is ON");
@@ -77,29 +76,6 @@ function victim_processing(    branch, sha1, sha2){
     }
 }
 
-function write(msg){
-    print msg >> out_stream_attached;
-}
-function write_after_line(msg){
-    write("\n" msg);
-}
-function trace(msg){
-    if(!trace_on)
-        return;
-
-    if(!msg){
-        print "|" >> out_stream_attached;
-        return;
-    }
-
-    print "|" msg >> out_stream_attached;
-}
-function dTrace(msg){
-    if(0)
-        return;
-
-    trace("|" msg)
-}
 
 END{
     print "{[results-spec: 0-results-spec; 1-out_push_spec1; 2-out_push_spec2; 3-end-of-results-required-mark;]}"
@@ -109,11 +85,4 @@ END{
 
     # Must print finishing line otherwise previous empty lines will be ignored by mapfile command in bash.
     print "{[end-of-results]}"
-}
-END{ # Disposing.
-    write("> refs rechecking end");
-
-    # Possibly the close here is excessive.
-    #https://www.gnu.org/software/gawk/manual/html_node/Close-Files-And-Pipes.html#Close-Files-And-Pipes
-    close(out_stream_attached);
 }
