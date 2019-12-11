@@ -23,9 +23,6 @@ BEGIN { # Globals.
     asides[side_b] = sides[side_a]
 }
 BEGIN { # Parameters.
-    write_after_line("> refs processing");
-    #trace("Tracing is ON");
-
     initial_states_processing();
 }
 function initial_states_processing(    side){
@@ -87,7 +84,7 @@ function initial_states_processing(    side){
 
     if(ff_candidates[side_a]){
         d_trace("Interrupting for FF candidates");
-        
+
         d_trace("ff_candidates[side_a]");
         d_trace(ff_candidates[side_a]);
         d_trace("ff_candidates[side_b]");

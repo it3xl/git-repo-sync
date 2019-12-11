@@ -3,7 +3,9 @@
 @include "input_processing.gawk"
 
 END {
+    write_after_line("> main processing");
     main_processing();
+    write("> main processing end");
 }
 function main_processing(    ref){
     deletion_allowed = 0;
@@ -82,18 +84,6 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim,
         }
     }
 
-    if(track_sha[equal] && !is_victim){
-        for(side in sides){
-            aside = asides[side];
-            if(remote_sha[side] == track_sha[common] && remote_sha[aside] != track_sha[common]){
-                trace(current_ref " action-fast-forward; outdated on " origin[side]);
-                a_ff[side][current_ref];
-
-                return;
-            }
-        }
-    }
-
     trace(current_ref " " action_solve_key "-all-others; is different track or/and remote branch commits");
     set_solve_action(is_victim, current_ref);
 }
@@ -119,15 +109,6 @@ function actions_to_operations(    side, aside, ref, owner_side){
         for(ref in a_del[side]){
             op_del_track[ref];
             op_push_del[side][ref];
-        }
-    }
-
-    for(side in a_ff){
-        aside = asides[side];
-        for(ref in a_ff[side]){
-            op_ff_vs_nff[side][ref];
-            #op_push_ff[side][ref];
-            #op_post_fetch[side][ref];
         }
     }
 

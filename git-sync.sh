@@ -151,7 +151,7 @@ if [[ $env_trace_refs == 1 ]]; then
   echo "$track_refs_2"
 fi;
 
-# exit
+exit
 
 
 proc_data=$(gawk \
@@ -165,16 +165,20 @@ proc_data=$(gawk \
 
 mapfile -t proc_list < <(echo "$proc_data")
 
+if [[ $env_trace_refs == 1 ]]; then
+  echo
+  echo proc_data is
+  echo "$proc_data"
+fi;
+
 del_spec="${proc_list[0]}";
-fetch_spec1="${proc_list[1]}";
-fetch_spec2="${proc_list[2]}";
-push_spec1="${proc_list[3]}";
-push_spec2="${proc_list[4]}";
-post_fetch_spec1="${proc_list[5]}";
-post_fetch_spec2="${proc_list[6]}";
-notify_del="${proc_list[7]//$env_awk_newline_substitution/$'\n'}";
-notify_solving="${proc_list[8]//$env_awk_newline_substitution/$'\n'}";
-end_of_results="${proc_list[9]}";
+push_spec1="${proc_list[1]}";
+push_spec2="${proc_list[2]}";
+post_fetch_spec1="${proc_list[3]}";
+post_fetch_spec2="${proc_list[4]}";
+notify_del="${proc_list[5]//$env_awk_newline_substitution/$'\n'}";
+notify_solving="${proc_list[6]//$env_awk_newline_substitution/$'\n'}";
+end_of_results="${proc_list[7]}";
 
 if [[ $env_trace_refs == 1 ]]; then
   echo
