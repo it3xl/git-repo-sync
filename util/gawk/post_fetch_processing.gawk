@@ -72,7 +72,7 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim,
             aside = asides[side];
             if(!remote_sha[side] && remote_sha[aside] == track_sha[common]){
                 if(deletion_allowed){
-                    trace(current_ref " action-del on " origin[aside] "; is disappeared from " origin[side]);
+                    trace(current_ref " action-del on " origin[aside] "; it is disappeared from " origin[side]);
                     a_del[aside][current_ref];
                 }else{
                     trace(current_ref " " action_solve_key "-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
@@ -84,7 +84,7 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim,
         }
     }
 
-    trace(current_ref " " action_solve_key "-all-others; is different track or/and remote branch commits");
+    trace(current_ref " " action_solve_key "-all-others; it has different track or/and remote branch commits");
     set_solve_action(is_victim, current_ref);
 }
 function set_solve_action(is_victim, ref){
@@ -124,7 +124,7 @@ function actions_to_operations(    side, aside, ref, owner_side){
                 continue;
             }
 
-            # op_victim_winner_search[ref];
+            op_victim_winner_search[ref];
         }
     }
 
@@ -170,12 +170,24 @@ function operations_to_refspecs(    side, aside, ref){
         }
     }
 
+
+
+
+
+
+
+
     for(side in op_push_ff){
         aside = asides[side];
         for(ref in op_push_ff[side]){
             out_push[side] = out_push[side] "  " refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key];
         }
     }
+
+
+
+
+
 
     for(side in op_push_nff){
         aside = asides[side];
@@ -188,7 +200,7 @@ function operations_to_refspecs(    side, aside, ref){
         }
     }
     set_ff_vs_nff_push_data();
-    set_victim_data();
+    set_victim_refspec();
 
     # We may use post fetching as workaround for network fails and program interruptions.
     # Also FF-updating may fail in case of rare conflicting with a remote repo.
@@ -220,19 +232,25 @@ function set_ff_vs_nff_push_data(    side, aside, descendant_sha, ancestor_sha){
         }
     }
 }
-function set_victim_data(    ref, sha_a, sha_b){
+function set_victim_refspec(    ref, sha_a, sha_b, git_rev_list_cmd, newest_sha){
     for(ref in op_victim_winner_search){
-        # We expects that "no sha" cases will be processed in by solving actions.
-        # But this approach with variables helped to solve a severe. It makes code more resilient.
-        sha_a = refs[ref][remote[side_a]][sha_key] ? refs[ref][remote[side_a]][sha_key] : ("no sha for " remote[side_a]);
-        sha_b = refs[ref][remote[side_b]][sha_key] ? refs[ref][remote[side_b]][sha_key] : ("no sha for " remote[side_b]);
+        # We expects that "no sha" cases will be processed by common NFF-solving actions.
+        # But this approach with variables help to solve severe errors. Also it makes code more resilient.
+        sha_a = refs[ref][remote[side_a]][sha_key] ? refs[ref][remote[side_a]][sha_key] : ("<no sha for " remote[side_a] ">");
+        sha_b = refs[ref][remote[side_b]][sha_key] ? refs[ref][remote[side_b]][sha_key] : ("<no sha for " remote[side_b] ">");
 
-        # append_by_val(out_victim_data, "victim " ref " " sha_a " " sha_b);
-        
-        # append_by_val(out_victim_data, "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1");
-        
-        # append_by_val(out_victim_data, "  +" refs[ref][track[side_a]][ref_key] ":" refs[ref][remote[side_b]][ref_key]);
-        # append_by_val(out_victim_data, "  +" refs[ref][track[side_b]][ref_key] ":" refs[ref][remote[side_a]][ref_key]);
+        git_rev_list_cmd = "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1"
+        git_rev_list_cmd | getline newest_sha;
+        close(git_rev_list_cmd);
+
+        if(newest_sha == sha_a){
+            d_trace("victim solving: " branch " on " origin_1 " beat " origin_2 " with " sha_a " vs " sha_b)
+            out_push[side_b] = out_push[side_b] "  +" refs[ref][track[side_a]][ref_key] ":" refs[ref][remote[side_b]][ref_key];
+        }
+        if(newest_sha == sha_b){
+            d_trace("victim solving: " branch " on " origin_2 " beat " origin_1 " with " sha_b " vs " sha_a)
+            out_push[side_a] = out_push[side_a] "  +" refs[ref][track[side_b]][ref_key] ":" refs[ref][remote[side_a]][ref_key];
+        }        
     }
 }
 
@@ -243,7 +261,7 @@ function refspecs_to_stream(){
     print out_push[side_a];
     print out_push[side_b];
     print out_notify_solving[val];
-    
+
     print out_post_fetch[side_a];
     print out_post_fetch[side_b];
 
