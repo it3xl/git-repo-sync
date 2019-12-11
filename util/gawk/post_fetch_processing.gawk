@@ -56,7 +56,10 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim,
     action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
 
     if(track_sha[empty]){
-        trace(current_ref " " action_solve_key " on both remotes; is not tracked");
+        trace("!Warning!");
+        trace("!! Something went wrong for " current_ref ". It is still untracked.");
+        trace("!! Possibly the program or the network were interrupted.");
+        trace("!! We will try to sync it during the second sync pass.");
         set_solve_action(is_victim, current_ref);
 
         return;
@@ -119,8 +122,6 @@ function actions_to_operations(    side, aside, ref, owner_side){
         }
     }
 
-    # Warning! We need post fetching here because a ref's change may be not a FF-change. And without the post fetch the sync will not be resolved ever.
-    # This is a case when a sync-collision will be solved with two sync passes.
     for(side in a_ff){
         aside = asides[side];
         for(ref in a_ff[side]){
@@ -208,7 +209,10 @@ function operations_to_refspecs(    side, aside, ref){
     set_ff_vs_nff_push_data();
     set_victim_data();
 
-    # Post fetching is used to fix FF-updating fails by two pass syncing. The fail appears if NFF updating of an another side brach was considered as FF updating.
+    # We may use post fetching as workaround for network fails and program interruptions.
+    # Also FF-updating may fail in case of rare conflicting with a remote repo.
+    # Without the post fetching these cases will not be resolved ever.
+    # But we don't use it for now as we've migrated to preprocessing git fetching.
     for(side in op_post_fetch){
         for(ref in op_post_fetch[side]){
             out_post_fetch[side] = out_post_fetch[side] "  +" refs[ref][remote[side]][ref_key] ":" refs[ref][track[side]][ref_key];

@@ -5,7 +5,7 @@ A creation of an own branch works and are synced right.
 A creation of another side branch works and are synced right.
     One sync pass is enough.
 
-FF-updating of another side branch will be synced successfully.
+Another side FF-updating leads to successful FF git merge sync.
     One sync pass is enough.
 
 NFF-updating of another side branch will be reverted.
@@ -16,6 +16,9 @@ NFF-updating of another side branch will be reverted.
 NFF-resolving works
     It is synchronized right.
     Conflict-notification is working.
+    One sync pass is enough.
+
+Owned side branch FF-updating uses NFF-sync strategy.
     One sync pass is enough.
 
 After a recreation of one remote repo synchronized refs are restored right.
