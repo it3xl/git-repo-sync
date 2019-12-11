@@ -23,11 +23,12 @@ if [[ ! -f "$env_modifications_signal_file" ]]; then
   source "$path_git_sync_util/change_detector.sh"
 
   if (( $changes_detected != 1 )); then
-    echo '@' RESULT: Refs are the same. Exit.
-    echo
+    echo '@' RESULT: Refs are the same.
     
-    # !!! EXIT !!!
-    exit
+    if [[ $env_process_if_refs_are_the_same != 1 ]]; then
+      echo '@' Exit.
+      exit
+    fi;
   fi
 else
   echo '@' RESULT: Synchronization requested.
@@ -78,13 +79,13 @@ mapfile -t pre_proc_list < <(echo "$pre_proc_data")
 
 fetch_spec1="${pre_proc_list[0]}";
 fetch_spec2="${pre_proc_list[1]}";
-out_ff_candidates_1="${pre_proc_list[2]//$env_awk_newline_substitution/$'\n'}";
-out_ff_candidates_2="${pre_proc_list[3]//$env_awk_newline_substitution/$'\n'}";
+ff_candidates_1="${pre_proc_list[2]//$env_awk_newline_substitution/$'\n'}";
+ff_candidates_2="${pre_proc_list[3]//$env_awk_newline_substitution/$'\n'}";
 end_of_results="${pre_proc_list[4]}";
 
 # Let's export for an usage in main processing.
-export out_ff_candidates_1
-export out_ff_candidates_2
+export ff_candidates_1
+export ff_candidates_2
 
 end_of_results_expected='{[end-of-results]}';
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
@@ -101,10 +102,10 @@ if [[ $env_trace_refs == 1 ]]; then
   echo "$fetch_spec1"
   echo fetch_spec2
   echo "$fetch_spec2"
-  echo out_ff_candidates_1
-  echo "$out_ff_candidates_1"
-  echo out_ff_candidates_2
-  echo "$out_ff_candidates_2"
+  echo ff_candidates_1
+  echo "$ff_candidates_1"
+  echo ff_candidates_2
+  echo "$ff_candidates_2"
 fi;
 # exit
 

@@ -148,6 +148,19 @@ function prefix_name_key() { # Generates a common key for all 4 locations of eve
     $3 = split_refs[2];
 }
 
+function process_input_ff_candidates(    cmd, result){
+    cmd = "echo \"$ff_candidates_1\"";
+
+    while (cmd | getline result){
+        if(!result){
+            continue;
+        }
+        d_trace("result is " result);
+    }
+
+    close(cmd);
+}
+
 
 
 
