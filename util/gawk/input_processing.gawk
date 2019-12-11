@@ -21,11 +21,6 @@ BEGIN { # Globals.
     
     asides[side_a] = sides[side_b]
     asides[side_b] = sides[side_a]
-
-    split("", origin);
-    split("", prefix);
-    split("", track);
-    split("", remote);
 }
 BEGIN { # Parameters.
     write_after_line("> refs processing");
@@ -85,6 +80,20 @@ function initial_states_processing(    side){
     for(side in sides){
         track[side] = "track@" prefix[side];
         remote[side] = "remote@" prefix[side];
+    }
+    
+    ff_candidates[side_a] = ENVIRON["out_ff_candidates_1"];
+    ff_candidates[side_b] = ENVIRON["out_ff_candidates_2"];
+
+    if(ff_candidates[side_a]){
+        d_trace("Interrupting for FF candidates");
+        
+        d_trace("ff_candidates[side_a]");
+        d_trace(ff_candidates[side_a]);
+        d_trace("ff_candidates[side_b]");
+        d_trace(ff_candidates[side_b]);
+
+        exit;
     }
 }
 BEGINFILE { # Preparing processing for every portion of refs.

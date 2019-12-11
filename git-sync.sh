@@ -60,7 +60,7 @@ fi;
 
 
 pre_fetch_processing='pre_fetch_processing.gawk'
-refspecs=$(gawk --file="$path_git_sync_util/gawk/$pre_fetch_processing" \
+pre_proc_data=$(gawk --file="$path_git_sync_util/gawk/$pre_fetch_processing" \
   <(echo "$remote_refs_1") \
   <(echo "$remote_refs_2") \
   <(echo "$track_refs_1") \
@@ -68,18 +68,19 @@ refspecs=$(gawk --file="$path_git_sync_util/gawk/$pre_fetch_processing" \
 )
 
 if [[ $env_trace_refs == 1 ]]; then
-  echo refspecs
-  echo "$refspecs"
+  echo
+  echo pre_proc_data is
+  echo "$pre_proc_data"
 fi;
-# exit;
+# exit
 
-mapfile -t refspec_list < <(echo "$refspecs")
+mapfile -t pre_proc_list < <(echo "$pre_proc_data")
 
-fetch_spec1="${refspec_list[0]}";
-fetch_spec2="${refspec_list[1]}";
-out_ff_candidate_1="${refspec_list[2]//$env_awk_newline_substitution/$'\n'}";
-out_ff_candidate_2="${refspec_list[3]//$env_awk_newline_substitution/$'\n'}";
-end_of_results="${refspec_list[4]}";
+fetch_spec1="${pre_proc_list[0]}";
+fetch_spec2="${pre_proc_list[1]}";
+export out_ff_candidates_1="${pre_proc_list[2]//$env_awk_newline_substitution/$'\n'}";
+export out_ff_candidates_2="${pre_proc_list[3]//$env_awk_newline_substitution/$'\n'}";
+end_of_results="${pre_proc_list[4]}";
 
 end_of_results_expected='{[end-of-results]}';
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
@@ -88,7 +89,7 @@ if [[ $end_of_results != "$end_of_results_expected" ]]; then
   echo
   
   # !!! EXIT !!!
-  exit 2002;
+  exit 2002
 fi;
 
 if [[ $env_trace_refs == 1 ]]; then
@@ -96,13 +97,13 @@ if [[ $env_trace_refs == 1 ]]; then
   echo "$fetch_spec1"
   echo fetch_spec1
   echo "$fetch_spec1"
-  echo out_ff_candidate_1
-  echo "$out_ff_candidate_1"
-  echo out_ff_candidate_2
-  echo "$out_ff_candidate_2"
+  echo out_ff_candidates_1
+  echo "$out_ff_candidates_1"
+  echo out_ff_candidates_2
+  echo "$out_ff_candidates_2"
 fi;
 
-# exit;
+# exit
 
 
 if [[ $env_allow_async == 1 && -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
@@ -150,10 +151,10 @@ if [[ $env_trace_refs == 1 ]]; then
   echo "$track_refs_2"
 fi;
 
-exit;
+# exit
 
 
-victim_refspecs=$(gawk \
+proc_data=$(gawk \
   --file="$path_git_sync_util/gawk/post_fetch_processing.gawk" \
   `# --lint` \
   <(echo "$remote_refs_1") \
@@ -162,15 +163,27 @@ victim_refspecs=$(gawk \
   <(echo "$track_refs_2") \
 )
 
-mapfile -t victim_refspec_list < <(echo "$victim_refspecs")
+mapfile -t proc_list < <(echo "$proc_data")
 
-push_victim_spec1="${victim_refspec_list[1]}";
-push_victim_spec2="${victim_refspec_list[2]}";
+del_spec="${proc_list[0]}";
+fetch_spec1="${proc_list[1]}";
+fetch_spec2="${proc_list[2]}";
+push_spec1="${proc_list[3]}";
+push_spec2="${proc_list[4]}";
+post_fetch_spec1="${proc_list[5]}";
+post_fetch_spec2="${proc_list[6]}";
+notify_del="${proc_list[7]//$env_awk_newline_substitution/$'\n'}";
+notify_solving="${proc_list[8]//$env_awk_newline_substitution/$'\n'}";
+end_of_results="${proc_list[9]}";
 
-push_spec1="$push_spec1$push_victim_spec1"
-push_spec2="$push_spec2$push_victim_spec2"
+if [[ $env_trace_refs == 1 ]]; then
+  echo
+  echo proc_data is
+  echo "$proc_data"
+fi;
 
-end_of_results="${refspec_list[4]}";
+exit
+
 
 end_of_results_expected='{[end-of-results]}';
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
@@ -179,12 +192,7 @@ if [[ $end_of_results != "$end_of_results_expected" ]]; then
   echo
   
   # !!! EXIT !!!
-  exit 2002;
-fi;
-
-
-if [[ $env_trace_refs == 1 ]]; then
-  echo
+  exit 2003
 fi;
 
 

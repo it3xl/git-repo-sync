@@ -100,7 +100,7 @@ function actions_to_refspecs(    side, aside, ref){
         aside = asides[side];
         for(ref in a_ff_candidate[side]){
             # In format order: ref; the space; side to update
-            append_by_side(side, out_ff_candidate, ref " " refs[ref][remote[side]][ref_key]);
+            append_by_side(side, out_ff_candidates, ref " " refs[ref][remote[side]][ref_key]);
         }
     }
 }
@@ -109,8 +109,8 @@ function refspecs_to_stream(){
     print out_fetch[side_a];
     print out_fetch[side_b];
 
-    print out_ff_candidate[side_a];
-    print out_ff_candidate[side_b];
+    print out_ff_candidates[side_a];
+    print out_ff_candidates[side_b];
 
     # Must print finishing line otherwise previous empty lines will be ignored by mapfile command in bash.
     print "{[end-of-results]}"

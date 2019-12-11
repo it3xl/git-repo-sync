@@ -50,20 +50,7 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim,
         return;
     }
 
-    if(remote_sha[equal]){
-        for(side in sides){
-            if(remote_sha[common] == track_sha[side]){
-                continue;
-            }
-            # Possibly gitSync or the network was interrupted.
-            trace(current_ref " action-fetch from " origin[side] "; track ref is " ((track_sha[side]) ? "outdated" : "unknown"));
-            a_fetch[side][current_ref];
-        }
-
-        return;
-    }
-
-    # ! All further actions suppose that remote refs are not equal.
+    # ! All further actions assume that remote refs are not equal.
 
     is_victim = index(current_ref, prefix_victims) == 1;
     action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
@@ -121,13 +108,7 @@ function actions_to_operations(    side, aside, ref, owner_side){
                 continue;
             }
             op_push_restore[side][ref];
-            #op_fetch_post[side][ref];
-        }
-    }
-
-    for(side in a_fetch){
-        for(ref in a_fetch[side]){
-            op_fetch[side][ref]
+            #op_post_fetch[side][ref];
         }
     }
 
@@ -143,35 +124,25 @@ function actions_to_operations(    side, aside, ref, owner_side){
     for(side in a_ff){
         aside = asides[side];
         for(ref in a_ff[side]){
-            op_fetch[aside][ref];
-            
             op_ff_vs_nff[side][ref];
             #op_push_ff[side][ref];
-            #op_fetch_post[side][ref];
+            #op_post_fetch[side][ref];
         }
     }
 
     for(side in sides){
         aside = asides[side];
         for(ref in a_victim_solve){
-
-            # Update outdated or missing track refs for existing remote refs.
-            if(refs[ref][remote[side]][sha_key]){
-                if(refs[ref][remote[side]][sha_key] != refs[ref][track[side]][sha_key]){
-                    op_fetch[side][ref];
-                }
-            }
-
             # Update non-existing remote refs.
             if(!refs[ref][remote[side]][sha_key] && refs[ref][remote[aside]][sha_key]){
                 op_push_nff[side][ref];
-                #op_fetch_post[side][ref];
+                #op_post_fetch[side][ref];
 
                 # Stop if non-existing remote refs will be updated.
                 continue;
             }
 
-            op_victim_winner_search[ref];
+            # op_victim_winner_search[ref];
         }
     }
 
@@ -185,17 +156,11 @@ function actions_to_operations(    side, aside, ref, owner_side){
             }
 
             if(refs[ref][remote[side]][sha_key]){
-                if(refs[ref][remote[side]][sha_key] != refs[ref][track[side]][sha_key]){
-                    op_fetch[side][ref];
-                }
                 op_push_nff[aside][ref];
-                #op_fetch_post[aside][ref];
+                #op_post_fetch[aside][ref];
             } else if(refs[ref][remote[aside]][sha_key]){
-                if(refs[ref][remote[aside]][sha_key] != refs[ref][track[aside]][sha_key]){
-                    op_fetch[aside][ref];
-                }
                 op_push_nff[side][ref];
-                #op_fetch_post[side][ref];
+                #op_post_fetch[side][ref];
             }
         }
     }
@@ -206,12 +171,6 @@ function operations_to_refspecs(    side, aside, ref){
             if(refs[ref][track[side]][sha_key]){
                 out_del = out_del "  " origin[side] "/" ref;
             }
-        }
-    }
-
-    for(side in op_fetch){
-        for(ref in op_fetch[side]){
-            out_fetch[side] = out_fetch[side] "  +" refs[ref][remote[side]][ref_key] ":" refs[ref][track[side]][ref_key];
         }
     }
 
@@ -250,8 +209,8 @@ function operations_to_refspecs(    side, aside, ref){
     set_victim_data();
 
     # Post fetching is used to fix FF-updating fails by two pass syncing. The fail appears if NFF updating of an another side brach was considered as FF updating.
-    for(side in op_fetch_post){
-        for(ref in op_fetch_post[side]){
+    for(side in op_post_fetch){
+        for(ref in op_post_fetch[side]){
             out_post_fetch[side] = out_post_fetch[side] "  +" refs[ref][remote[side]][ref_key] ":" refs[ref][track[side]][ref_key];
         }
     }
@@ -283,39 +242,24 @@ function set_victim_data(    ref, sha_a, sha_b){
         sha_a = refs[ref][remote[side_a]][sha_key] ? refs[ref][remote[side_a]][sha_key] : ("no sha for " remote[side_a]);
         sha_b = refs[ref][remote[side_b]][sha_key] ? refs[ref][remote[side_b]][sha_key] : ("no sha for " remote[side_b]);
 
-        append_by_val(out_victim_data, "victim " ref " " sha_a " " sha_b);
+        # append_by_val(out_victim_data, "victim " ref " " sha_a " " sha_b);
         
-        append_by_val(out_victim_data, "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1");
+        # append_by_val(out_victim_data, "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1");
         
-        append_by_val(out_victim_data, "  +" refs[ref][track[side_a]][ref_key] ":" refs[ref][remote[side_b]][ref_key]);
-        append_by_val(out_victim_data, "  +" refs[ref][track[side_b]][ref_key] ":" refs[ref][remote[side_a]][ref_key]);
+        # append_by_val(out_victim_data, "  +" refs[ref][track[side_a]][ref_key] ":" refs[ref][remote[side_b]][ref_key]);
+        # append_by_val(out_victim_data, "  +" refs[ref][track[side_b]][ref_key] ":" refs[ref][remote[side_a]][ref_key]);
     }
 }
 
 function refspecs_to_stream(){
-    # 0
     print out_del;
-    # 1
-    print out_fetch[side_a];
-    # 2
-    print out_fetch[side_b];
-    # 3
     print out_ff_vs_nff_data[side_a];
-    # 4
     print out_ff_vs_nff_data[side_b];
-    # 5
-    print out_victim_data[val];
-    # 6
     print out_push[side_a];
-    # 7
     print out_push[side_b];
-    # 8
     print out_post_fetch[side_a];
-    # 9
     print out_post_fetch[side_b];
-    # 10
     print out_notify_del[val];
-    # 11
     print out_notify_solving[val];
 
     # 12
