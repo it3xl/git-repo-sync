@@ -1,13 +1,11 @@
 
-@include base.gawk
-@include input_processing.gawk
+@include "base.gawk"
+@include "input_processing.gawk"
 
 END {
     main_processing();
 }
 function main_processing(    ref){
-    dest = ""; ref_prefix = "";
-
     deletion_allowed = 0;
     unlock_deletion();
     write("Deletion " ((deletion_allowed) ? "allowed" : "blocked") " by " must_exist_branch);
@@ -21,44 +19,45 @@ function main_processing(    ref){
     operations_to_refspecs();
     refspecs_to_stream();
 }
-function state_to_action(cr,    rr, tr, side, is_victim, action_solve_key){
+function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim, action_solve_key){
     for(side in sides){
-        rr[side] = refs[cr][remote[side]][sha_key];
-        tr[side] = refs[cr][track[side]][sha_key];
+        remote_sha[side] = refs[current_ref][remote[side]][sha_key];
+        track_sha[side] = refs[current_ref][track[side]][sha_key];
     }
 
-    rr[equal] = rr[side_a] == rr[side_b];
-    tr[equal] = tr[side_a] == tr[side_b];
+    remote_sha[equal] = remote_sha[side_a] == remote_sha[side_b];
+    track_sha[equal] = track_sha[side_a] == track_sha[side_b];
     
-    if(rr[equal] && tr[equal] && tr[side_a] == rr[side_b]){
-        # Nothing to change for the current branch.
+    if(remote_sha[equal] && track_sha[equal] && track_sha[side_a] == remote_sha[side_b])
+        return;
+
+    remote_sha[common] = remote_sha[equal] ? remote_sha[side_a] : "";
+    remote_sha[empty] = !(remote_sha[side_a] || remote_sha[side_b]);
+
+    track_sha[common] = track_sha[equal] ? track_sha[side_a] : "";
+    track_sha[empty] = !(track_sha[side_a] || track_sha[side_b]);
+
+    if(remote_sha[empty]){
+        # As we here this means that remote repos don't know the current ref but gitSync knows it somehow.
+
+        trace(current_ref " action-restore on both remotes; is unknown");
+        # This actions supports independents of gitSync from its remoter repos.
+        # I.e. you can replace remote repos all at once, as gitSync will be the source of truth.
+        # But if you don't run gitSync for a while and have deleted a branch on both side repos manually then gitSync will recreate it.
+        # Re-delete the branch again and use gitSync. Silly))
+        a_restore[current_ref];
 
         return;
     }
 
-    rr[common] = rr[equal] ? rr[side_a] : "";
-    rr[empty] = !(rr[side_a] || rr[side_b]);
-
-    if(rr[empty]){
-        # As we here this means that remote repos don't know the current branch but gitSync knows it somehow.
-        # This behavior supports independents of gitSync from its remoter repos. I.e. you can replace them at once, as gitSync will be the source of truth.
-        # But if you don't run gitSync for a while and have deleted the branch on both side repos manually then gitSync will recreate it.
-        # Re-delete the branch and use gitSync. Silly))
-
-        trace(cr " action-restore on both remotes; is unknown");
-        a_restore[cr];
-
-        return;
-    }
-
-    if(rr[equal]){
+    if(remote_sha[equal]){
         for(side in sides){
-            if(rr[common] == tr[side]){
+            if(remote_sha[common] == track_sha[side]){
                 continue;
             }
             # Possibly gitSync or the network was interrupted.
-            trace(cr " action-fetch from " origin[side] "; track ref is " ((tr[side]) ? "outdated" : "unknown"));
-            a_fetch[side][cr];
+            trace(current_ref " action-fetch from " origin[side] "; track ref is " ((track_sha[side]) ? "outdated" : "unknown"));
+            a_fetch[side][current_ref];
         }
 
         return;
@@ -66,29 +65,26 @@ function state_to_action(cr,    rr, tr, side, is_victim, action_solve_key){
 
     # ! All further actions suppose that remote refs are not equal.
 
-    tr[common] = tr[equal] ? tr[side_a] : "";
-    tr[empty] = !(tr[side_a] || tr[side_b]);
-
-    is_victim = index(cr, prefix_victims) == 1;
+    is_victim = index(current_ref, prefix_victims) == 1;
     action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
 
-    if(tr[empty]){
-        trace(cr " " action_solve_key " on both remotes; is not tracked");
-        set_solve_action(is_victim, cr);
+    if(track_sha[empty]){
+        trace(current_ref " " action_solve_key " on both remotes; is not tracked");
+        set_solve_action(is_victim, current_ref);
 
         return;
     }
 
-    if(tr[equal]){
+    if(track_sha[equal]){
         for(side in sides){
             aside = asides[side];
-            if(!rr[side] && rr[aside] == tr[common]){
+            if(!remote_sha[side] && remote_sha[aside] == track_sha[common]){
                 if(deletion_allowed){
-                    trace(cr " action-del on " origin[aside] "; is disappeared from " origin[side]);
-                    a_del[aside][cr];
+                    trace(current_ref " action-del on " origin[aside] "; is disappeared from " origin[side]);
+                    a_del[aside][current_ref];
                 }else{
-                    trace(cr " " action_solve_key "-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
-                    set_solve_action(is_victim, cr);
+                    trace(current_ref " " action_solve_key "-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
+                    set_solve_action(is_victim, current_ref);
                 }
 
                 return;
@@ -96,20 +92,20 @@ function state_to_action(cr,    rr, tr, side, is_victim, action_solve_key){
         }
     }
 
-    if(tr[equal] && !is_victim){
+    if(track_sha[equal] && !is_victim){
         for(side in sides){
             aside = asides[side];
-            if(rr[side] == tr[common] && rr[aside] != tr[common]){
-                trace(cr " action-fast-forward; outdated on " origin[side]);
-                a_ff[side][cr];
+            if(remote_sha[side] == track_sha[common] && remote_sha[aside] != track_sha[common]){
+                trace(current_ref " action-fast-forward; outdated on " origin[side]);
+                a_ff[side][current_ref];
 
                 return;
             }
         }
     }
 
-    trace(cr " " action_solve_key "-all-others; is different track or/and remote branch commits");
-    set_solve_action(is_victim, cr);
+    trace(current_ref " " action_solve_key "-all-others; is different track or/and remote branch commits");
+    set_solve_action(is_victim, current_ref);
 }
 function set_solve_action(is_victim, ref){
     if(is_victim){
@@ -271,12 +267,12 @@ function set_ff_vs_nff_push_data(    side, aside, descendant_sha, ancestor_sha){
         # descendant is (possibly) update source.
         descendant_sha = refs[ref][remote[aside]][sha_key] ? refs[ref][aside][sha_key] : ("no sha for " remote[aside]);
 
-        append_by_side(out_ff_vs_nff_data, side, "ff-vs-nff " ref " " ancestor_sha " " descendant_sha);
+        append_by_side(side, out_ff_vs_nff_data, "ff-vs-nff " ref " " ancestor_sha " " descendant_sha);
         
         # --is-ancestor <ancestor> <descendant>
-        append_by_side(out_ff_vs_nff_data, side, "git merge-base --is-ancestor " refs[ref][track[side]][ref_key] " " refs[ref][track[aside]][ref_key] " && echo ff || echo nff");
+        append_by_side(side, out_ff_vs_nff_data, "git merge-base --is-ancestor " refs[ref][track[side]][ref_key] " " refs[ref][track[aside]][ref_key] " && echo ff || echo nff");
         
-        append_by_side(out_ff_vs_nff_data, side, refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key]);
+        append_by_side(side, out_ff_vs_nff_data, refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key]);
         }
     }
 }

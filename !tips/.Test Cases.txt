@@ -1,4 +1,10 @@
 
+A creation of an own branch works and are synced right.
+    One sync pass is enough.
+
+A creation of another side branch works and are synced right.
+    One sync pass is enough.
+
 FF-updating of another side branch will be synced successfully.
     One sync pass is enough.
 

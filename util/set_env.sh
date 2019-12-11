@@ -5,6 +5,10 @@ echo Start `basename "$BASH_SOURCE"`
 export path_git_sync="$invoke_path"
 export path_git_sync_util="$path_git_sync/util"
 
+# AWKPATH is env variable of GAWK that is used by the @include directive.
+# We need to set AWKPATH because our current directory commonly points points out to the sync Git repo, not our GAWK scripts.
+export AWKPATH="$path_git_sync_util/gawk"
+
 file_name_repo_settings="${1-}"
 
 run_sample=0
@@ -83,7 +87,12 @@ export origin_2=orig_2_$prefix_2_safe
 
 export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 
+# The way we receive data from gawk we can't use new line char in the output. So we are using a substitution.
+export env_awk_newline_substitution='|||||'
+
 export env_allow_async=0
+export env_trace_refs=1
+export env_awk_trace_on=1
 
 path_project_root="$path_git_sync/sync-projects/$project_folder"
 export path_sync_repo="$path_project_root/sync_repo"

@@ -40,64 +40,46 @@ else
   rm -f "$env_modifications_signal_file_2"
 fi
 
-
 track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
 track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
 
-if(( 1 == 2 )); then
+if [[ $env_trace_refs == 1 ]]; then
   echo
   echo remote_refs_1=
   echo "$remote_refs_1"
-
   echo remote_refs_2=
   echo "$remote_refs_2"
-
   echo track_refs_1=
   echo "$track_refs_1"
-
   echo track_refs_2=
   echo "$track_refs_2"
 fi;
 
-# The way we receive data from gawk we can't use new line char in the output. So we are using a substitution.
-env_awk_newline_substitution='|||||'
+# gawk --file="$path_git_sync_util/gawk/proto.gawk" <(echo)
+# exit
+
 
 pre_fetch_processing='pre_fetch_processing.gawk'
-refspecs=$(gawk \
-  --file="$path_git_sync_util/gawk/$pre_fetch_processing" \
-  `# --lint` \
-  --assign must_exist_branch=$must_exist_branch \
-  --assign origin_a="$origin_1" \
-  --assign origin_b="$origin_2" \
-  --assign prefix_a="$prefix_1" \
-  --assign prefix_b="$prefix_2" \
-  --assign prefix_victims="$prefix_victims" \
-  --assign newline_substitution="$env_awk_newline_substitution" \
-  --assign trace_on=1 \
+refspecs=$(gawk --file="$path_git_sync_util/gawk/$pre_fetch_processing" \
   <(echo "$remote_refs_1") \
   <(echo "$remote_refs_2") \
   <(echo "$track_refs_1") \
   <(echo "$track_refs_2") \
 )
 
-echo "$refspecs"
+if [[ $env_trace_refs == 1 ]]; then
+  echo refspecs
+  echo "$refspecs"
+fi;
 # exit;
 
 mapfile -t refspec_list < <(echo "$refspecs")
 
-del_spec="${refspec_list[0]}";
-fetch_spec1="${refspec_list[1]}";
-fetch_spec2="${refspec_list[2]}";
-ff_vs_nff_push_data_1="${refspec_list[3]//$env_awk_newline_substitution/$'\n'}";
-ff_vs_nff_push_data_2="${refspec_list[4]//$env_awk_newline_substitution/$'\n'}";
-victim_data="${refspec_list[5]//$env_awk_newline_substitution/$'\n'}";
-push_spec1="${refspec_list[6]}";
-push_spec2="${refspec_list[7]}";
-post_fetch_spec1="${refspec_list[8]}";
-post_fetch_spec2="${refspec_list[9]}";
-notify_del="${refspec_list[10]//$env_awk_newline_substitution/$'\n'}";
-notify_solving="${refspec_list[11]//$env_awk_newline_substitution/$'\n'}";
-end_of_results="${refspec_list[12]}";
+fetch_spec1="${refspec_list[0]}";
+fetch_spec2="${refspec_list[1]}";
+out_ff_candidate_1="${refspec_list[2]//$env_awk_newline_substitution/$'\n'}";
+out_ff_candidate_2="${refspec_list[3]//$env_awk_newline_substitution/$'\n'}";
+end_of_results="${refspec_list[4]}";
 
 end_of_results_expected='{[end-of-results]}';
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
@@ -109,11 +91,17 @@ if [[ $end_of_results != "$end_of_results_expected" ]]; then
   exit 2002;
 fi;
 
-# echo "$ff_vs_nff_push_data_1"
-# echo
-# echo "$ff_vs_nff_push_data_2"
-# echo
-# echo "$victim_data"
+if [[ $env_trace_refs == 1 ]]; then
+  echo fetch_spec1
+  echo "$fetch_spec1"
+  echo fetch_spec1
+  echo "$fetch_spec1"
+  echo out_ff_candidate_1
+  echo "$out_ff_candidate_1"
+  echo out_ff_candidate_2
+  echo "$out_ff_candidate_2"
+fi;
+
 # exit;
 
 
@@ -151,21 +139,23 @@ else
 fi;
 
 
+track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
+track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
+
+if [[ $env_trace_refs == 1 ]]; then
+  echo
+  echo track_refs_1=
+  echo "$track_refs_1"
+  echo track_refs_2=
+  echo "$track_refs_2"
+fi;
+
+exit;
+
 
 victim_refspecs=$(gawk \
   --file="$path_git_sync_util/gawk/post_fetch_processing.gawk" \
   `# --lint` \
-  --assign must_exist_branch=$must_exist_branch \
-  --assign origin_a="$origin_1" \
-  --assign origin_b="$origin_2" \
-  --assign prefix_a="$prefix_1" \
-  --assign prefix_b="$prefix_2" \
-  --assign prefix_victims="$prefix_victims" \
-  --assign newline_substitution="$env_awk_newline_substitution" \
-  --assign trace_on=1 \
-  <(echo "$ff_vs_nff_push_data_1") \
-  <(echo "$ff_vs_nff_push_data_2") \
-  <(echo "$victim_data") \
   <(echo "$remote_refs_1") \
   <(echo "$remote_refs_2") \
   <(echo "$track_refs_1") \
@@ -179,6 +169,23 @@ push_victim_spec2="${victim_refspec_list[2]}";
 
 push_spec1="$push_spec1$push_victim_spec1"
 push_spec2="$push_spec2$push_victim_spec2"
+
+end_of_results="${refspec_list[4]}";
+
+end_of_results_expected='{[end-of-results]}';
+# This comparison must have double quotes on the second operand. Otherwise it doesn't work.
+if [[ $end_of_results != "$end_of_results_expected" ]]; then
+  echo '@' ERROR: An unexpected internal processing results end. Exit.
+  echo
+  
+  # !!! EXIT !!!
+  exit 2002;
+fi;
+
+
+if [[ $env_trace_refs == 1 ]]; then
+  echo
+fi;
 
 
 mkdir -p "$path_async_output"

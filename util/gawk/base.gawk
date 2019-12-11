@@ -1,7 +1,9 @@
-@include util.gawk
-
+@include "util.gawk"
 
 function unlock_deletion(    rr_a, rr_b, tr_a, tr_b){
+    if(!must_exist_branch)
+        return;
+
     rr_a = refs[must_exist_branch][remote[side_a]][sha_key];
     if(!rr_a)
         return;
@@ -37,10 +39,16 @@ function generate_missing_refs(    ref){
         if(!refs[ref][track[side_b]][ref_key]){
             refs[ref][track[side_b]][ref_key] = track_refs_prefix origin[side_b] "/" ref;
         }
+
+        # d_trace("ref is " ref);
+        # d_trace("track ref_key side_a " refs[ref][track[side_a]][ref_key]);
+        # d_trace("track ref_key side_b " refs[ref][track[side_b]][ref_key]);
+        # d_trace("remote ref_key side_a " refs[ref][remote[side_a]][ref_key]);
+        # d_trace("remote ref_key side_b " refs[ref][remote[side_b]][ref_key]);
     }
 }
 
-function append_by_side(host, side, addition){
+function append_by_side(side, host, addition){
     host[side] = host[side] (host[side] ? newline_substitution : "") addition;
 }
 function append_by_val(host, addition){

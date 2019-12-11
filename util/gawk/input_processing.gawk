@@ -1,4 +1,4 @@
-@include util.gawk
+@include "util.gawk"
 
 BEGIN { # Constants.
     track_refs_prefix = "refs/remotes/";
@@ -34,9 +34,11 @@ BEGIN { # Parameters.
     initial_states_processing();
 }
 function initial_states_processing(    side){
+    must_exist_branch = ENVIRON["must_exist_branch"];
     if(!must_exist_branch)
         write("Deletion is blocked. Parameter must_exist_branch is empty");
         
+    origin_a = ENVIRON["origin_1"];
     if(!origin_a){
         write("Error. Parameter origin_a is empty");
         exit 1002;
@@ -44,6 +46,7 @@ function initial_states_processing(    side){
     origin[side_a] = origin_a;
     origin_a = ""
     
+    origin_b = ENVIRON["origin_2"];
     if(!origin_b){
         write("Error. Parameter origin_b is empty");
         exit 1003;
@@ -51,6 +54,7 @@ function initial_states_processing(    side){
     origin[side_b] = origin_b;
     origin_b = ""
     
+    prefix_a = ENVIRON["prefix_1"];
     if(!prefix_a){
         write("Error. Parameter prefix_a is empty");
         exit 1004;
@@ -58,6 +62,7 @@ function initial_states_processing(    side){
     prefix[side_a] = prefix_a;
     prefix_a = ""
     
+    prefix_b = ENVIRON["prefix_2"];
     if(!prefix_b){
         write("Error. Parameter prefix_b is empty");
         exit 1005;
@@ -65,11 +70,13 @@ function initial_states_processing(    side){
     prefix[side_b] = prefix_b;
     prefix_b = ""
 
+    prefix_victims = ENVIRON["prefix_victims"];
     if(!prefix_victims){
         # Let's prevent emptiness checking all around as prefix_victims var allowed to be empty.
         prefix_victims = "{prefix_victims var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
     }
 
+    newline_substitution = ENVIRON["env_awk_newline_substitution"];
     if(!newline_substitution){
         write("Error. Parameter newline_substitution is empty");
         exit 1006;
@@ -84,6 +91,8 @@ BEGINFILE { # Preparing processing for every portion of refs.
     file_states_processing();
 }
 function file_states_processing() {
+    dest = "";
+    ref_prefix = "";
     switch (++file_num) {
         case 1:
             dest = remote[side_a];
