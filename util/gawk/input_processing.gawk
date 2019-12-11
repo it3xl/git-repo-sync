@@ -82,13 +82,17 @@ function initial_states_processing(    side){
     ff_candidates[side_a] = ENVIRON["out_ff_candidates_1"];
     ff_candidates[side_b] = ENVIRON["out_ff_candidates_2"];
 
-    if(ff_candidates[side_a]){
+    if(ff_candidates[side_a] || ff_candidates[side_b]){
         d_trace("Interrupting for FF candidates");
 
-        d_trace("ff_candidates[side_a]");
-        d_trace(ff_candidates[side_a]);
-        d_trace("ff_candidates[side_b]");
-        d_trace(ff_candidates[side_b]);
+        if(ff_candidates[side_a]){
+            d_trace("ff_candidates[side_a]");
+            d_trace(ff_candidates[side_a]);
+        }
+        if(ff_candidates[side_b]){
+            d_trace("ff_candidates[side_b]");
+            d_trace(ff_candidates[side_b]);
+        }
 
         exit;
     }

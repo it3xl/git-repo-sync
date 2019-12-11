@@ -16,10 +16,10 @@ function main_processing(    ref){
     actions_to_refspecs();
     refspecs_to_stream();
 }
-function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim){
+function state_to_action(ref,    remote_sha, track_sha, side, is_victim){
     for(side in sides){
-        remote_sha[side] = refs[current_ref][remote[side]][sha_key];
-        track_sha[side] = refs[current_ref][track[side]][sha_key];
+        remote_sha[side] = refs[ref][remote[side]][sha_key];
+        track_sha[side] = refs[ref][track[side]][sha_key];
     }
 
     remote_sha[equal] = remote_sha[side_a] == remote_sha[side_b];
@@ -34,28 +34,28 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim)
     track_sha[common] = track_sha[equal] ? track_sha[side_a] : "";
     track_sha[empty] = !(track_sha[side_a] || track_sha[side_b]);
 
-    is_victim = index(current_ref, prefix_victims) == 1;
+    is_victim = index(ref, prefix_victims) == 1;
 
     if(remote_sha[empty])
         return;
     
     if(remote_sha[equal])
-        request_update_tracking(current_ref, remote_sha, track_sha);
+        request_update_tracking(ref, remote_sha, track_sha);
 
     if(remote_sha[equal])
         return;
 
     if(track_sha[empty])
-        request_update_tracking(current_ref, remote_sha, track_sha);
+        request_update_tracking(ref, remote_sha, track_sha);
 
     if(track_sha[empty])
         return;
 
-    request_ff(current_ref, remote_sha, track_sha, is_victim);
+    request_ff(ref, remote_sha, track_sha, is_victim);
 
-    request_update_tracking(current_ref, remote_sha, track_sha);
+    request_update_tracking(ref, remote_sha, track_sha);
 }
-function request_update_tracking(current_ref, remote_sha, track_sha){
+function request_update_tracking(ref, remote_sha, track_sha){
     for(side in sides){
         if(!remote_sha[side]){
             # No the update source.
@@ -66,11 +66,11 @@ function request_update_tracking(current_ref, remote_sha, track_sha){
             continue;
         }
         # Possibly gitSync or the network was interrupted. Let's update the tracking ref.
-        trace(current_ref " action-fetch from " origin[side] "; track ref is " ((track_sha[side]) ? "outdated" : "unknown"));
-        a_fetch[side][current_ref];
+        trace(ref " action-fetch from " origin[side] "; track ref is " ((track_sha[side]) ? "outdated" : "unknown"));
+        a_fetch[side][ref];
     }
 }
-function request_ff(current_ref, remote_sha, track_sha, is_victim){
+function request_ff(ref, remote_sha, track_sha, is_victim,    side, aside, ref_owner){
     if(!track_sha[equal])
         return;
     
@@ -81,12 +81,31 @@ function request_ff(current_ref, remote_sha, track_sha, is_victim){
         return;
 
     for(side in sides){
-        aside = asides[side];
-        if(remote_sha[side] == track_sha[common] && remote_sha[aside] != track_sha[common]){
-            # Let's allow updating of the another side conventional refs. Remember fast-forward updating candidates.
-            trace(current_ref " check-fast-forward; outdated on " origin[side]);
-            a_ff_candidate[side][current_ref];
+
+        ref_owner = index(ref, prefix[side]) == 1;
+
+        if(ref_owner){
+            continue;
         }
+        
+        # d_trace(ref_owner " " side " " ref " " prefix[side]);
+
+        if(!remote_sha[side]){
+            continue;
+        }
+
+        if(remote_sha[side] == track_sha[side]){
+            continue;
+        }
+
+        aside = asides[side];
+        if(remote_sha[aside] != track_sha[aside]){
+            continue;
+        }
+
+        # Let's allow updating of the another side conventional refs. Remember fast-forward updating candidates.
+        trace(ref " check-fast-forward; outdated on " origin[side]);
+        a_ff_candidate[side][ref];
     }
 }
 
@@ -100,8 +119,7 @@ function actions_to_refspecs(    side, aside, ref){
     for(side in a_ff_candidate){
         aside = asides[side];
         for(ref in a_ff_candidate[side]){
-            # In format order: ref; the space; side to update
-            append_by_side(side, out_ff_candidates, ref " " refs[ref][remote[side]][ref_key]);
+            append_by_side(side, out_ff_candidates, ref);
         }
     }
 }

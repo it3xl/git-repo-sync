@@ -131,9 +131,9 @@ function actions_to_operations(    side, aside, ref, owner_side){
     for(side in sides){
         aside = asides[side];
         for(ref in a_solve){
-            owner_side = index(ref, prefix[side]) == 1;
+            ref_owner = index(ref, prefix[side]) == 1;
 
-            if(!owner_side){
+            if(!ref_owner){
                 continue;
             }
 
@@ -169,25 +169,6 @@ function operations_to_refspecs(    side, aside, ref){
             append_by_val(out_notify_del, prefix[side]  " | deletion | "  refs[ref][remote[side]][ref_key]  "   "  refs[ref][remote[side]][sha_key]);
         }
     }
-
-
-
-
-
-
-
-
-    for(side in op_push_ff){
-        aside = asides[side];
-        for(ref in op_push_ff[side]){
-            out_push[side] = out_push[side] "  " refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key];
-        }
-    }
-
-
-
-
-
 
     for(side in op_push_nff){
         aside = asides[side];
