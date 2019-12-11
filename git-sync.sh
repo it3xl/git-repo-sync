@@ -102,7 +102,6 @@ if [[ $env_trace_refs == 1 ]]; then
   echo out_ff_candidates_2
   echo "$out_ff_candidates_2"
 fi;
-
 # exit
 
 
@@ -150,8 +149,7 @@ if [[ $env_trace_refs == 1 ]]; then
   echo track_refs_2=
   echo "$track_refs_2"
 fi;
-
-exit
+# exit
 
 
 proc_data=$(gawk \
@@ -170,24 +168,19 @@ if [[ $env_trace_refs == 1 ]]; then
   echo proc_data is
   echo "$proc_data"
 fi;
+# exit
 
 del_spec="${proc_list[0]}";
-push_spec1="${proc_list[1]}";
-push_spec2="${proc_list[2]}";
-post_fetch_spec1="${proc_list[3]}";
-post_fetch_spec2="${proc_list[4]}";
-notify_del="${proc_list[5]//$env_awk_newline_substitution/$'\n'}";
-notify_solving="${proc_list[6]//$env_awk_newline_substitution/$'\n'}";
+notify_del="${proc_list[1]//$env_awk_newline_substitution/$'\n'}";
+
+push_spec1="${proc_list[2]}";
+push_spec2="${proc_list[3]}";
+notify_solving="${proc_list[4]//$env_awk_newline_substitution/$'\n'}";
+
+post_fetch_spec1="${proc_list[5]}";
+post_fetch_spec2="${proc_list[6]}";
+
 end_of_results="${proc_list[7]}";
-
-if [[ $env_trace_refs == 1 ]]; then
-  echo
-  echo proc_data is
-  echo "$proc_data"
-fi;
-
-exit
-
 
 end_of_results_expected='{[end-of-results]}';
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
@@ -208,7 +201,6 @@ if [[ -n "$del_spec" ]]; then
   git branch --delete --force --remotes $del_spec
 fi;
 
-
 if [[ -n "$notify_del" ]]; then
   echo $'\n>' Notify Deletion
 
@@ -216,14 +208,6 @@ if [[ -n "$notify_del" ]]; then
   
   echo > "$env_notify_del_file"
   echo "$notify_del" >> "$env_notify_del_file"
-fi;
-if [[ -n "$notify_solving" ]]; then
-  echo $'\n>' Notify Solving
-
-  install -D /dev/null "$env_notify_solving_file"
-  
-  echo > "$env_notify_solving_file"
-  echo "$notify_solving" >> "$env_notify_solving_file"
 fi;
 
 
@@ -258,6 +242,15 @@ else
     echo $push_spec2
     git push $origin_2 $push_spec2 || true
   fi;
+fi;
+
+if [[ -n "$notify_solving" ]]; then
+  echo $'\n>' Notify Solving
+
+  install -D /dev/null "$env_notify_solving_file"
+  
+  echo > "$env_notify_solving_file"
+  echo "$notify_solving" >> "$env_notify_solving_file"
 fi;
 
 
