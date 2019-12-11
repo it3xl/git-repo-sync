@@ -3,7 +3,9 @@
 @include "input_processing.gawk"
 
 END {
+    write_after_line("> pre processing");
     main_processing();
+    write("> pre processing end");
 }
 function main_processing(    ref){
     generate_missing_refs();
@@ -34,7 +36,6 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim)
 
     is_victim = index(current_ref, prefix_victims) == 1;
 
-
     if(remote_sha[empty])
         return;
     
@@ -60,7 +61,7 @@ function request_update_tracking(current_ref, remote_sha, track_sha){
             # No the update source.
             continue;
         }
-        if(remote_sha[common] == track_sha[side]){
+        if(remote_sha[side] == track_sha[side]){
             # No need to update. Tracking and remote refs are the same.
             continue;
         }
