@@ -253,8 +253,6 @@ function set_victim_data(    ref, sha_a, sha_b){
 
 function refspecs_to_stream(){
     print out_del;
-    print out_ff_vs_nff_data[side_a];
-    print out_ff_vs_nff_data[side_b];
     print out_push[side_a];
     print out_push[side_b];
     print out_post_fetch[side_a];
@@ -262,7 +260,6 @@ function refspecs_to_stream(){
     print out_notify_del[val];
     print out_notify_solving[val];
 
-    # 12
     # Must print finishing line otherwise previous empty lines will be ignored by mapfile command in bash.
     print "{[end-of-results]}"
 }
