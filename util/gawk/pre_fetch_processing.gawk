@@ -105,7 +105,7 @@ function request_ff(ref, remote_sha, track_sha, is_victim,    side, aside, ref_o
 
         # Let's allow updating of the another side conventional refs. Remember fast-forward updating candidates.
         trace(ref " check-fast-forward; outdated on " origin[side]);
-        a_ff_candidate[side][ref];
+        a_ff_candidates[ref];
     }
 }
 
@@ -116,11 +116,8 @@ function actions_to_refspecs(    side, aside, ref){
         }
     }
 
-    for(side in a_ff_candidate){
-        aside = asides[side];
-        for(ref in a_ff_candidate[side]){
-            append_by_side(side, out_ff_candidates, ref);
-        }
+    for(ref in a_ff_candidates){
+        append_by_val(side, out_ff_candidates, ref);
     }
 }
 
@@ -128,8 +125,7 @@ function refspecs_to_stream(){
     print out_fetch[side_a];
     print out_fetch[side_b];
 
-    print out_ff_candidates[side_a];
-    print out_ff_candidates[side_b];
+    print out_ff_candidates[val];
 
     # Must print finishing line otherwise previous empty lines will be ignored by mapfile command in bash.
     print "{[end-of-results]}"

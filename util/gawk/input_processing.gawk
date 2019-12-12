@@ -25,7 +25,7 @@ BEGIN { # Globals.
 BEGIN { # Parameters.
     initial_states_processing();
 }
-function initial_states_processing(    side, split_arr, index, ref){
+function initial_states_processing(    side, split_arr, ind, ref){
     must_exist_branch = ENVIRON["must_exist_branch"];
     if(!must_exist_branch)
         write("Deletion is blocked. Parameter must_exist_branch is empty");
@@ -79,16 +79,14 @@ function initial_states_processing(    side, split_arr, index, ref){
         remote[side] = "remote@" prefix[side];
     }
     
-    for(side in sides){
-        split(ENVIRON["ff_candidates_" side], split_arr, "\n")
-        for(index in split_arr){
-            ref = split_arr[index];
-            if(!ref){
-                continue;
-            }
-            d_trace("ref is " ref);
-            ff_candidates[side][ref];
+    split(ENVIRON["ff_candidates"], split_arr, "\n");
+    for(ind in split_arr){
+        ref = split_arr[ind];
+        if(!ref){
+            continue;
         }
+        d_trace("ref is " ref);
+        ff_candidates[side][ref];
     }
 }
 BEGINFILE { # Preparing processing for every portion of refs.

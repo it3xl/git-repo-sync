@@ -79,13 +79,11 @@ mapfile -t pre_proc_list < <(echo "$pre_proc_data")
 
 fetch_spec1="${pre_proc_list[0]}";
 fetch_spec2="${pre_proc_list[1]}";
-ff_candidates_1="${pre_proc_list[2]//$env_awk_newline_substitution/$'\n'}";
-ff_candidates_2="${pre_proc_list[3]//$env_awk_newline_substitution/$'\n'}";
-end_of_results="${pre_proc_list[4]}";
+ff_candidates="${pre_proc_list[2]//$env_awk_newline_substitution/$'\n'}";
+end_of_results="${pre_proc_list[3]}";
 
 # Let's export for an usage in main processing.
-export ff_candidates_1
-export ff_candidates_2
+export ff_candidates
 
 end_of_results_expected='{[end-of-results]}';
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
@@ -102,10 +100,8 @@ if [[ $env_trace_refs == 1 ]]; then
   echo "$fetch_spec1"
   echo fetch_spec2
   echo "$fetch_spec2"
-  echo ff_candidates_1
-  echo "$ff_candidates_1"
-  echo ff_candidates_2
-  echo "$ff_candidates_2"
+  echo ff_candidates
+  echo "$ff_candidates"
 fi;
 # exit
 

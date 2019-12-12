@@ -22,7 +22,7 @@ function main_processing(    ref){
     operations_to_refspecs();
     refspecs_to_stream();
 }
-function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim, action_solve_key){
+function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_victim){
     for(side in sides){
         remote_sha[side] = refs[current_ref][remote[side]][sha_key];
         track_sha[side] = refs[current_ref][track[side]][sha_key];
@@ -85,6 +85,10 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, is_victim,
         }
     }
 
+    if(ff_candidates_to_refspec(current_ref)){
+        return;
+    }
+
     trace(current_ref " " action_solve_key "-all-others; it has different track or/and remote branch commits");
     set_solve_action(is_victim, current_ref);
 }
@@ -95,7 +99,55 @@ function set_solve_action(is_victim, ref){
         a_solve[ref];
     }
 }
-function actions_to_operations(    side, aside, ref, owner_side){
+function ff_candidates_to_refspec(ref,    ff_ref, is_ff, a_owner, b_owner, owner_side, not_owner_side, owner_sha, not_owner_sha, cmd, ff_result){
+    for(ff_ref in ff_candidates){
+        if(ff_ref == ref){
+            is_ff = 1;
+            break;
+        }
+    }
+    if(!is_ff){
+        return;
+    }
+
+    a_owner = index(ref, prefix[side_a]) == 1;
+    b_owner = index(ref, prefix[side_b]) == 1;
+
+    if(a_owner){
+        owner_side = side_a;
+    } else if(b_owner){
+        owner_side = side_b;
+    } else {
+        return;
+    }
+
+    not_owner_side = asides[owner_side];
+
+    # Ancestor is an update target. Owner must be an ancestor
+    owner_sha = refs[ref][remote[owner_side]][sha_key];
+
+    # descendant is (possibly) where to update.
+    not_owner_sha = refs[ref][remote[not_owner_side]][sha_key];
+
+    # --is-ancestor <ancestor> <descendant>
+    cmd = "git merge-base --is-ancestor " refs[ref][track[owner_side]][ref_key] " " refs[ref][track[not_owner_side]][ref_key] " && echo ff";
+    
+    cmd | getline ff_result;
+    close(cmd);
+
+    if(ff_result != "ff"){
+        trace(ref " blocked-fast-forward; from " origin[not_owner_side] " to " origin[owner_side] " as " owner_sha " isn't parent of " not_owner_sha " respectively");
+
+        return;
+    }
+    
+    trace(ref " action-fast-forward; from " origin[not_owner_side] " to " origin[owner_side] " as " owner_sha " is parent of " not_owner_sha " respectively");
+    out_push[owner_side] = out_push[owner_side] " " refs[ref][track[not_owner_side]][ref_key] ":" refs[ref][remote[owner_side]][ref_key];
+
+    # Let's inform a calling logic that we've processed the current ref.
+    return 1;
+}
+function actions_to_operations(    side, aside, ref, ref_owner){
     for(ref in a_restore){
         for(side in sides){
             if(!refs[ref][track[side]][sha_key]){
@@ -181,7 +233,6 @@ function operations_to_refspecs(    side, aside, ref){
             }
         }
     }
-    set_ff_vs_nff_push_data();
     set_victim_refspec();
 
     # We may use post fetching as workaround for network fails and program interruptions.
@@ -194,26 +245,7 @@ function operations_to_refspecs(    side, aside, ref){
         }
     }
 }
-function set_ff_vs_nff_push_data(    side, aside, descendant_sha, ancestor_sha){
-    for(side in op_ff_vs_nff){
-        aside = asides[side];
 
-        for(ref in op_ff_vs_nff[side]){
-        # ancestor is update target.
-        ancestor_sha = refs[ref][remote[side]][sha_key] ? refs[ref][remote[side]][sha_key] : ("no sha for " remote[side]);
-
-        # descendant is (possibly) update source.
-        descendant_sha = refs[ref][remote[aside]][sha_key] ? refs[ref][aside][sha_key] : ("no sha for " remote[aside]);
-
-        append_by_side(side, out_ff_vs_nff_data, "ff-vs-nff " ref " " ancestor_sha " " descendant_sha);
-        
-        # --is-ancestor <ancestor> <descendant>
-        append_by_side(side, out_ff_vs_nff_data, "git merge-base --is-ancestor " refs[ref][track[side]][ref_key] " " refs[ref][track[aside]][ref_key] " && echo ff || echo nff");
-        
-        append_by_side(side, out_ff_vs_nff_data, refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key]);
-        }
-    }
-}
 function set_victim_refspec(    ref, sha_a, sha_b, git_rev_list_cmd, newest_sha){
     for(ref in op_victim_winner_search){
         # We expects that "no sha" cases will be processed by common NFF-solving actions.

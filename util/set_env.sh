@@ -1,5 +1,5 @@
-echo
-echo Start `basename "$BASH_SOURCE"`
+# echo
+# echo Start `basename "$BASH_SOURCE"`
 
 # The $invoke_path variable comes from an external script.
 export path_git_sync="$invoke_path"
@@ -93,7 +93,7 @@ export env_awk_newline_substitution='|||||'
 export env_allow_async=0
 export env_trace_refs=1
 export env_awk_trace_on=1
-export env_process_if_refs_are_the_same=1
+export env_process_if_refs_are_the_same=0
 
 path_project_root="$path_git_sync/sync-projects/$project_folder"
 export path_sync_repo="$path_project_root/sync_repo"
@@ -114,4 +114,4 @@ export git_cred="$path_git_sync_util/bash-git-credential-helper/git-cred.sh"
 
 
 
-echo End `basename "$BASH_SOURCE"`
+# echo End `basename "$BASH_SOURCE"`
