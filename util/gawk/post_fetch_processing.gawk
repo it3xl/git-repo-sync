@@ -166,7 +166,6 @@ function actions_to_operations(    side, aside, ref, ref_owner){
     }
 
     for(side in sides){
-        aside = asides[side];
         for(ref in a_victim_solve){
             d_trace("a_victim_solve op_victim_winner_search " side " " ref);
             op_victim_winner_search[ref];
