@@ -183,6 +183,25 @@ post_fetch_spec2="${proc_list[6]}";
 
 end_of_results="${proc_list[7]}";
 
+if [[ $env_trace_refs == 1 ]]; then
+  echo
+  echo del_spec is
+  echo "$del_spec"
+  echo notify_del is
+  echo "$notify_del"
+  echo push_spec1 is
+  echo "$push_spec1"
+  echo push_spec2 is
+  echo "$push_spec2"
+  echo notify_solving is
+  echo "$notify_solving"
+  echo post_fetch_spec1 is
+  echo "$post_fetch_spec1"
+  echo post_fetch_spec2 is
+  echo "$post_fetch_spec2"
+fi;
+# exit
+
 end_of_results_expected='{[end-of-results]}';
 # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
 if [[ $end_of_results != "$end_of_results_expected" ]]; then

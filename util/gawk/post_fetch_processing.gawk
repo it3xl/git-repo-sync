@@ -130,7 +130,7 @@ function ff_candidates_to_refspec(ref,    ff_ref, is_ff, a_owner, b_owner, owner
     not_owner_sha = refs[ref][remote[not_owner_side]][sha_key];
 
     # --is-ancestor <ancestor> <descendant>
-    cmd = "git merge-base --is-ancestor " refs[ref][track[owner_side]][ref_key] " " refs[ref][track[not_owner_side]][ref_key] " && echo ff";
+    cmd = subprocess_mode_cmd "git merge-base --is-ancestor " refs[ref][track[owner_side]][ref_key] " " refs[ref][track[not_owner_side]][ref_key] " && echo ff";
     
     cmd | getline ff_result;
     close(cmd);
@@ -168,15 +168,7 @@ function actions_to_operations(    side, aside, ref, ref_owner){
     for(side in sides){
         aside = asides[side];
         for(ref in a_victim_solve){
-            # Update non-existing remote refs.
-            if(!refs[ref][remote[side]][sha_key] && refs[ref][remote[aside]][sha_key]){
-                op_push_nff[side][ref];
-                #op_post_fetch[side][ref];
-
-                # Stop if non-existing remote refs will be updated.
-                continue;
-            }
-
+            d_trace("a_victim_solve op_victim_winner_search " side " " ref);
             op_victim_winner_search[ref];
         }
     }
@@ -246,23 +238,31 @@ function operations_to_refspecs(    side, aside, ref){
     }
 }
 
-function set_victim_refspec(    ref, sha_a, sha_b, git_rev_list_cmd, newest_sha){
+function set_victim_refspec(    ref, sha_a, sha_a_txt, sha_b, sha_b_txt, cmd, newest_sha){
     for(ref in op_victim_winner_search){
         # We expects that "no sha" cases will be processed by common NFF-solving actions.
         # But this approach with variables help to solve severe errors. Also it makes code more resilient.
-        sha_a = refs[ref][remote[side_a]][sha_key] ? refs[ref][remote[side_a]][sha_key] : ("<no sha for " remote[side_a] ">");
-        sha_b = refs[ref][remote[side_b]][sha_key] ? refs[ref][remote[side_b]][sha_key] : ("<no sha for " remote[side_b] ">");
+        sha_a = refs[ref][track[side_a]][sha_key];
+        sha_a_txt = sha_a ? sha_a : "<no-sha>"
+        sha_b = refs[ref][track[side_b]][sha_key];
+        sha_b_txt = sha_b ? sha_b : "<no-sha>"
 
-        git_rev_list_cmd = "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1"
-        git_rev_list_cmd | getline newest_sha;
-        close(git_rev_list_cmd);
+        if(sha_a && sha_b){
+            cmd = subprocess_mode_cmd "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1"
+            cmd | getline newest_sha;
+            close(cmd);
+        } else if(sha_a){
+           newest_sha =  sha_a;
+        } else if(sha_b){
+           newest_sha =  sha_b;
+        }
 
         if(newest_sha == sha_a){
-            d_trace("victim solving: " branch " on " origin_1 " beat " origin_2 " with " sha_a " vs " sha_b)
+            trace("victim-solving: " ref " on " origin[side_a] " beat " origin[side_b] " with " sha_a_txt " vs " sha_b_txt)
             out_push[side_b] = out_push[side_b] "  +" refs[ref][track[side_a]][ref_key] ":" refs[ref][remote[side_b]][ref_key];
         }
         if(newest_sha == sha_b){
-            d_trace("victim solving: " branch " on " origin_2 " beat " origin_1 " with " sha_b " vs " sha_a)
+            trace("victim-solving: " ref " on " origin[side_b] " beat " origin[side_a] " with " sha_b_txt " vs " sha_a_txt)
             out_push[side_a] = out_push[side_a] "  +" refs[ref][track[side_b]][ref_key] ":" refs[ref][remote[side_a]][ref_key];
         }        
     }

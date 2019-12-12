@@ -88,6 +88,8 @@ function initial_states_processing(    side, split_arr, ind, ref){
         d_trace("ref is " ref);
         ff_candidates[side][ref];
     }
+
+    subprocess_mode_cmd = "set -euf +x -o pipefail; ";
 }
 BEGINFILE { # Preparing processing for every portion of refs.
     file_states_processing();
