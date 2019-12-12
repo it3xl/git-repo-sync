@@ -1,35 +1,20 @@
 
-Hot TO-DOs
-  Move notification message generation to the second processing.
+Think to allow moving back for conventional branches from a non-owner repo.
 
+Add solving notifications for victim strategy.
 
+Create a separate pass.sh file.
 
-Test cases to check for victim refs
-  Any side may move victim branches to any commit.
+Add the second pass at the end of every run.
+  Ignore second run of set_env.sh
+  
+Write tests in bash.
+  Use bash source to analyze evn variables.
+  Put crucial tracing to env variables.
+    It is better than analyse process outputs.
+  Be ready for GitHub integration.
 
-
-Code down some Git timeouts or GNU timeout, or something, instead of the plain wait command.
-  Add a fetch wait period config parameters.
-  I expect my solution to work from under automaton servers such as Jenkins.
-  There we can use some "kill after inactivity" features.
-  But for those who runs it directly we have to prevent any hanging.
-  Nobody expects any hanging.
-
-Recreate sync repos if parameters were changed.
-  Do not see enough reasons to implement this yet.
-  We are solving problems here, not playing games.
-
-if prefix_1 or prefix_2 undefined, it blocks migration of corresponding branches.
-  Do not see enough reasons to implement this yet.
-  Use any one line force migration command of Git.
-
-
-Think about mitigation of any NFF after a long job interruption by a preliminary FF.
-  Looks like it is excessive.
-    Remember the time of the last sync.
-    Without an analysis of predecessor refs do a FF.
-    Remember if the FF was already applied.
-.
+Integrate tests with GitHub.
 
 
 

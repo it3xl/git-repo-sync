@@ -42,6 +42,7 @@ A victim branch deletion is synchronized right.
     One sync pass is enough.
 
 A victim branch updating on one side is synchronized right.
+    Conflict-notification is working.
     One sync pass is enough.
 
 A victim branch updating differently on both sides (conflict) between syncs is synchronized right.
@@ -50,7 +51,7 @@ A victim branch updating differently on both sides (conflict) between syncs is s
     One sync pass is enough.
 
 A victim branch moved to any commit that differentiated from the last used commit is synchronized right.
-    ???
+    Conflict-notification is working.
     One sync pass is enough.
 
 A victim branch NFF-change or moving back on one side is synchronized right to the other side.
