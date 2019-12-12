@@ -9,8 +9,6 @@ END {
 }
 
 function main_processing(    ref){
-    process_input_ff_candidates();
-    
     deletion_allowed = 0;
     unlock_deletion();
     write("Deletion " ((deletion_allowed) ? "allowed" : "blocked") " by " must_exist_branch);

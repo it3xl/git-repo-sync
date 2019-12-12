@@ -25,7 +25,7 @@ BEGIN { # Globals.
 BEGIN { # Parameters.
     initial_states_processing();
 }
-function initial_states_processing(    side){
+function initial_states_processing(    side, split_arr, index, ref){
     must_exist_branch = ENVIRON["must_exist_branch"];
     if(!must_exist_branch)
         write("Deletion is blocked. Parameter must_exist_branch is empty");
@@ -79,22 +79,16 @@ function initial_states_processing(    side){
         remote[side] = "remote@" prefix[side];
     }
     
-    ff_candidates[side_a] = ENVIRON["out_ff_candidates_1"];
-    ff_candidates[side_b] = ENVIRON["out_ff_candidates_2"];
-
-    if(ff_candidates[side_a] || ff_candidates[side_b]){
-        d_trace("Interrupting for FF candidates");
-
-        if(ff_candidates[side_a]){
-            d_trace("ff_candidates[side_a]");
-            d_trace(ff_candidates[side_a]);
+    for(side in sides){
+        split(ENVIRON["ff_candidates_" side], split_arr, "\n")
+        for(index in split_arr){
+            ref = split_arr[index];
+            if(!ref){
+                continue;
+            }
+            d_trace("ref is " ref);
+            ff_candidates[side][ref];
         }
-        if(ff_candidates[side_b]){
-            d_trace("ff_candidates[side_b]");
-            d_trace(ff_candidates[side_b]);
-        }
-
-        exit;
     }
 }
 BEGINFILE { # Preparing processing for every portion of refs.
@@ -147,23 +141,5 @@ function prefix_name_key() { # Generates a common key for all 4 locations of eve
     split($3, split_refs, ref_prefix);
     $3 = split_refs[2];
 }
-
-function process_input_ff_candidates(    cmd, result){
-    cmd = "echo \"$ff_candidates_1\"";
-
-    while (cmd | getline result){
-        if(!result){
-            continue;
-        }
-        d_trace("result is " result);
-    }
-
-    close(cmd);
-}
-
-
-
-
-
 
 
