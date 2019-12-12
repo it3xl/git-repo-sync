@@ -43,7 +43,7 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
     if(remote_sha[empty]){
         # As we here this means that remote repos don't know the current ref but gitSync knows it somehow.
 
-        trace(current_ref " action-restore on both remotes; is unknown");
+        trace(current_ref ": action-restore on both remotes; is unknown");
         # This actions supports independents of gitSync from its remoter repos.
         # I.e. you can replace remote repos all at once, as gitSync will be the source of truth.
         # But if you don't run gitSync for a while and have deleted a branch on both side repos manually then gitSync will recreate it.
@@ -72,10 +72,10 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
             aside = asides[side];
             if(!remote_sha[side] && remote_sha[aside] == track_sha[common]){
                 if(deletion_allowed){
-                    trace(current_ref " action-del on " origin[aside] "; it is disappeared from " origin[side]);
+                    trace(current_ref ": action-del on " origin[aside] "; it is disappeared from " origin[side]);
                     a_del[aside][current_ref];
                 }else{
-                    trace(current_ref " " action_solve_key "-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
+                    trace(current_ref ": " action_solve_key "-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
                     set_solve_action(is_victim, current_ref);
                 }
 
@@ -88,7 +88,7 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
         return;
     }
 
-    trace(current_ref " " action_solve_key "-all-others; it has different track or/and remote branch commits");
+    trace(current_ref ": " action_solve_key "-all-others; it has different track or/and remote branch commits");
     set_solve_action(is_victim, current_ref);
 }
 function set_solve_action(is_victim, ref){
@@ -129,7 +129,7 @@ function ff_candidates_to_refspec(ref,    ff_ref, is_ff, a_owner, b_owner, owner
     not_owner_sha = refs[ref][remote[not_owner_side]][sha_key];
 
     # --is-ancestor <ancestor> <descendant>
-    cmd = subprocess_mode_cmd "git merge-base --is-ancestor " refs[ref][track[owner_side]][ref_key] " " refs[ref][track[not_owner_side]][ref_key] " && echo ff";
+    cmd = "git merge-base --is-ancestor " refs[ref][track[owner_side]][ref_key] " " refs[ref][track[not_owner_side]][ref_key] " && echo ff";
     
     cmd | getline ff_result;
     close(cmd);
@@ -245,7 +245,7 @@ function set_victim_refspec(    ref, sha_a, sha_a_txt, sha_b, sha_b_txt, cmd, ne
         sha_b_txt = sha_b ? sha_b : "<no-sha>"
 
         if(sha_a && sha_b){
-            cmd = subprocess_mode_cmd "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1"
+            cmd = "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1"
             cmd | getline newest_sha;
             close(cmd);
         } else if(sha_a){
