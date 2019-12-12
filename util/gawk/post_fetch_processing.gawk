@@ -55,18 +55,17 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
 
     # ! All further actions assume that remote refs are not equal.
 
-    is_victim = index(current_ref, prefix_victims) == 1;
-    action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
-
     if(track_sha[empty]){
         trace("!Warning!");
         trace("!! Something went wrong for " current_ref ". It is still untracked.");
         trace("!! Possibly the program or the network were interrupted.");
         trace("!! We will try to sync it during the second sync pass.");
-        set_solve_action(is_victim, current_ref);
 
         return;
     }
+
+    is_victim = index(current_ref, prefix_victims) == 1;
+    action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
 
     if(track_sha[equal]){
         for(side in sides){
@@ -167,7 +166,6 @@ function actions_to_operations(    side, aside, ref, ref_owner){
 
     for(side in sides){
         for(ref in a_victim_solve){
-            d_trace("a_victim_solve op_victim_winner_search " side " " ref);
             op_victim_winner_search[ref];
         }
     }

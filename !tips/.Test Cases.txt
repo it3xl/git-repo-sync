@@ -25,6 +25,8 @@ After a recreation of one remote repo synchronized refs are restored right.
     One sync pass is enough.
 
 After a recreation of both remote repos synchronized refs are restored right.
+    Conventional refs are not disappearing.
+    Victim refs are not disappearing.
     One sync pass is enough.
 
 A branch deletion on owning side is synchronized right.
