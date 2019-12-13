@@ -26,7 +26,7 @@ project_folder=sample_repo
 # Assign here a conventional prefix for refs in your first repo. Only prefixed refs will be synced.
 # To make things simpler, I demand from you to put some char at the end here.
 # I prefer to use "/", "-" or "_". And I didn't test other.
-prefix_1=client_co/
+prefix_1=a/
 # Then synced branches will be looking like this "client_co/feature_x"
 
 # Assign here a real URL to your first repo.
@@ -35,7 +35,7 @@ url_1=https://your-repo1-url.org/git/my_repo.git
 
 
 # Assign here a conventional prefix for refs of your second repo. Only prefixed refs will be synced.
-prefix_2=vendor_co-
+prefix_2=b-
 # Then synced branches will be looking like this "vendor_co-abc_feature"
 
 # Assign here a real URL to your second repo.
@@ -44,7 +44,7 @@ url_2=https://git.your-repo2-url.org/my_repo.git
 
 
 # Assign a prefix for branches with conflict solving strategy "The youngest wins".
-prefix_victims=common@
+prefix_victims=@
 
 
 
