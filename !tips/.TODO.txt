@@ -1,5 +1,10 @@
 
-Think to allow moving back for conventional branches from a non-owner repo.
+Allow refs deletion from a non-owner repo.
+  Prevent from refs wiping if a repo was made manually empty.
+    Block the deletion if a side has no refs at all.
+  
+Allow history rewriting from a non-owner repo.
+  Moving back is also here.
 
 Add solving notifications for victim strategy.
 
