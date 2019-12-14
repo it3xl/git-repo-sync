@@ -1,4 +1,9 @@
 
+Deletion blocked if must_exist_branch config setting is empty.
+Deletion blocked if must_exist_branch doesn't match everywhere.
+
+Deletion blocked if any repo has no refs at all.
+
 A creation of an own branch works and are synced right.
     One sync pass is enough.
 

@@ -1,9 +1,7 @@
 
-Allow refs deletion from a non-owner repo.
-  Prevent from refs wiping if a repo was made manually empty.
-    Block the deletion if a side has no refs at all.
   
 Allow history rewriting from a non-owner repo.
+  Disable non-owner history rewriting config option.
   Moving back is also here.
 
 Add solving notifications for victim strategy.

@@ -1,28 +1,37 @@
 @include "util.gawk"
 
 function unlock_deletion(    rr_a, rr_b, tr_a, tr_b){
-    if(!must_exist_branch)
+    if(!must_exist_branch){
+        deletion_blocked_by = "Deletion blocked as a branch that must exist on all repos isn't provided in project configuration settings"
         return;
+    }
 
     rr_a = refs[must_exist_branch][remote[side_a]][sha_key];
-    if(!rr_a)
-        return;
+    rr_b = refs[must_exist_branch][remote[side_b]][sha_key];
 
     tr_a = refs[must_exist_branch][track[side_a]][sha_key];
-    if(!tr_a)
+    tr_b = refs[must_exist_branch][track[side_b]][sha_key];
+
+    deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch isn't exist on all remote repos"
+    if(!rr_a || !rr_b)
         return;
 
-    rr_b = refs[must_exist_branch][remote[side_b]][sha_key];
+    deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch isn't tracked yet"
+    if(!tr_a || !tr_b)
+        return;
+
+    deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch doesn't match evriwhere"
+
     if(rr_a != rr_b)
         return;
 
-    tr_b = refs[must_exist_branch][track[side_b]][sha_key];
     if(tr_a != tr_b)
         return;
         
     if(rr_a != tr_b)
         return;
     
+    deletion_blocked_by = ""
     deletion_allowed = 1;
 }
 function generate_missing_refs(    ref){

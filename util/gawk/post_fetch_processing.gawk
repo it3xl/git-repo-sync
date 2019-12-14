@@ -9,11 +9,12 @@ END {
 }
 
 function main_processing(    ref){
-    deletion_allowed = 0;
-    unlock_deletion();
-    write("Deletion " ((deletion_allowed) ? "allowed" : "blocked") " by " must_exist_branch);
-
     generate_missing_refs();
+
+    unlock_deletion();
+    if(!deletion_allowed){
+        write(deletion_blocked_by);
+    }
 
     for(ref in refs){
         state_to_action(ref);
