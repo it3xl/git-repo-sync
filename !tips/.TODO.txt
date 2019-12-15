@@ -1,4 +1,8 @@
 
+Allow to use sample_repo.sh as a configuration file for a real project.
+  Rename sample_repo.sh to sync_project_configuration.sh
+
+
 Do not sync if prefixes are empty (conventional, victim).
 
 Allow deletion of the Victim Refs at any time.

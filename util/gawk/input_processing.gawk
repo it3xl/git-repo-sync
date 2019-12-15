@@ -64,6 +64,7 @@ function initial_states_processing(    side, split_arr, ind, ref){
 
     victim_refs_prefix = ENVIRON["victim_refs_prefix"];
     if(!victim_refs_prefix){
+        trace("The victim branches are isn't difined. This functionality is ignored.")
         # Let's prevent emptiness checking all around as victim_refs_prefix var allowed to be empty.
         victim_refs_prefix = "{victim_refs_prefix var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
     }

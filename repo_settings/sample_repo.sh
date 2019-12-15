@@ -21,10 +21,11 @@ project_folder=sample_repo
 
 
 # Comment the Victim Refs parameter to disable this type of synchronization.
-# You can always do whatever you want with the Victim Refs from any synchronized repository. 
-# It uses "The latest action wins" conflict solving strategy.
+# Change "@" to another value if you want to have other prefix for victim branches.
+# @ You can always do whatever you want with the Victim Refs from any synchronized repository. 
+# @ It uses "The latest action wins" conflict solving strategy.
 #
-#victim_refs_prefix=@
+victim_refs_prefix=@
 
 
 # Configure the Conventional Refs.

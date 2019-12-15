@@ -13,7 +13,7 @@ file_name_repo_settings="${1-}"
 
 run_sample=0
 [[ $# -eq 0 ]] && {
-    # If there is no the first input parameter, then use with sample repos.
+    # If there is no the first input parameter, then we create sample remote and local repos.
     run_sample=1
     file_name_repo_settings="sample_repo.sh"
 }
@@ -83,6 +83,10 @@ export prefix_2
 export url_2
 export victim_refs_prefix
 export must_exist_branch
+
+sync_ref_specs="$prefix_1* $prefix_2* ${victim_refs_prefix:+${victim_refs_prefix}*}"
+export sync_ref_specs
+echo "sync_ref_specs is $sync_ref_specs;"
 
 prefix_1_safe=${prefix_1: : -1}
 prefix_1_safe=${prefix_1_safe//\//-}

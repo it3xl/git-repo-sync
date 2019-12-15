@@ -10,7 +10,7 @@ function delete_project_repo_and_exit() {
     exit 1;
 }
 
-function repo_create_main(){
+function create_sync_repo(){
     if [[ -f "$path_sync_repo/.git/config" ]]; then
         return
     fi
@@ -53,7 +53,7 @@ function repo_create_main(){
 
     echo @ `basename "$BASH_SOURCE"` ended
 }
-repo_create_main
+create_sync_repo
 
 
 

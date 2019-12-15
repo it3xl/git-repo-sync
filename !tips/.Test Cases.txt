@@ -1,6 +1,6 @@
 
 Conventional sycn is ignored if conventional prefixes are the same.
-Victim sycn is ignored if the victim prefixe are the same as any of conventional prefixes.
+Victim sycn is ignored if the victim prefixe is the same as any of conventional prefixes.
 
 Deletion of conventional refs blocked if must_exist_branch config setting is empty.
 Deletion of conventional refs blocked if must_exist_branch doesn't match everywhere.
