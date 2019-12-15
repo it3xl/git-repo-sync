@@ -1,9 +1,15 @@
 
 Allow to use sample_repo.sh as a configuration file for a real project.
-  Rename sample_repo.sh to sync_project_configuration.sh
+  Rename sample_repo.sh to default_sync_project.sh
+  Do not create sample repos if there is no prefixes.
+  Do not create sample repos if there is urls in config file.
+  Update documentation.
 
 
 Do not sync if prefixes are empty (conventional, victim).
+Do not sync if urls are empty.
+
+conventional_refs_another_side_block_history_rewrite
 
 Allow deletion of the Victim Refs at any time.
   

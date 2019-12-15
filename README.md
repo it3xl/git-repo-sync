@@ -88,7 +88,7 @@ See my contacts at [it3xl.ru](http://it3xl.ru).
 
 I use my **bash Git Credential Helper [git-cred](https://github.com/it3xl/bash-git-credential-helper)**<br/>
 It passes to Git credentials from enviroment variables created by Continues Intergration tools like Jenkins.<br/>
-It is **[inegrated](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh)** now with git-sync. 
+It is **[inegrated](https://github.com/it3xl/git-sync/blob/master/repo_settings/default_sync_project.sh)** now with git-sync. 
 
 ## What to expect next
 
@@ -112,7 +112,7 @@ Here is my [glossary](https://it3xl.blogspot.com/2018/02/glossary-of-synchroniza
 ## How to Use
 
 You need to describe the prefixes and simple details of your real remote repositories in a simple config-file.<br/>
-Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/sample_repo.sh).
+Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/default_sync_project.sh).
 
 Run the **git-sync** and pass a path to your config file as a parameter.<br/>
 

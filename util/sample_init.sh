@@ -1,21 +1,41 @@
 
 
-url_local="$path_project_root/material_repos"
+function create_sample_repos(){
+    if [[ ! "$url_1" || ! "$url_2" ]]; then
+        return;
+    fi;
+    
+    if [[ ! "$victim_refs_prefix" ]]; then
+        victim_refs_prefix=@
+    fi;
+    if [[ ! "$prefix_1" ]]; then
+        prefix_1=a/
+    fi;
+    if [[ ! "$prefix_2" ]]; then
+        prefix_2=b-
+    fi;
 
-# Overrides settings' file values.
-url_1="$url_local/remote_$prefix_1_safe"
-url_2="$url_local/remote_$prefix_2_safe"
 
-url_local_1="$url_local/local_$prefix_1_safe"
-url_local_2="$url_local/local_$prefix_2_safe"
+    local url_local
+    url_local="$path_project_root/material_repos"
 
-initial_commit_branch=initial-commit
-second_branch=${prefix_2}develop
-non_conflicting_common_branch=${victim_refs_prefix}non-conflicting
-conflicting_common_branch=${victim_refs_prefix}conflicting
-non_conflicting_common_branch_one_side=${victim_refs_prefix}one-side-non-conflicting
+    # Overrides settings' file values.
+    url_1="$url_local/remote_$prefix_1_safe"
+    url_2="$url_local/remote_$prefix_2_safe"
 
-if [[ ! -f "$url_1/config" ]]; then
+    url_local_1="$url_local/local_$prefix_1_safe"
+    url_local_2="$url_local/local_$prefix_2_safe"
+
+    initial_commit_branch=initial-commit
+    second_branch=${prefix_2}develop
+    non_conflicting_common_branch=${victim_refs_prefix}non-conflicting
+    conflicting_common_branch=${victim_refs_prefix}conflicting
+    non_conflicting_common_branch_one_side=${victim_refs_prefix}one-side-non-conflicting
+
+    if [[ -f "$url_1/config" ]]; then
+        return;
+    fi;
+
     echo @ `basename "$BASH_SOURCE"` started
     echo
     echo '@ Creation of sample repos with 2 remote & 2 local repositories'
@@ -122,12 +142,8 @@ if [[ ! -f "$url_1/config" ]]; then
     git push --all "origin"
 
     echo @ `basename "$BASH_SOURCE"` ended
-fi
-
-
-
-
-
+}
+create_sample_repos
 
 
 

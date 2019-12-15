@@ -15,7 +15,7 @@ run_sample=0
 [[ $# -eq 0 ]] && {
     # If there is no the first input parameter, then we create sample remote and local repos.
     run_sample=1
-    file_name_repo_settings="sample_repo.sh"
+    file_name_repo_settings="default_sync_project.sh"
 }
 
 relative_settings_file="$path_git_sync/$file_name_repo_settings"
@@ -37,13 +37,14 @@ else
     exit 101;
 fi
 
-if [[ ! ${project_folder:+1} ]]; then missed_repo_settings+="project_folder "; fi
-if [[ ! ${prefix_1:+1} ]]; then missed_repo_settings+="prefix_1 "; fi
-if [[ ! ${url_1:+1} ]]; then missed_repo_settings+="url_1 "; fi
-if [[ ! ${prefix_2:+1} ]]; then missed_repo_settings+="prefix_2 "; fi
-if [[ ! ${url_2:+1} ]]; then missed_repo_settings+="url_2 "; fi
+project_folder=$(basename ${file_name_repo_settings%.*})
 
-if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo properties must be set: $missed_repo_settings"; fi
+if [[ ! ${prefix_1:+1} ]]; then missed_repo_settings+="prefix_1  "; fi
+if [[ ! ${url_1:+1} ]]; then missed_repo_settings+="url_1  "; fi
+if [[ ! ${prefix_2:+1} ]]; then missed_repo_settings+="prefix_2  "; fi
+if [[ ! ${url_2:+1} ]]; then missed_repo_settings+="url_2  "; fi
+
+if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo properties must be set:  $missed_repo_settings"; fi
 if [[ ! ${must_exist_branch:+1} ]]; then echo 'Warning! The deletion will not be working without setting the must_exist_branch property'; fi
 
 if [[ ${missed_repo_settings:+1} ]]; then
@@ -86,7 +87,6 @@ export must_exist_branch
 
 sync_ref_specs="$prefix_1* $prefix_2* ${victim_refs_prefix:+${victim_refs_prefix}*}"
 export sync_ref_specs
-echo "sync_ref_specs is $sync_ref_specs;"
 
 prefix_1_safe=${prefix_1: : -1}
 prefix_1_safe=${prefix_1_safe//\//-}
