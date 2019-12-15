@@ -13,28 +13,28 @@ file_name_repo_settings="${1-}"
 
 run_sample=0
 [[ $# -eq 0 ]] && {
-  # If there is no the first input parameter, then use with sample repos.
-  run_sample=1
-  file_name_repo_settings="sample_repo.sh"
+    # If there is no the first input parameter, then use with sample repos.
+    run_sample=1
+    file_name_repo_settings="sample_repo.sh"
 }
 
 relative_settings_file="$path_git_sync/$file_name_repo_settings"
 absolute_settings_file="$file_name_repo_settings"
 subfolder_settings_file="$path_git_sync/repo_settings/$file_name_repo_settings"
 if [[ -f "$relative_settings_file" ]]; then
-  echo Settings. Using relative. $relative_settings_file
-  source "$relative_settings_file"
+    echo Settings. Using relative. $relative_settings_file
+    source "$relative_settings_file"
 elif [[ -f "$absolute_settings_file" ]]; then
-  echo Settings. Using absolute. $absolute_settings_file
-  source "$absolute_settings_file"
+    echo Settings. Using absolute. $absolute_settings_file
+    source "$absolute_settings_file"
 elif [[ -f "$subfolder_settings_file" ]]; then
-  echo Settings. Using repo_settings subfolder. $subfolder_settings_file
-  source "$subfolder_settings_file"
+    echo Settings. Using repo_settings subfolder. $subfolder_settings_file
+    source "$subfolder_settings_file"
 else
-  echo "Error! Exit! The first parameter must be an absolute path, relative path or a name of a file with your sync-project repo settings."
-  echo The '"'$file_name_repo_settings'"' is not recognized as a file.
-  
-  exit 101;
+    echo "Error! Exit! The first parameter must be an absolute path, relative path or a name of a file with your sync-project repo settings."
+    echo The '"'$file_name_repo_settings'"' is not recognized as a file.
+    
+    exit 101;
 fi
 
 if [[ ! ${project_folder:+1} ]]; then missed_repo_settings+="project_folder "; fi
@@ -47,7 +47,7 @@ if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo 
 if [[ ! ${must_exist_branch:+1} ]]; then echo 'Warning! The deletion will not be working without setting the must_exist_branch property'; fi
 
 if [[ ${missed_repo_settings:+1} ]]; then
-  exit 102;
+    exit 102;
 fi
 
 if [[ ! ${victim_refs_prefix:+1} ]]; then
@@ -57,24 +57,24 @@ fi;
 
 if [[ "$prefix_1" && "$prefix_1" == "$prefix_2" ]];
 then
-  echo "Error! Exit! We expect that you assign different letters for conventional ref prefixes.
+    echo "Error! Exit! We expect that you assign different letters for conventional ref prefixes.
 prefix_1 is $prefix_1
 prefix_2 is $prefix_2"
 
-  exit 103;
+    exit 103;
 fi;
 
 if [[ "$victim_refs_prefix" \
     && ( "$prefix_1" == "$victim_refs_prefix" \
     || "$prefix_2" == "$victim_refs_prefix" ) ]];
 then
-  echo "Error! Exit! We expect that the victim ref prefix have letters different from conventional ref prefixes.
+    echo "Error! Exit! We expect that the victim ref prefix have letters different from conventional ref prefixes.
 victim_refs_prefix is $victim_refs_prefix
 prefix_1 is $prefix_1
 prefix_2 is $prefix_2
 "
 
-  exit 104;
+    exit 104;
 fi;
 
 export prefix_1
@@ -119,7 +119,7 @@ export env_notify_solving_file="$path_project_root/$signal_files_folder/notify_s
 export git_cred="$path_git_sync_util/bash-git-credential-helper/git-cred.sh"
 
 (( $run_sample == 1 )) && {
-  source "$path_git_sync_util/sample_init.sh";
+    source "$path_git_sync_util/sample_init.sh";
 }
 
 

@@ -20,21 +20,21 @@ source "$path_git_sync_util/change_detector.sh"
 
 echo
 if (( $changes_detected == 1 )); then
-  install -D /dev/null "$env_modifications_signal_file"
-  install -D /dev/null "$env_modifications_signal_file_1"
-  install -D /dev/null "$env_modifications_signal_file_2"
-  
-  # Passing of remote refs to prevent excessive network requesting.
-  echo "$remote_refs_1" >> "$env_modifications_signal_file_1"
+    install -D /dev/null "$env_modifications_signal_file"
+    install -D /dev/null "$env_modifications_signal_file_1"
+    install -D /dev/null "$env_modifications_signal_file_2"
+    
+    # Passing of remote refs to prevent excessive network requesting.
+    echo "$remote_refs_1" >> "$env_modifications_signal_file_1"
 
-  echo "$remote_refs_2" >> "$env_modifications_signal_file_2"
-  
-  echo '@' RESULT: Synchronization requested.
+    echo "$remote_refs_2" >> "$env_modifications_signal_file_2"
+    
+    echo '@' RESULT: Synchronization requested.
 else
-  echo '@' RESULT: Refs are the same. Exit.
-  echo
-  
-  exit
+    echo '@' RESULT: Refs are the same. Exit.
+    echo
+    
+    exit
 fi
 
 
