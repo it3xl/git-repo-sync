@@ -11,10 +11,7 @@ export AWKPATH="$path_git_sync_util/gawk"
 
 file_name_repo_settings="${1-}"
 
-run_sample=0
 [[ $# -eq 0 ]] && {
-    # If there is no the first input parameter, then we create sample remote and local repos.
-    run_sample=1
     file_name_repo_settings="default_sync_project.sh"
 }
 
@@ -121,11 +118,6 @@ export env_notify_del_file="$path_project_root/$signal_files_folder/notify_del"
 export env_notify_solving_file="$path_project_root/$signal_files_folder/notify_solving"
 
 export git_cred="$path_git_sync_util/bash-git-credential-helper/git-cred.sh"
-
-(( $run_sample == 1 )) && {
-    source "$path_git_sync_util/sample_init.sh";
-}
-
 
 
 # echo End `basename "$BASH_SOURCE"`
