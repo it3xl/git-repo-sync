@@ -4,9 +4,9 @@ if [[ $env_allow_async == 1 ]]; then
   
   mkdir -p "$path_async_output"
 
-  git ls-remote --heads "$url_1" $prefix_1* $prefix_2* ${victim_refs_prifix:+${victim_refs_prifix}*} > "$path_async_output/remote_refs_1.txt" &
+  git ls-remote --heads "$url_1" $prefix_1* $prefix_2* ${victim_refs_prefix:+${victim_refs_prefix}*} > "$path_async_output/remote_refs_1.txt" &
   pid_remote_refs_1=$!
-  git ls-remote --heads "$url_2" $prefix_1* $prefix_2* ${victim_refs_prifix:+${victim_refs_prifix}*} > "$path_async_output/remote_refs_2.txt" &
+  git ls-remote --heads "$url_2" $prefix_1* $prefix_2* ${victim_refs_prefix:+${victim_refs_prefix}*} > "$path_async_output/remote_refs_2.txt" &
   pid_remote_refs_2=$!
 
   err_remote_refs_1=0;
@@ -42,8 +42,8 @@ if [[ $env_allow_async == 1 ]]; then
 else
   echo '! Sync (sync remote refs check is used)'
   
-  remote_refs_2=$(git ls-remote --heads "$url_2" $prefix_1* $prefix_2* ${victim_refs_prifix:+${victim_refs_prifix}*})
-  remote_refs_1=$(git ls-remote --heads "$url_1" $prefix_1* $prefix_2* ${victim_refs_prifix:+${victim_refs_prifix}*})
+  remote_refs_2=$(git ls-remote --heads "$url_2" $prefix_1* $prefix_2* ${victim_refs_prefix:+${victim_refs_prefix}*})
+  remote_refs_1=$(git ls-remote --heads "$url_1" $prefix_1* $prefix_2* ${victim_refs_prefix:+${victim_refs_prefix}*})
 fi;
 
 

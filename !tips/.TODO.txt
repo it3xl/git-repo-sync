@@ -1,5 +1,5 @@
 
-Use default values for prefixes.
+Do not sync if prefixes are empty (conventional, victim).
 
 Allow deletion of the Victim Refs at any time.
   

@@ -62,10 +62,10 @@ function initial_states_processing(    side, split_arr, ind, ref){
     prefix[side_b] = prefix_b;
     prefix_b = ""
 
-    victim_refs_prifix = ENVIRON["victim_refs_prifix"];
-    if(!victim_refs_prifix){
-        # Let's prevent emptiness checking all around as victim_refs_prifix var allowed to be empty.
-        victim_refs_prifix = "{victim_refs_prifix var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
+    victim_refs_prefix = ENVIRON["victim_refs_prefix"];
+    if(!victim_refs_prefix){
+        # Let's prevent emptiness checking all around as victim_refs_prefix var allowed to be empty.
+        victim_refs_prefix = "{victim_refs_prefix var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
     }
 
     newline_substitution = ENVIRON["env_awk_newline_substitution"];
@@ -124,7 +124,7 @@ function file_states_processing() {
 
     if(index($3, prefix[side_a]) != 1 \
         && index($3, prefix[side_b]) != 1 \
-        && index($3, victim_refs_prifix) != 1 \
+        && index($3, victim_refs_prefix) != 1 \
         ){
         trace("!unexpected " $2 " (" dest ") " $1 "; branch name (" $3 ") has no allowed prefixes");
 

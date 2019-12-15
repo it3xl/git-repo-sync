@@ -34,7 +34,7 @@ else
   echo "Error! Exit! The first parameter must be an absolute path, relative path or a name of a file with your sync-project repo settings."
   echo The '"'$file_name_repo_settings'"' is not recognized as a file.
   
-  exit 1;
+  exit 101;
 fi
 
 if [[ ! ${project_folder:+1} ]]; then missed_repo_settings+="project_folder "; fi
@@ -47,31 +47,41 @@ if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo 
 if [[ ! ${must_exist_branch:+1} ]]; then echo 'Warning! The deletion will not be working without setting the must_exist_branch property'; fi
 
 if [[ ${missed_repo_settings:+1} ]]; then
-  exit 2
+  exit 102;
 fi
 
-if [[ ! ${victim_refs_prifix:+1} ]]; then
-  # If this var is empty, then we ignore "The latest wins" conflict solving strategy.
-  victim_refs_prifix=
+if [[ ! ${victim_refs_prefix:+1} ]]; then
+  # If this var is empty, then we ignore the Victim branches functionality and their "The latest action wins" conflict solving strategy.
+  victim_refs_prefix=
 fi;
 
-if [[ $prefix_1 == $prefix_2 \
-    || $prefix_1 == $victim_refs_prifix \
-    || $prefix_2 == $victim_refs_prifix ]];
+if [[ "$prefix_1" && "$prefix_1" == "$prefix_2" ]];
 then
-  echo "Error! Exit! We expect that you assign different letters for all prefixes."
-  echo "prefix_1 is $prefix_1"
-  echo "prefix_2 is $prefix_2"
-  echo "victim_refs_prifix is $victim_refs_prifix"
+  echo "Error! Exit! We expect that you assign different letters for conventional ref prefixes.
+prefix_1 is $prefix_1
+prefix_2 is $prefix_2"
 
-  exit 3
+  exit 103;
+fi;
+
+if [[ "$victim_refs_prefix" \
+    && ( "$prefix_1" == "$victim_refs_prefix" \
+    || "$prefix_2" == "$victim_refs_prefix" ) ]];
+then
+  echo "Error! Exit! We expect that the victim ref prefix have letters different from conventional ref prefixes.
+victim_refs_prefix is $victim_refs_prefix
+prefix_1 is $prefix_1
+prefix_2 is $prefix_2
+"
+
+  exit 104;
 fi;
 
 export prefix_1
 export url_1
 export prefix_2
 export url_2
-export victim_refs_prifix
+export victim_refs_prefix
 export must_exist_branch
 
 prefix_1_safe=${prefix_1: : -1}

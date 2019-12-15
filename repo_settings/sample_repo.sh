@@ -20,11 +20,11 @@
 project_folder=sample_repo
 
 
-# Let's highlight the Victim Refs.
-# You can always do with this refs whatever you want from any synchronized branch. 
-# It uses conflict solving strategy "The latest action will win".
+# Comment the Victim Refs parameter to disable this type of synchronization.
+# You can always do whatever you want with the Victim Refs from any synchronized repository. 
+# It uses "The latest action wins" conflict solving strategy.
 #
-victim_refs_prifix=@
+#victim_refs_prefix=@
 
 
 # Configure the Conventional Refs.
