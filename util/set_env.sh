@@ -36,16 +36,21 @@ fi
 
 project_folder=$(basename ${file_name_repo_settings%.*})
 
-if [[ ! ${prefix_1:+1} ]]; then missed_repo_settings+="prefix_1  "; fi
 if [[ ! ${url_1:+1} ]]; then missed_repo_settings+="url_1  "; fi
-if [[ ! ${prefix_2:+1} ]]; then missed_repo_settings+="prefix_2  "; fi
 if [[ ! ${url_2:+1} ]]; then missed_repo_settings+="url_2  "; fi
 
 if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo properties must be set:  $missed_repo_settings"; fi
-if [[ ! ${must_exist_branch:+1} ]]; then echo 'Warning! The deletion will not be working without setting the must_exist_branch property'; fi
+if [[ ! ${must_exist_branch:+1} ]]; then echo "Warning! The refs' deletion will not be working without setting the must_exist_branch property"; fi
 
 if [[ ${missed_repo_settings:+1} ]]; then
     exit 102;
+fi
+
+if [[ ! ${prefix_1:+1} ]]; then
+    prefix_1=
+fi
+if [[ ! ${prefix_2:+1} ]]; then
+    prefix_2=
 fi
 
 if [[ ! ${victim_refs_prefix:+1} ]]; then
@@ -53,27 +58,35 @@ if [[ ! ${victim_refs_prefix:+1} ]]; then
   victim_refs_prefix=
 fi;
 
-if [[ "$prefix_1" && "$prefix_1" == "$prefix_2" ]];
-then
-    echo "Error! Exit! We expect that you assign different letters for conventional ref prefixes.
-prefix_1 is $prefix_1
-prefix_2 is $prefix_2"
+conventional_prefixes_trace_values="
+prefix_1 is '$prefix_1'
+prefix_2 is '$prefix_2'"
+
+if [[ "$prefix_1" && "$prefix_1" == "$prefix_2" ]]; then
+    echo "Error! Exit! We expect that you assign different letters for conventional ref prefixes. $conventional_prefixes_trace_values"
 
     exit 103;
 fi;
+
+prefixes_trace_values="
+victim_refs_prefix is '$victim_refs_prefix' $conventional_prefixes_trace_values"
 
 if [[ "$victim_refs_prefix" \
     && ( "$prefix_1" == "$victim_refs_prefix" \
     || "$prefix_2" == "$victim_refs_prefix" ) ]];
 then
-    echo "Error! Exit! We expect that the victim ref prefix have letters different from conventional ref prefixes.
-victim_refs_prefix is $victim_refs_prefix
-prefix_1 is $prefix_1
-prefix_2 is $prefix_2
-"
+    echo "Error! Exit! We expect that the victim ref prefix have letters different from conventional ref prefixes. $prefixes_trace_values"
 
     exit 104;
 fi;
+
+if [[ ( ! "$prefix_1" || ! "$prefix_1" ) || ! "$victim_refs_prefix" ]]; then
+    echo "Error! Exit! You have to configure victim or both conventional ref prefixes. $prefixes_trace_values"
+
+    exit 105;
+fi;
+sync_ref_specs="$prefix_1* $prefix_2* ${victim_refs_prefix:+${victim_refs_prefix}*}"
+export sync_ref_specs
 
 export prefix_1
 export url_1
@@ -81,9 +94,6 @@ export prefix_2
 export url_2
 export victim_refs_prefix
 export must_exist_branch
-
-sync_ref_specs="$prefix_1* $prefix_2* ${victim_refs_prefix:+${victim_refs_prefix}*}"
-export sync_ref_specs
 
 prefix_1_safe=${prefix_1: : -1}
 prefix_1_safe=${prefix_1_safe//\//-}
