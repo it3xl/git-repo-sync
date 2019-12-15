@@ -8,26 +8,21 @@
 # First
 ## You have to change variables in this file.
 # Second
-## You can create a copy of this file.
+## You can create a copy of this file in the same folder.
 ## Then you have to pass the name of a newly created file to gitSync as the first parameter for every run.
 ## But this allows you to have multiple synchronization projects for multiple remote repo pairs.
 ## Example: $ ./git-sync.sh my-sync-project.sh
+## Also you have two options where to store your new configuration file.
+## git-sync/repo_settings/  - This is the first option.
+## git-sync.repo_settings/  - This is the second option. This folder is the sibling to gitSync root folder.
 
-# You have two options where to store your new configuration file.
-# You can put it next to this file (default_sync.sh).
-# Or you can create a sibling folder named "git-sync.repo_settings" next to the git-sync root folder.
-# I.e.
-# git-sync/repo_settings/  - This is the first option.
-# git-sync.repo_settings/  - This is the second option.
-
-# Change parameters below to describe your Git remote repositories that you want to synchronize.
+# ! Note! Synchronization artifacts of your project will be saved at "git-sync/sync-projects/<name-of-this-file-without-extension>".
 
 
-# Synchronization artifacts of your project will be saved at  "git-sync/sync-projects/<name-of-this-file-without-extension>".
+# Change parameters below to describe your Git remote repositories and what you want to synchronize.
 
 
 # Assign real URLs to your remote Git-repos.
-# Otherwise sample repos will be created.
 #
 url_1=https://your-repo1-url.org/git/my_repo.git
 url_2=https://git.your-repo2-url.org/my_repo.git
@@ -43,23 +38,20 @@ victim_refs_prefix=@
 
 
 # Configure the Conventional Refs.
-# @ You may limit manipulations of conventional refs for non-owner remote repository.
+# @ You may limit manipulations of conventional refs for a non-owner remote repository.
 # @ See further parameters.
 #
 prefix_1=a/
 prefix_2=b-
 
 
-# Provide must_exist_branch with the name of a branch that must always exist.
-# It allows deletion of conventional branches.
+# Provide a name of a branch that must always exist. It allows deletion of conventional branches from a non-owner repo.
 # You can create the real branch later or change here the name at any time.
 #
 must_exist_branch=${prefix_1}production
 
 
 # Uncomment this variable to block unlimited manipulations with conventional refs from a non-owner repository.
-# We have two types of refs. Victim and Conventional.
-# Conventional refs separa
 #
 # conventional_refs_another_side_block_history_rewrite=1
 

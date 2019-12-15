@@ -1,8 +1,5 @@
 
-Allow to use sample_repo.sh as a configuration file for a real project.
-  Rename sample_repo.sh to default_sync_project.sh
-  Do not create sample repos if there is no prefixes.
-  Do not create sample repos if there is urls in config file.
+Rename sample_repo.sh to default_sync_project.sh
   Update documentation.
 
 
