@@ -11,15 +11,24 @@
 
 # Change parameters below to describe your Git remote repositories that you want to synchronize.
 
-# I consider that you've created clones from your remote Git repositories before you start to play with gitSync.
+# ! Warning!
+# It is expected that you've created clones from your remote Git repositories before you start to play with gitSync.
 
 
-# It is an arbitrary folder-name to stored your sync project.
+# It is an arbitrary folder-name to stored your sync project in "git-sync/sync-projects/ folder".
 #
 project_folder=sample_repo
 
 
+# Let's highlight the Victim Refs.
+# You can always do with this refs whatever you want from any synchronized branch. 
+# It uses conflict solving strategy "The latest action will win".
+#
+victim_refs_prifix=@
 
+
+# Configure the Conventional Refs.
+#
 # Assign here a prefix for refs in your first repo.
 #
 prefix_1=a/
@@ -39,9 +48,6 @@ url_2=https://git.your-repo2-url.org/my_repo.git
 
 
 
-# Assign a prefix for branches with conflict solving strategy "The youngest wins".
-#
-prefix_victims=@
 
 
 
@@ -52,7 +58,12 @@ must_exist_branch=${prefix_1}production
 
 
 
-
+# Uncomment this variable to block unlimited manipulations from another side.
+# We have two types of refs. Victim and Conventional.
+# Conventional refs separa
+#
+#
+# conventional_refs_another_side_block_history_rewrite=1
 
 
 

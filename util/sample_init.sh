@@ -11,9 +11,9 @@ url_local_2="$url_local/local_$prefix_2_safe"
 
 initial_commit_branch=initial-commit
 second_branch=${prefix_2}develop
-non_conflicting_common_branch=${prefix_victims}non-conflicting
-conflicting_common_branch=${prefix_victims}conflicting
-non_conflicting_common_branch_one_side=${prefix_victims}one-side-non-conflicting
+non_conflicting_common_branch=${victim_refs_prifix}non-conflicting
+conflicting_common_branch=${victim_refs_prifix}conflicting
+non_conflicting_common_branch_one_side=${victim_refs_prifix}one-side-non-conflicting
 
 if [[ ! -f "$url_1/config" ]]; then
   echo @ `basename "$BASH_SOURCE"` started

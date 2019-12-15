@@ -34,7 +34,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim){
     track_sha[common] = track_sha[equal] ? track_sha[side_a] : "";
     track_sha[empty] = !(track_sha[side_a] || track_sha[side_b]);
 
-    is_victim = index(ref, prefix_victims) == 1;
+    is_victim = index(ref, victim_refs_prifix) == 1;
 
     if(remote_sha[empty])
         return;

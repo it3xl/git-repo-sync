@@ -1,6 +1,7 @@
 
 Use default values for prefixes.
-  
+
+Allow deletion of the Victim Refs at any time.
   
 Allow history rewriting from a non-owner repo.
   Disable non-owner history rewriting config option.

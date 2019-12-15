@@ -65,7 +65,7 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
         return;
     }
 
-    is_victim = index(current_ref, prefix_victims) == 1;
+    is_victim = index(current_ref, victim_refs_prifix) == 1;
     action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
 
     if(track_sha[equal]){
