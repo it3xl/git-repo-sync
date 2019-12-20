@@ -4,10 +4,14 @@
 # ! Warning!
 # It is expected that you've created clones from your remote Git repositories before you start playing with gitSync.
 
-# You have two options to configure synchronization of your two remote Git-repositories.
+# You have three options to configure synchronization of your two remote Git-repositories.
 # First
 ## You have to change variables in this file.
 # Second
+## If you define globally any of "url_1" or "url_2" variables then gitSync expects that all variables
+## will come from your environment.
+## Example: "export url_1" or "export url_1=<my_url_here>", etc.
+# Third
 ## You can create a copy of this file in the same folder.
 ## Then you have to pass the name of a newly created file to gitSync as the first parameter for every run.
 ## But this allows you to have multiple synchronization projects for multiple remote repo pairs.
