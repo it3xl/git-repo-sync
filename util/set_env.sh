@@ -46,11 +46,13 @@
         # We need to set AWKPATH because our current directory commonly points points out to the sync Git repo, not our GAWK scripts.
         export AWKPATH="$path_git_sync_util/gawk"
 
-        [[ ${url_1:+1} || ${url_2:+1} ]] && {
+        if [[ ${git_sync_project_folder:+1} ]]; then
+            env_project_folder=$git_sync_project_folder
+        elif [[ ${url_1:+1} || ${url_2:+1} ]]; then
             env_project_folder=default_env_sync_project
-        } || {
+        else
             git_sync_env_run_settings_script "$@"
-        }
+        fi
 
         if [[ ! ${url_1:+1} ]]; then missed_repo_settings+="url_1  "; fi
         if [[ ! ${url_2:+1} ]]; then missed_repo_settings+="url_2  "; fi
