@@ -2,6 +2,15 @@
 function sync_pass(){
     ((++git_sync_pass_num))
 
+    if (( ${changes_detected:-1} != 1 )); then
+        # echo '@' Previous sync-pass din not find any changes.
+        
+        if [[ $env_process_if_refs_are_the_same != 1 ]]; then
+            # echo '@' Sync-pass $git_sync_pass_num was interrupted
+            return;
+        fi;
+    fi
+
     if [[ ! -f "$env_modifications_signal_file" ]]; then
         source "$path_git_sync_util/change_detector.sh"
 
@@ -14,6 +23,8 @@ function sync_pass(){
             fi;
         fi
     else
+        changes_detected=1
+
         echo '@' RESULT: Synchronization requested.
         
         remote_refs_1=$(<"$env_modifications_signal_file_1")
