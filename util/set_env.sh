@@ -126,6 +126,9 @@
 
         export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 
+        export git_sync_pass_num=0
+        export git_sync_pass_num_required=0
+
         # The way we receive data from gawk we can't use new line char in the output. So we are using a substitution.
         export env_awk_newline_substitution='|||||'
 
