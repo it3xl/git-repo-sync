@@ -117,7 +117,7 @@ function actions_to_refspecs(    side, aside, ref){
     }
 
     for(ref in a_ff_candidates){
-        append_by_val(side, out_ff_candidates, ref);
+        append_by_val(out_ff_candidates, ref);
     }
 }
 
