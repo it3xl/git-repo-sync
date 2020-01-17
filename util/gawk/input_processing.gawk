@@ -86,8 +86,7 @@ function initial_states_processing(    side, split_arr, ind, ref){
         if(!ref){
             continue;
         }
-        d_trace("ref is " ref);
-        ff_candidates[side][ref];
+        ff_candidates[ref];
     }
 }
 BEGINFILE { # Preparing processing for every portion of refs.
