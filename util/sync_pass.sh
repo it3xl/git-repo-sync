@@ -80,7 +80,7 @@ function sync_pass(){
     ff_candidates="${pre_proc_list[2]//$env_awk_newline_substitution/$'\n'}";
     end_of_results="${pre_proc_list[3]}";
 
-    # Let's export for an usage in main processing.
+    # Let's export for an usage in post_fetch_processing.gawk.
     export ff_candidates
 
     end_of_results_expected='{[end-of-results]}';

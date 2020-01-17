@@ -1,9 +1,13 @@
 
 @include "base.gawk"
+
+BEGIN {
+    write_after_line("> main processing");
+}
+
 @include "input_processing.gawk"
 
 END {
-    write_after_line("> main processing");
     main_processing();
     write("> main processing end");
 }
@@ -23,7 +27,7 @@ function main_processing(    ref){
     operations_to_refspecs();
     refspecs_to_stream();
 }
-function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_victim){
+function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_victim, ref_type){
     for(side in sides){
         remote_sha[side] = refs[current_ref][remote[side]][sha_key];
         track_sha[side] = refs[current_ref][track[side]][sha_key];
@@ -66,7 +70,7 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
     }
 
     is_victim = index(current_ref, victim_refs_prefix) == 1;
-    action_solve_key = is_victim ? "action-victim-solve" : "action-solve";
+    ref_type = is_victim ? "victim" : "conv";
 
     if(track_sha[equal]){
         for(side in sides){
@@ -76,7 +80,7 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
                     trace(current_ref ": action-del on " origin[aside] "; it is disappeared from " origin[side]);
                     a_del[aside][current_ref];
                 }else{
-                    trace(current_ref ": " action_solve_key "-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
+                    trace(current_ref "; " ref_type ":action-solve-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
                     set_solve_action(is_victim, current_ref);
                 }
 
@@ -89,7 +93,7 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
         return;
     }
 
-    trace(current_ref ": " action_solve_key "-all-others; it has different track or/and remote branch commits");
+    trace(current_ref "; " ref_type ":action-solve-all-others; it has different track or/and remote branch commits");
     set_solve_action(is_victim, current_ref);
 }
 function set_solve_action(is_victim, ref){

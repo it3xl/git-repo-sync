@@ -1,9 +1,13 @@
 
 @include "base.gawk"
+
+BEGIN {
+    write_after_line("> pre processing");
+}
+
 @include "input_processing.gawk"
 
 END {
-    write_after_line("> pre processing");
     main_processing();
     write("> pre processing end");
 }
