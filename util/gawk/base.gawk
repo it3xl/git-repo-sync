@@ -20,7 +20,7 @@ function unlock_deletion(    rr_a, rr_b, tr_a, tr_b){
     if(!tr_a || !tr_b)
         return;
 
-    deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch doesn't match evriwhere"
+    deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch doesn't match everywhere"
 
     if(rr_a != rr_b)
         return;

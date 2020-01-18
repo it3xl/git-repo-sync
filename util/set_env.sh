@@ -140,10 +140,7 @@
         # env_trace_refs=1
         export env_trace_refs
         
-        env_awk_trace_on=${env_awk_trace_on:-0}
-        # env_awk_trace_on=1
-        export env_awk_trace_on
-
+        export env_awk_trace_on=1
         export env_process_if_refs_are_the_same=0
 
         path_project_root="$path_git_sync/sync-projects/$env_project_folder"
