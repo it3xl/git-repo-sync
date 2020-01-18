@@ -132,9 +132,18 @@
         # The way we receive data from gawk we can't use new line char in the output. So we are using a substitution.
         export env_awk_newline_substitution='|||||'
 
-        export env_allow_async=0
-        export env_trace_refs=1
-        export env_awk_trace_on=1
+        env_allow_async=${env_allow_async:-1}
+        # env_allow_async=0
+        export env_allow_async
+
+        env_trace_refs=${env_trace_refs:-0}
+        # env_trace_refs=1
+        export env_trace_refs
+        
+        env_awk_trace_on=${env_awk_trace_on:-0}
+        # env_awk_trace_on=1
+        export env_awk_trace_on
+
         export env_process_if_refs_are_the_same=0
 
         path_project_root="$path_git_sync/sync-projects/$env_project_folder"
