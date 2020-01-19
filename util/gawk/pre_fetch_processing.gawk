@@ -62,15 +62,19 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim){
 function request_update_tracking(ref, remote_sha, track_sha){
     for(side in sides){
         if(!remote_sha[side]){
-            # No the update source.
+            # No an update source.
             continue;
         }
         if(remote_sha[side] == track_sha[side]){
             # No need to update. Tracking and remote refs are the same.
             continue;
         }
-        # Possibly gitSync or the network was interrupted. Let's update the tracking ref.
-        trace(ref " action-fetch from " origin[side] "; track ref is " ((track_sha[side]) ? "outdated" : "unknown"));
+
+        # Possibly gitSync or the network was interrupted.
+        # Or this ref was moved back.
+        # But the default scenario is that the remote ref was modified.
+        # Let's update the tracking ref.
+        trace(ref " action-fetch from " origin[side] "; " ((track_sha[side]) ? "track ref is outdated" : "track ref is unknown"));
         a_fetch[side][ref];
     }
 }
