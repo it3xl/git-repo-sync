@@ -11,6 +11,7 @@ BEGIN { # Constants.
     common = "common";
     equal = "equal";
     empty = "empty";
+    empty_any = "empty_any";
 }
 BEGIN { # Globals.
     side_a = 1;
@@ -25,7 +26,7 @@ BEGIN { # Globals.
 BEGIN { # Parameters.
     initial_states_processing();
 }
-function initial_states_processing(    side, split_arr, ind, ref){
+function initial_states_processing(    side, split_arr, split_val, ind, ref, val, sha){
     must_exist_branch = ENVIRON["must_exist_branch"];
     if(!must_exist_branch)
         write("Deletion is blocked. Parameter must_exist_branch is empty");
@@ -87,6 +88,21 @@ function initial_states_processing(    side, split_arr, ind, ref){
             continue;
         }
         ff_candidates[ref];
+    }
+    
+    split(ENVIRON["nff_candidates"], split_arr, "\n");
+    for(ind in split_arr){
+        val = split_arr[ind];
+
+        split(val, split_val, " ");
+
+        ref = split_val[1];
+        sha = split_val[2];
+        if(!ref || !sha){
+            continue;
+        }
+
+        nff_candidates[ref][sha];
     }
 }
 BEGINFILE { # Preparing processing for every portion of refs.

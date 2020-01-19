@@ -92,6 +92,9 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
     if(ff_candidates_to_refspec(current_ref)){
         return;
     }
+    if(nff_candidates_to_refspec(current_ref)){
+        return;
+    }
 
     trace(current_ref "; " ref_type ":action-solve-all-others; it has different track or/and remote branch commits");
     set_solve_action(is_victim, current_ref);
@@ -103,14 +106,14 @@ function set_solve_action(is_victim, ref){
         a_solve[ref];
     }
 }
-function ff_candidates_to_refspec(ref,    ff_ref, is_ff, a_owner, b_owner, owner_side, not_owner_side, owner_sha, not_owner_sha, cmd, ff_result){
-    for(ff_ref in ff_candidates){
-        if(ff_ref == ref){
-            is_ff = 1;
+function ff_candidates_to_refspec(ref,    ref_item, is_candidate, a_owner, b_owner, owner_side, not_owner_side, owner_sha, not_owner_sha, cmd, ff_result){
+    for(ref_item in ff_candidates){
+        if(ref_item == ref){
+            is_candidate = 1;
             break;
         }
     }
-    if(!is_ff){
+    if(!is_candidate){
         return;
     }
 
@@ -147,6 +150,36 @@ function ff_candidates_to_refspec(ref,    ff_ref, is_ff, a_owner, b_owner, owner
     
     trace(ref " action-fast-forward; from " origin[not_owner_side] " to " origin[owner_side] " as " owner_sha " is parent of " not_owner_sha " respectively");
     out_push[owner_side] = out_push[owner_side] " " refs[ref][track[not_owner_side]][ref_key] ":" refs[ref][remote[owner_side]][ref_key];
+
+    # Let's inform a calling logic that we've processed the current ref.
+    return 1;
+}
+function nff_candidates_to_refspec(ref,    ref_item, is_candidate, action_sha){
+    for(ref_item in nff_candidates){
+        if(ref_item != ref){
+            continue;
+        }
+        is_candidate = 1;
+        for(action_sha in nff_candidates[ref_item]){}
+
+        break;
+    }
+    if(!is_candidate){
+        return;
+    }
+
+    d_trace("ref is " ref "; sha is " action_sha);
+
+    return;
+
+
+
+
+    # Ignore the candidate if something was changed. E.g. obey ra==la & rb==lb & ra!=rb
+
+
+    trace(ref " action-non-fast-forward;");
+    # out_push[owner_side] = out_push[owner_side] " " refs[ref][track[not_owner_side]][ref_key] ":" refs[ref][remote[owner_side]][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
