@@ -6,7 +6,7 @@ function sync_pass(){
         # echo '@' Previous sync-pass din not find any changes.
         
         if [[ $env_process_if_refs_are_the_same != 1 ]]; then
-            # echo '@' Sync-pass $git_sync_pass_num was interrupted
+            # echo '@' Sync-pass $git_sync_pass_num was interrupted as not needed
             return;
         fi;
     fi
@@ -18,7 +18,7 @@ function sync_pass(){
             echo '@' RESULT: Refs are the same.
             
             if [[ $env_process_if_refs_are_the_same != 1 ]]; then
-                echo '@' Sync-pass $git_sync_pass_num was interrupted
+                echo '@' Sync-pass $git_sync_pass_num was interrupted as not needed
                 return;
             fi;
         fi
