@@ -37,7 +37,7 @@ function sync_pass(){
 
 
     ((++git_sync_pass_num_required))
-
+    echo '!' Running $git_sync_pass_num_required sync pass
 
     track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
     track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")

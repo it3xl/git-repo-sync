@@ -27,10 +27,10 @@ function main_processing(    ref){
     operations_to_refspecs();
     refspecs_to_stream();
 }
-function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_victim, ref_type){
+function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, ref_type){
     for(side in sides){
-        remote_sha[side] = refs[current_ref][remote[side]][sha_key];
-        track_sha[side] = refs[current_ref][track[side]][sha_key];
+        remote_sha[side] = refs[ref][remote[side]][sha_key];
+        track_sha[side] = refs[ref][track[side]][sha_key];
     }
 
     remote_sha[equal] = remote_sha[side_a] == remote_sha[side_b];
@@ -41,35 +41,38 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
 
     remote_sha[common] = remote_sha[equal] ? remote_sha[side_a] : "";
     remote_sha[empty] = !(remote_sha[side_a] || remote_sha[side_b]);
+    remote_sha[empty_any] = !remote_sha[side_a] || !remote_sha[side_b];
 
     track_sha[common] = track_sha[equal] ? track_sha[side_a] : "";
     track_sha[empty] = !(track_sha[side_a] || track_sha[side_b]);
+    track_sha[empty_any] = !track_sha[side_a] || !track_sha[side_b];
+
+    is_victim = index(ref, victim_refs_prefix) == 1;
 
     if(remote_sha[empty]){
         # As we here this means that remote repos don't know the current ref but gitSync knows it somehow.
 
-        trace(current_ref ": action-restore on both remotes; is unknown");
+        trace(ref ": action-restore on both remotes; is unknown");
         # This actions supports independents of gitSync from its remoter repos.
         # I.e. you can replace remote repos all at once, as gitSync will be the source of truth.
         # But if you don't run gitSync for a while and have deleted a branch on both side repos manually then gitSync will recreate it.
         # Re-delete the branch again and use gitSync. Silly))
-        a_restore[current_ref];
+        a_restore[ref];
 
         return;
     }
 
-    # ! All further actions assume that remote refs are not equal.
+    # ! All further actions assume that remote refs are unequal.
 
     if(track_sha[empty]){
         trace("!Warning!");
-        trace("!! Something went wrong for " current_ref ". It is still untracked.");
+        trace("!! Something went wrong for " ref ". It is still untracked.");
         trace("!! Possibly the program or the network were interrupted.");
         trace("!! We will try to sync it during the second sync pass.");
 
         return;
     }
 
-    is_victim = index(current_ref, victim_refs_prefix) == 1;
     ref_type = is_victim ? "victim" : "conv";
 
     if(track_sha[equal]){
@@ -77,11 +80,11 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
             aside = asides[side];
             if(!remote_sha[side] && remote_sha[aside] == track_sha[common]){
                 if(deletion_allowed){
-                    trace(current_ref ": action-del on " origin[aside] "; it is disappeared from " origin[side]);
-                    a_del[aside][current_ref];
+                    trace(ref ": action-del on " origin[aside] "; it is disappeared from " origin[side]);
+                    a_del[aside][ref];
                 }else{
-                    trace(current_ref "; " ref_type ":action-solve-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
-                    set_solve_action(is_victim, current_ref);
+                    trace(ref "; " ref_type ":action-solve-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
+                    set_solve_action(is_victim, ref);
                 }
 
                 return;
@@ -89,15 +92,15 @@ function state_to_action(current_ref,    remote_sha, track_sha, side, aside, is_
         }
     }
 
-    if(ff_candidates_to_refspec(current_ref)){
+    if(ff_candidates_to_refspec(ref)){
         return;
     }
-    if(nff_candidates_to_refspec(current_ref)){
+    if(nff_candidates_to_refspec(ref, remote_sha, track_sha, is_victim)){
         return;
     }
 
-    trace(current_ref "; " ref_type ":action-solve-all-others; it has different track or/and remote branch commits");
-    set_solve_action(is_victim, current_ref);
+    trace(ref "; " ref_type ":action-solve-all-others; it has different track or/and remote branch commits");
+    set_solve_action(is_victim, ref);
 }
 function set_solve_action(is_victim, ref){
     if(is_victim){
@@ -106,14 +109,13 @@ function set_solve_action(is_victim, ref){
         a_solve[ref];
     }
 }
-function ff_candidates_to_refspec(ref,    ref_item, is_candidate, a_owner, b_owner, owner_side, not_owner_side, owner_sha, not_owner_sha, cmd, ff_result){
+function ff_candidates_to_refspec(ref,    ref_item, a_owner, b_owner, owner_side, not_owner_side, owner_sha, not_owner_sha, cmd, ff_result){
     for(ref_item in ff_candidates){
         if(ref_item == ref){
-            is_candidate = 1;
             break;
         }
     }
-    if(!is_candidate){
+    if(ref != ref_item){
         return;
     }
 
@@ -149,37 +151,52 @@ function ff_candidates_to_refspec(ref,    ref_item, is_candidate, a_owner, b_own
     }
     
     trace(ref " action-fast-forward; from " origin[not_owner_side] " to " origin[owner_side] " as " owner_sha " is parent of " not_owner_sha " respectively");
-    out_push[owner_side] = out_push[owner_side] " " refs[ref][track[not_owner_side]][ref_key] ":" refs[ref][remote[owner_side]][ref_key];
+    out_push[owner_side] = out_push[owner_side] "  " refs[ref][track[not_owner_side]][ref_key] ":" refs[ref][remote[owner_side]][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
 }
-function nff_candidates_to_refspec(ref,    ref_item, is_candidate, action_sha){
+function nff_candidates_to_refspec(ref, remote_sha, track_sha, is_victim,    ref_item, action_sha, source_side, target_side){
     for(ref_item in nff_candidates){
         if(ref_item != ref){
             continue;
         }
-        is_candidate = 1;
         for(action_sha in nff_candidates[ref_item]){}
 
         break;
     }
-    if(!is_candidate){
+    if(ref_item != ref){
         return;
     }
 
-    d_trace("ref is " ref "; sha is " action_sha);
+    # The idea below is to ignore a candidate ref if sha was changed since last check.
+    # E.g. obey ra==la & rb==lb & ra!=rb
 
-    return;
+    if(remote_sha[equal])
+        return;
+    if(track_sha[equal])
+        return;
 
+    if(remote_sha[side_a] != track_sha[side_a])
+        return;
+    if(remote_sha[side_b] != track_sha[side_b])
+        return;
 
+    if(remote_sha[side_a] != action_sha && remote_sha[side_b] != action_sha)
+        return;
 
+    if(remote_sha[side_a] == action_sha){
+        source_side = side_a;
+    } else if(remote_sha[side_b] == action_sha){
+        source_side = side_b;
+    } else {
+        return;
+    }
 
-    # Ignore the candidate if something was changed. E.g. obey ra==la & rb==lb & ra!=rb
+    target_side = asides[source_side];
 
-
-    trace(ref " action-non-fast-forward;");
-    # out_push[owner_side] = out_push[owner_side] " " refs[ref][track[not_owner_side]][ref_key] ":" refs[ref][remote[owner_side]][ref_key];
+    trace(ref " action-non-fast-forward to " action_sha);
+    out_push[target_side] = out_push[target_side] "  +" refs[ref][track[source_side]][ref_key] ":" refs[ref][remote[target_side]][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
