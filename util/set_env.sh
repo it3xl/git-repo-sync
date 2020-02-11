@@ -64,17 +64,17 @@
             exit 102;
         fi
 
-        ${prefix_a:+}
-        ${prefix_b:+}
+        ${pref_a_conv:+}
+        ${pref_b_conv:+}
 
         # If this var is empty, then we ignore the Victim branches functionality and its "The latest action wins" conflict solving strategy.
         ${pref_victim:+}
 
         conventional_prefixes_trace_values="
-        prefix_a is '$prefix_a'
-        prefix_b is '$prefix_b'"
+        pref_a_conv is '$pref_a_conv'
+        pref_b_conv is '$pref_b_conv'"
 
-        if [[ "$prefix_a" && "$prefix_a" == "$prefix_b" ]]; then
+        if [[ "$pref_a_conv" && "$pref_a_conv" == "$pref_b_conv" ]]; then
             echo "Error! Exit! We expect that you assign different letters for conventional ref prefixes. $conventional_prefixes_trace_values"
 
             exit 103;
@@ -84,39 +84,39 @@
         pref_victim is '$pref_victim' $conventional_prefixes_trace_values"
 
         if [[ "$pref_victim" \
-            && ( "$prefix_a" == "$pref_victim" \
-            || "$prefix_b" == "$pref_victim" ) ]];
+            && ( "$pref_a_conv" == "$pref_victim" \
+            || "$pref_b_conv" == "$pref_victim" ) ]];
         then
             echo "Error! Exit! We expect that the victim ref prefix have letters different from conventional ref prefixes. $prefixes_trace_values"
 
             exit 104;
         fi;
 
-        if [[ ( ! "$prefix_a" || ! "$prefix_a" ) || ! "$pref_victim" ]]; then
+        if [[ ( ! "$pref_a_conv" || ! "$pref_a_conv" ) || ! "$pref_victim" ]]; then
             echo "Error! Exit! You have to configure victim or both conventional ref prefixes. $prefixes_trace_values"
 
             exit 105;
         fi;
-        sync_ref_specs="$prefix_a* $prefix_b* ${pref_victim:+${pref_victim}*}"
+        sync_ref_specs="$pref_a_conv* $pref_b_conv* ${pref_victim:+${pref_victim}*}"
         export sync_ref_specs
 
-        export prefix_a
+        export pref_a_conv
         export url_1
-        export prefix_b
+        export pref_b_conv
         export url_2
         export pref_victim
         export must_exist_branch
 
-        prefix_a_safe=${prefix_a: : -1}
-        prefix_a_safe=${prefix_a_safe//\//-}
-        export prefix_a_safe
+        pref_a_conv_safe=${pref_a_conv: : -1}
+        pref_a_conv_safe=${pref_a_conv_safe//\//-}
+        export pref_a_conv_safe
 
-        prefix_b_safe=${prefix_b: : -1}
-        prefix_b_safe=${prefix_b_safe//\//-}
-        export prefix_b_safe
+        pref_b_conv_safe=${pref_b_conv: : -1}
+        pref_b_conv_safe=${pref_b_conv_safe//\//-}
+        export pref_b_conv_safe
 
-        export origin_1=orig_1_$prefix_a_safe
-        export origin_2=orig_2_$prefix_b_safe
+        export origin_1=orig_1_$pref_a_conv_safe
+        export origin_2=orig_2_$pref_b_conv_safe
 
         export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 

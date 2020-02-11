@@ -47,21 +47,21 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     origin[side_b] = origin_b;
     origin_b = ""
     
-    prefix_a = ENVIRON["prefix_a"];
-    if(!prefix_a){
-        write("Error. Parameter prefix_a is empty");
+    pref_a_conv = ENVIRON["pref_a_conv"];
+    if(!pref_a_conv){
+        write("Error. Parameter pref_a_conv is empty");
         exit 1004;
     }
-    prefix[side_a] = prefix_a;
-    prefix_a = ""
+    prefix[side_a] = pref_a_conv;
+    pref_a_conv = ""
     
-    prefix_b = ENVIRON["prefix_b"];
-    if(!prefix_b){
-        write("Error. Parameter prefix_b is empty");
+    pref_b_conv = ENVIRON["pref_b_conv"];
+    if(!pref_b_conv){
+        write("Error. Parameter pref_b_conv is empty");
         exit 1005;
     }
-    prefix[side_b] = prefix_b;
-    prefix_b = ""
+    prefix[side_b] = pref_b_conv;
+    pref_b_conv = ""
 
     pref_victim = ENVIRON["pref_victim"];
     if(!pref_victim){
