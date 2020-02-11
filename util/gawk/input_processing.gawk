@@ -47,7 +47,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     origin[side_b] = origin_b;
     origin_b = ""
     
-    prefix_a = ENVIRON["prefix_1"];
+    prefix_a = ENVIRON["prefix_a"];
     if(!prefix_a){
         write("Error. Parameter prefix_a is empty");
         exit 1004;
@@ -55,7 +55,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     prefix[side_a] = prefix_a;
     prefix_a = ""
     
-    prefix_b = ENVIRON["prefix_2"];
+    prefix_b = ENVIRON["prefix_b"];
     if(!prefix_b){
         write("Error. Parameter prefix_b is empty");
         exit 1005;
@@ -63,11 +63,11 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     prefix[side_b] = prefix_b;
     prefix_b = ""
 
-    victim_refs_prefix = ENVIRON["victim_refs_prefix"];
-    if(!victim_refs_prefix){
-        trace("The victim branches are isn't difined. This functionality is ignored.")
-        # Let's prevent emptiness checking all around as victim_refs_prefix var allowed to be empty.
-        victim_refs_prefix = "{victim_refs_prefix var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
+    pref_victim = ENVIRON["pref_victim"];
+    if(!pref_victim){
+        trace("The victim branches are isn't defined. This functionality is ignored.")
+        # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
+        pref_victim = "{pref_victim var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
     }
 
     newline_substitution = ENVIRON["env_awk_newline_substitution"];
@@ -140,7 +140,7 @@ function file_states_processing() {
 
     if(index($3, prefix[side_a]) != 1 \
         && index($3, prefix[side_b]) != 1 \
-        && index($3, victim_refs_prefix) != 1 \
+        && index($3, pref_victim) != 1 \
         ){
         trace("!unexpected " $2 " (" dest ") " $1 "; branch name (" $3 ") has no allowed prefixes");
 

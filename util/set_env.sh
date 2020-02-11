@@ -64,65 +64,59 @@
             exit 102;
         fi
 
-        if [[ ! ${prefix_1:+1} ]]; then
-            prefix_1=
-        fi
-        if [[ ! ${prefix_2:+1} ]]; then
-            prefix_2=
-        fi
+        ${prefix_a:+}
+        ${prefix_b:+}
 
-        if [[ ! ${victim_refs_prefix:+1} ]]; then
-            # If this var is empty, then we ignore the Victim branches functionality and their "The latest action wins" conflict solving strategy.
-            victim_refs_prefix=
-        fi;
+        # If this var is empty, then we ignore the Victim branches functionality and its "The latest action wins" conflict solving strategy.
+        ${pref_victim:+}
 
         conventional_prefixes_trace_values="
-        prefix_1 is '$prefix_1'
-        prefix_2 is '$prefix_2'"
+        prefix_a is '$prefix_a'
+        prefix_b is '$prefix_b'"
 
-        if [[ "$prefix_1" && "$prefix_1" == "$prefix_2" ]]; then
+        if [[ "$prefix_a" && "$prefix_a" == "$prefix_b" ]]; then
             echo "Error! Exit! We expect that you assign different letters for conventional ref prefixes. $conventional_prefixes_trace_values"
 
             exit 103;
         fi;
 
         prefixes_trace_values="
-        victim_refs_prefix is '$victim_refs_prefix' $conventional_prefixes_trace_values"
+        pref_victim is '$pref_victim' $conventional_prefixes_trace_values"
 
-        if [[ "$victim_refs_prefix" \
-            && ( "$prefix_1" == "$victim_refs_prefix" \
-            || "$prefix_2" == "$victim_refs_prefix" ) ]];
+        if [[ "$pref_victim" \
+            && ( "$prefix_a" == "$pref_victim" \
+            || "$prefix_b" == "$pref_victim" ) ]];
         then
             echo "Error! Exit! We expect that the victim ref prefix have letters different from conventional ref prefixes. $prefixes_trace_values"
 
             exit 104;
         fi;
 
-        if [[ ( ! "$prefix_1" || ! "$prefix_1" ) || ! "$victim_refs_prefix" ]]; then
+        if [[ ( ! "$prefix_a" || ! "$prefix_a" ) || ! "$pref_victim" ]]; then
             echo "Error! Exit! You have to configure victim or both conventional ref prefixes. $prefixes_trace_values"
 
             exit 105;
         fi;
-        sync_ref_specs="$prefix_1* $prefix_2* ${victim_refs_prefix:+${victim_refs_prefix}*}"
+        sync_ref_specs="$prefix_a* $prefix_b* ${pref_victim:+${pref_victim}*}"
         export sync_ref_specs
 
-        export prefix_1
+        export prefix_a
         export url_1
-        export prefix_2
+        export prefix_b
         export url_2
-        export victim_refs_prefix
+        export pref_victim
         export must_exist_branch
 
-        prefix_1_safe=${prefix_1: : -1}
-        prefix_1_safe=${prefix_1_safe//\//-}
-        export prefix_1_safe
+        prefix_a_safe=${prefix_a: : -1}
+        prefix_a_safe=${prefix_a_safe//\//-}
+        export prefix_a_safe
 
-        prefix_2_safe=${prefix_2: : -1}
-        prefix_2_safe=${prefix_2_safe//\//-}
-        export prefix_2_safe
+        prefix_b_safe=${prefix_b: : -1}
+        prefix_b_safe=${prefix_b_safe//\//-}
+        export prefix_b_safe
 
-        export origin_1=orig_1_$prefix_1_safe
-        export origin_2=orig_2_$prefix_2_safe
+        export origin_1=orig_1_$prefix_a_safe
+        export origin_2=orig_2_$prefix_b_safe
 
         export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 

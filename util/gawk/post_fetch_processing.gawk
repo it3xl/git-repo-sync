@@ -47,7 +47,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, 
     track_sha[empty] = !(track_sha[side_a] || track_sha[side_b]);
     track_sha[empty_any] = !track_sha[side_a] || !track_sha[side_b];
 
-    is_victim = index(ref, victim_refs_prefix) == 1;
+    is_victim = index(ref, pref_victim) == 1;
 
     if(remote_sha[empty]){
         # As we here this means that remote repos don't know the current ref but gitSync knows it somehow.
