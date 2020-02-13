@@ -25,9 +25,9 @@ if (( $changes_detected == 1 )); then
     install -D /dev/null "$env_modifications_signal_file_2"
     
     # Passing of remote refs to prevent excessive network requesting.
-    echo "$remote_refs_1" >> "$env_modifications_signal_file_1"
+    echo "$remote_refs_a" >> "$env_modifications_signal_file_1"
 
-    echo "$remote_refs_2" >> "$env_modifications_signal_file_2"
+    echo "$remote_refs_b" >> "$env_modifications_signal_file_2"
     
     echo '@' RESULT: Synchronization requested.
 else

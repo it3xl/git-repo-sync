@@ -27,8 +27,8 @@ function sync_pass(){
 
         echo '@' RESULT: Synchronization requested.
         
-        remote_refs_1=$(<"$env_modifications_signal_file_1")
-        remote_refs_2=$(<"$env_modifications_signal_file_2")
+        remote_refs_a=$(<"$env_modifications_signal_file_1")
+        remote_refs_b=$(<"$env_modifications_signal_file_2")
         
         rm -f "$env_modifications_signal_file"
         rm -f "$env_modifications_signal_file_1"
@@ -39,19 +39,19 @@ function sync_pass(){
     ((++git_sync_pass_num_required))
     echo '!' Running $git_sync_pass_num_required sync pass
 
-    track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
-    track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
+    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
+    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
 
     if [[ $env_trace_refs == 1 ]]; then
         echo
-        echo remote_refs_1=
-        echo "$remote_refs_1"
-        echo remote_refs_2=
-        echo "$remote_refs_2"
-        echo track_refs_1=
-        echo "$track_refs_1"
-        echo track_refs_2=
-        echo "$track_refs_2"
+        echo remote_refs_a=
+        echo "$remote_refs_a"
+        echo remote_refs_b=
+        echo "$remote_refs_b"
+        echo track_refs_a=
+        echo "$track_refs_a"
+        echo track_refs_b=
+        echo "$track_refs_b"
     fi;
 
     # gawk --file="$path_git_sync_util/gawk/proto.gawk" <(echo)
@@ -60,10 +60,10 @@ function sync_pass(){
 
     pre_fetch_processing='pre_fetch_processing.gawk'
     pre_proc_data=$(gawk --file="$path_git_sync_util/gawk/$pre_fetch_processing" \
-        <(echo "$remote_refs_1") \
-        <(echo "$remote_refs_2") \
-        <(echo "$track_refs_1") \
-        <(echo "$track_refs_2") \
+        <(echo "$remote_refs_a") \
+        <(echo "$remote_refs_b") \
+        <(echo "$track_refs_a") \
+        <(echo "$track_refs_b") \
     )
 
     if [[ $env_trace_refs == 1 ]]; then
@@ -142,15 +142,15 @@ function sync_pass(){
     fi;
 
 
-    track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
-    track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
+    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
+    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
 
     if [[ $env_trace_refs == 1 ]]; then
         echo
-        echo track_refs_1=
-        echo "$track_refs_1"
-        echo track_refs_2=
-        echo "$track_refs_2"
+        echo track_refs_a=
+        echo "$track_refs_a"
+        echo track_refs_b=
+        echo "$track_refs_b"
     fi;
     # exit
 
@@ -158,10 +158,10 @@ function sync_pass(){
     proc_data=$(gawk \
         --file="$path_git_sync_util/gawk/post_fetch_processing.gawk" \
         `# --lint` \
-        <(echo "$remote_refs_1") \
-        <(echo "$remote_refs_2") \
-        <(echo "$track_refs_1") \
-        <(echo "$track_refs_2") \
+        <(echo "$remote_refs_a") \
+        <(echo "$remote_refs_b") \
+        <(echo "$track_refs_a") \
+        <(echo "$track_refs_b") \
     )
 
     mapfile -t proc_list < <(echo "$proc_data")
