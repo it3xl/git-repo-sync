@@ -118,8 +118,8 @@
         pref_b_conv_safe=${pref_b_conv_safe//\//-}
         export pref_b_conv_safe
 
-        export origin_a=orig_1_$pref_a_conv_safe
-        export origin_b=orig_2_$pref_b_conv_safe
+        export origin_a=orig_a_$pref_a_conv_safe
+        export origin_b=orig_b_$pref_b_conv_safe
 
         export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 
@@ -146,8 +146,8 @@
         export path_async_output="$path_project_root/async_output"
         signal_files_folder=file-signals
         export env_modifications_signal_file="$path_project_root/$signal_files_folder/there-are-modifications"
-        export env_modifications_signal_file_1="$path_project_root/$signal_files_folder/there-are-modifications_1"
-        export env_modifications_signal_file_2="$path_project_root/$signal_files_folder/there-are-modifications_2"
+        export env_modifications_signal_file_a="$path_project_root/$signal_files_folder/there-are-modifications_a"
+        export env_modifications_signal_file_b="$path_project_root/$signal_files_folder/there-are-modifications_b"
         export env_notify_del_file="$path_project_root/$signal_files_folder/notify_del"
         export env_notify_solving_file="$path_project_root/$signal_files_folder/notify_solving"
 

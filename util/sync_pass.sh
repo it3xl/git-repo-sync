@@ -27,12 +27,12 @@ function sync_pass(){
 
         echo '@' RESULT: Synchronization requested.
         
-        remote_refs_a=$(<"$env_modifications_signal_file_1")
-        remote_refs_b=$(<"$env_modifications_signal_file_2")
+        remote_refs_a=$(<"$env_modifications_signal_file_a")
+        remote_refs_b=$(<"$env_modifications_signal_file_b")
         
         rm -f "$env_modifications_signal_file"
-        rm -f "$env_modifications_signal_file_1"
-        rm -f "$env_modifications_signal_file_2"
+        rm -f "$env_modifications_signal_file_a"
+        rm -f "$env_modifications_signal_file_b"
     fi
 
 
