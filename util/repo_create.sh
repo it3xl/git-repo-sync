@@ -25,8 +25,8 @@ function create_sync_repo(){
     git config --local advice.pushUpdateRejected false
     #git config --local core.logAllRefUpdates
 
-    git remote add $origin_1 "$url_1"
-    git remote add $origin_2 "$url_2"
+    git remote add $origin_a "$url_a"
+    git remote add $origin_b "$url_b"
 
 
     [[ "$use_bash_git_credential_helper" == "1" ]] && {
@@ -41,10 +41,10 @@ function create_sync_repo(){
         
         GIT_CRED_DO_NOT_EXIT=1
         
-        source "$git_cred"  init  repo_1  $url_1
+        source "$git_cred"  init  repo_1  $url_a
         [[ $GIT_CRED_FAILED != 0 ]] && delete_project_repo_and_exit
         
-        source "$git_cred"  init  repo_2  $url_2
+        source "$git_cred"  init  repo_2  $url_b
         [[ $GIT_CRED_FAILED != 0 ]] && delete_project_repo_and_exit
     }
 

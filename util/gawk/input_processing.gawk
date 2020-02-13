@@ -31,7 +31,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     if(!must_exist_branch)
         write("Deletion is blocked. Parameter must_exist_branch is empty");
         
-    origin_a = ENVIRON["origin_1"];
+    origin_a = ENVIRON["origin_a"];
     if(!origin_a){
         write("Error. Parameter origin_a is empty");
         exit 1002;
@@ -39,7 +39,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     origin[side_a] = origin_a;
     origin_a = ""
     
-    origin_b = ENVIRON["origin_2"];
+    origin_b = ENVIRON["origin_b"];
     if(!origin_b){
         write("Error. Parameter origin_b is empty");
         exit 1003;

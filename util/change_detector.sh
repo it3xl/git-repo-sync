@@ -4,9 +4,9 @@ if [[ $env_allow_async == 1 ]]; then
     
     mkdir -p "$path_async_output"
 
-    git ls-remote --heads "$url_1" $sync_ref_specs > "$path_async_output/remote_refs_1.txt" &
+    git ls-remote --heads "$url_a" $sync_ref_specs > "$path_async_output/remote_refs_1.txt" &
     pid_remote_refs_1=$!
-    git ls-remote --heads "$url_2" $sync_ref_specs > "$path_async_output/remote_refs_2.txt" &
+    git ls-remote --heads "$url_b" $sync_ref_specs > "$path_async_output/remote_refs_2.txt" &
     pid_remote_refs_2=$!
 
     err_remote_refs_1=0;
@@ -19,13 +19,13 @@ if [[ $env_allow_async == 1 ]]; then
 
     if (( $err_remote_refs_1 != 0 )); then
         echo
-        echo "> Async fail | Change detection | $origin_1 | Error $err_remote_refs_1"
+        echo "> Async fail | Change detection | $origin_a | Error $err_remote_refs_1"
         echo "$remote_refs_1"
         echo ">"
     fi;
     if (( $err_remote_refs_2 != 0 )); then
         echo
-        echo "> Async fail | Change detection | $origin_2 | Error $err_remote_refs_2"
+        echo "> Async fail | Change detection | $origin_b | Error $err_remote_refs_2"
         echo "$remote_refs_2"
         echo ">"
     fi;
@@ -42,13 +42,13 @@ if [[ $env_allow_async == 1 ]]; then
 else
     echo '! Sync (sync remote refs check is used)'
     
-    remote_refs_2=$(git ls-remote --heads "$url_2" $sync_ref_specs)
-    remote_refs_1=$(git ls-remote --heads "$url_1" $sync_ref_specs)
+    remote_refs_2=$(git ls-remote --heads "$url_b" $sync_ref_specs)
+    remote_refs_1=$(git ls-remote --heads "$url_a" $sync_ref_specs)
 fi;
 
 
-track_refs_1_sha=$(git for-each-ref --format="%(objectname)" "refs/remotes/$origin_1/")
-track_refs_2_sha=$(git for-each-ref --format="%(objectname)" "refs/remotes/$origin_2/")
+track_refs_1_sha=$(git for-each-ref --format="%(objectname)" "refs/remotes/$origin_a/")
+track_refs_2_sha=$(git for-each-ref --format="%(objectname)" "refs/remotes/$origin_b/")
 
 # Let's check the local checking repository is new and empty. For a fast filling of the local checking repo.
 ## remote_count=$(echo "$remote_refs_1" | awk 'END { print NR }';)

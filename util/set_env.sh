@@ -48,14 +48,14 @@
 
         if [[ ${git_sync_project_folder:+1} ]]; then
             env_project_folder=$git_sync_project_folder
-        elif [[ ${url_1:+1} || ${url_2:+1} ]]; then
+        elif [[ ${url_a:+1} || ${url_b:+1} ]]; then
             env_project_folder=default_env_sync_project
         else
             git_sync_env_run_settings_script "$@"
         fi
 
-        if [[ ! ${url_1:+1} ]]; then missed_repo_settings+="url_1  "; fi
-        if [[ ! ${url_2:+1} ]]; then missed_repo_settings+="url_2  "; fi
+        if [[ ! ${url_a:+1} ]]; then missed_repo_settings+="url_a  "; fi
+        if [[ ! ${url_b:+1} ]]; then missed_repo_settings+="url_b  "; fi
 
         if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo properties must be set:  $missed_repo_settings"; fi
         if [[ ! ${must_exist_branch:+1} ]]; then echo "Warning! The refs' deletion will not be working without setting the must_exist_branch property"; fi
@@ -63,6 +63,9 @@
         if [[ ${missed_repo_settings:+1} ]]; then
             exit 102;
         fi
+
+        ${pref_a_link:+}
+        ${pref_b_link:+}
 
         ${pref_a_conv:+}
         ${pref_b_conv:+}
@@ -101,9 +104,9 @@
         export sync_ref_specs
 
         export pref_a_conv
-        export url_1
+        export url_a
         export pref_b_conv
-        export url_2
+        export url_b
         export pref_victim
         export must_exist_branch
 
@@ -115,8 +118,8 @@
         pref_b_conv_safe=${pref_b_conv_safe//\//-}
         export pref_b_conv_safe
 
-        export origin_1=orig_1_$pref_a_conv_safe
-        export origin_2=orig_2_$pref_b_conv_safe
+        export origin_a=orig_1_$pref_a_conv_safe
+        export origin_b=orig_2_$pref_b_conv_safe
 
         export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 

@@ -39,8 +39,8 @@ function sync_pass(){
     ((++git_sync_pass_num_required))
     echo '!' Running $git_sync_pass_num_required sync pass
 
-    track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
-    track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
+    track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
+    track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
 
     if [[ $env_trace_refs == 1 ]]; then
         echo
@@ -111,14 +111,14 @@ function sync_pass(){
     if [[ $env_allow_async == 1 && -n "$fetch_spec1" && -n "$fetch_spec2" ]]; then
         echo $'\n>' Fetch Async
 
-        git fetch --no-tags $origin_1 $fetch_spec1 > "$path_async_output/fetch1.txt" &
+        git fetch --no-tags $origin_a $fetch_spec1 > "$path_async_output/fetch1.txt" &
         pid_fetch1=$!
-        git fetch --no-tags $origin_2 $fetch_spec2 > "$path_async_output/fetch2.txt" &
+        git fetch --no-tags $origin_b $fetch_spec2 > "$path_async_output/fetch2.txt" &
         pid_fetch2=$!
         
-        fetch_report1="> Fetch $origin_1 "
+        fetch_report1="> Fetch $origin_a "
         wait $pid_fetch1 && fetch_report1+="(async success)" || fetch_report1+="(async failure)"
-        fetch_report2+="> Fetch $origin_2 "
+        fetch_report2+="> Fetch $origin_b "
         wait $pid_fetch2 && fetch_report2+="(async success)" || fetch_report2+="(async failure)"
         
         echo $fetch_report1
@@ -130,20 +130,20 @@ function sync_pass(){
         cat < "$path_async_output/fetch2.txt"
     else
         if [[ -n "$fetch_spec1" ]]; then
-            echo $'\n>' Fetch $origin_1
+            echo $'\n>' Fetch $origin_a
             echo $fetch_spec1
-            git fetch --no-tags $origin_1 $fetch_spec1
+            git fetch --no-tags $origin_a $fetch_spec1
         fi;
         if [[ -n "$fetch_spec2" ]]; then
-            echo $'\n>' Fetch $origin_2
+            echo $'\n>' Fetch $origin_b
             echo $fetch_spec2
-            git fetch --no-tags $origin_2 $fetch_spec2
+            git fetch --no-tags $origin_b $fetch_spec2
         fi;
     fi;
 
 
-    track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_1/")
-    track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_2/")
+    track_refs_1=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
+    track_refs_2=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
 
     if [[ $env_trace_refs == 1 ]]; then
         echo
@@ -236,14 +236,14 @@ function sync_pass(){
     if [[ $env_allow_async == 1 && -n "$push_spec1" && -n "$push_spec2" ]]; then
         echo $'\n>' Push Async
 
-        { git push $origin_1 $push_spec1 || true; } > "$path_async_output/push1.txt" &
+        { git push $origin_a $push_spec1 || true; } > "$path_async_output/push1.txt" &
         pid_push1=$!
-        { git push $origin_2 $push_spec2 || true; } > "$path_async_output/push2.txt" &
+        { git push $origin_b $push_spec2 || true; } > "$path_async_output/push2.txt" &
         pid_push2=$!
         
-        push_report1="> Push $origin_1 "
+        push_report1="> Push $origin_a "
         wait $pid_push1 && push_report1+="(async success)" || push_report1+="(async failure)"
-        push_report2+="> Push $origin_2 "
+        push_report2+="> Push $origin_b "
         wait $pid_push2 && push_report2+="(async success)" || push_report2+="(async failure)"
         
         echo $push_report1
@@ -255,14 +255,14 @@ function sync_pass(){
         cat < "$path_async_output/push2.txt"
     else
         if [[ -n "$push_spec1" ]]; then
-            echo $'\n>' Push $origin_1
+            echo $'\n>' Push $origin_a
             echo $push_spec1
-            git push $origin_1 $push_spec1 || true
+            git push $origin_a $push_spec1 || true
         fi;
         if [[ -n "$push_spec2" ]]; then
-            echo $'\n>' Push $origin_2
+            echo $'\n>' Push $origin_b
             echo $push_spec2
-            git push $origin_2 $push_spec2 || true
+            git push $origin_b $push_spec2 || true
         fi;
     fi;
 
@@ -279,14 +279,14 @@ function sync_pass(){
     if [[ $env_allow_async == 1 && -n "$post_fetch_spec1" && -n "$post_fetch_spec2" ]]; then
         echo $'\n>' Post-fetch Async
 
-        git fetch --no-tags $origin_1 $post_fetch_spec1 > "$path_async_output/post_fetch1.txt" &
+        git fetch --no-tags $origin_a $post_fetch_spec1 > "$path_async_output/post_fetch1.txt" &
         pid_post_fetch1=$!
-        git fetch --no-tags $origin_2 $post_fetch_spec2 > "$path_async_output/post_fetch2.txt" &
+        git fetch --no-tags $origin_b $post_fetch_spec2 > "$path_async_output/post_fetch2.txt" &
         pid_post_fetch2=$!
         
-        post_fetch_report1="> Post-fetch $origin_1 "
+        post_fetch_report1="> Post-fetch $origin_a "
         wait $pid_post_fetch1 && post_fetch_report1+="(async success)" || post_fetch_report1+="(async failure)"
-        post_fetch_report2+="> Post-fetch $origin_2 "
+        post_fetch_report2+="> Post-fetch $origin_b "
         wait $pid_post_fetch2 && post_fetch_report2+="(async success)" || post_fetch_report2+="(async failure)"
         
         echo $post_fetch_report1
@@ -298,14 +298,14 @@ function sync_pass(){
         cat < "$path_async_output/post_fetch2.txt"
     else
         if [[ -n "$post_fetch_spec1" ]]; then
-            echo $'\n>' Post-fetch $origin_1
+            echo $'\n>' Post-fetch $origin_a
             echo $post_fetch_spec1
-            git fetch --no-tags $origin_1 $post_fetch_spec1
+            git fetch --no-tags $origin_a $post_fetch_spec1
         fi;
         if [[ -n "$post_fetch_spec2" ]]; then
-            echo $'\n>' Post-fetch $origin_2
+            echo $'\n>' Post-fetch $origin_b
             echo $post_fetch_spec2
-            git fetch --no-tags $origin_2 $post_fetch_spec2
+            git fetch --no-tags $origin_b $post_fetch_spec2
         fi;
     fi;
 }
