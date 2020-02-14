@@ -95,7 +95,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, 
     if(ff_candidates_to_refspec(ref)){
         return;
     }
-    if(nff_candidates_to_refspec(ref, remote_sha, track_sha, is_victim)){
+    if(nff_candidates_to_refspec(ref, remote_sha, track_sha)){
         return;
     }
 
@@ -156,7 +156,7 @@ function ff_candidates_to_refspec(ref,    ref_item, a_owner, b_owner, owner_side
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
 }
-function nff_candidates_to_refspec(ref, remote_sha, track_sha, is_victim,    ref_item, action_sha, source_side, target_side){
+function nff_candidates_to_refspec(ref, remote_sha, track_sha,    ref_item, action_sha, source_side, target_side){
     for(ref_item in nff_candidates){
         if(ref_item != ref){
             continue;
@@ -263,7 +263,7 @@ function operations_to_refspecs(    side, aside, ref){
         for(ref in op_push_del[side]){
             out_push[side] = out_push[side] "  +:" refs[ref][remote[side]][ref_key];
             
-            append_by_val(out_notify_del, prefix[side]  " | deletion | "  refs[ref][remote[side]][ref_key]  "   "  refs[ref][remote[side]][sha_key]);
+            append_by_val(out_notify_del, "deletion | " prefix[side] " | " ref " | " refs[ref][remote[side]][sha_key]);
         }
     }
 
@@ -273,7 +273,7 @@ function operations_to_refspecs(    side, aside, ref){
             out_push[side] = out_push[side] "  +" refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key];
 
             if(refs[ref][remote[side]][sha_key]){
-                append_by_val(out_notify_solving, prefix[side]  " | conflict-solving | "  refs[ref][remote[side]][ref_key]  "   "  refs[ref][remote[side]][sha_key]);
+                append_by_val(out_notify_solving, "conflict-solving | " prefix[side] " | " ref " | " refs[ref][remote[side]][sha_key]);
             }
         }
     }
@@ -290,7 +290,7 @@ function operations_to_refspecs(    side, aside, ref){
     }
 }
 
-function set_victim_refspec(    ref, sha_a, sha_a_txt, sha_b, sha_b_txt, cmd, newest_sha){
+function set_victim_refspec(    ref, sha_a, sha_a_txt, sha_b, sha_b_txt, cmd, newest_sha, side_winner, side_victim){
     for(ref in op_victim_winner_search){
         # We expects that "no sha" cases will be processed by common NFF-solving actions.
         # But this approach with variables help to solve severe errors. Also it makes code more resilient.
@@ -310,13 +310,19 @@ function set_victim_refspec(    ref, sha_a, sha_a_txt, sha_b, sha_b_txt, cmd, ne
         }
 
         if(newest_sha == sha_a){
-            trace("victim-solving: " ref " on " origin[side_a] " beat " origin[side_b] " with " sha_a_txt " vs " sha_b_txt)
-            out_push[side_b] = out_push[side_b] "  +" refs[ref][track[side_a]][ref_key] ":" refs[ref][remote[side_b]][ref_key];
+            side_winner = side_a
+            side_victim = side_b
+        } else if(newest_sha == sha_b){
+            side_winner = side_b
+            side_victim = side_a
+        } else {
+            trace("unexpected behavior during victim solving | " ref);
+
+            continue;
         }
-        if(newest_sha == sha_b){
-            trace("victim-solving: " ref " on " origin[side_b] " beat " origin[side_a] " with " sha_b_txt " vs " sha_a_txt)
-            out_push[side_a] = out_push[side_a] "  +" refs[ref][track[side_b]][ref_key] ":" refs[ref][remote[side_a]][ref_key];
-        }        
+
+        trace("victim-solving: " ref " on " origin[side_winner] " beat " origin[side_victim] " with " sha_a_txt " vs " sha_b_txt);
+        out_push[side_victim] = out_push[side_victim] "  +" refs[ref][track[side_winner]][ref_key] ":" refs[ref][remote[side_victim]][ref_key];
     }
 }
 
