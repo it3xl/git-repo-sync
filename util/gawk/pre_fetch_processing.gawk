@@ -93,12 +93,6 @@ function request_ff(ref, remote_sha, track_sha, is_victim,    side, aside, ref_o
         return;
 
     for(side in sides){
-
-        ref_owner = index(ref, prefix[side]) == 1;
-
-        if(ref_owner){
-            continue;
-        }
         
         # d_trace(ref_owner " " side " " ref " " prefix[side]);
 

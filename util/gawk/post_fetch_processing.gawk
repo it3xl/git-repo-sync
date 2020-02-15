@@ -109,7 +109,7 @@ function set_solve_action(is_victim, ref){
         a_solve[ref];
     }
 }
-function ff_candidates_to_refspec(ref,    ref_item, a_owner, b_owner, owner_side, not_owner_side, owner_sha, not_owner_sha, cmd, ff_result){
+function ff_candidates_to_refspec(ref,    ref_item, cmd, parent_sha, parent_side, child_side){
     for(ref_item in ff_candidates){
         if(ref_item == ref){
             break;
@@ -119,39 +119,25 @@ function ff_candidates_to_refspec(ref,    ref_item, a_owner, b_owner, owner_side
         return;
     }
 
-    a_owner = index(ref, prefix[side_a]) == 1;
-    b_owner = index(ref, prefix[side_b]) == 1;
-
-    if(a_owner){
-        owner_side = side_a;
-    } else if(b_owner){
-        owner_side = side_b;
-    } else {
-        return;
-    }
-
-    not_owner_side = asides[owner_side];
-
-    # Ancestor is an update target. Owner must be an ancestor
-    owner_sha = refs[ref][remote[owner_side]][sha_key];
-
-    # descendant is (possibly) where to update.
-    not_owner_sha = refs[ref][remote[not_owner_side]][sha_key];
-
-    # --is-ancestor <ancestor> <descendant>
-    cmd = "git merge-base --is-ancestor " refs[ref][track[owner_side]][ref_key] " " refs[ref][track[not_owner_side]][ref_key] " && echo ff";
+    cmd = "git merge-base " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key];
     
-    cmd | getline ff_result;
+    cmd | getline parent_sha;
     close(cmd);
 
-    if(ff_result != "ff"){
-        trace(ref " blocked-fast-forward; from " origin[not_owner_side] " to " origin[owner_side] " as " owner_sha " isn't parent of " not_owner_sha " respectively");
+    if(parent_sha == refs[ref][track[side_a]][sha_key]){
+        parent_side = side_a;
+    } else if(parent_sha == refs[ref][track[side_b]][sha_key]){
+        parent_side = side_b;
+    } else{
+        trace(ref " blocked-fast-forward; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
 
         return;
     }
+
+    child_side = asides[parent_side];
     
-    trace(ref " action-fast-forward; from " origin[not_owner_side] " to " origin[owner_side] " as " owner_sha " is parent of " not_owner_sha " respectively");
-    out_push[owner_side] = out_push[owner_side] "  " refs[ref][track[not_owner_side]][ref_key] ":" refs[ref][remote[owner_side]][ref_key];
+    trace(ref " action-fast-forward; from " origin[parent_side] " to " origin[child_side]);
+    out_push[parent_side] = out_push[parent_side] "  " refs[ref][track[child_side]][ref_key] ":" refs[ref][remote[parent_side]][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
