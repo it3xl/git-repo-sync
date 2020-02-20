@@ -45,7 +45,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim){
     if(remote_sha[empty])
         return;
     
-    request_nff(ref, remote_sha, track_sha, is_victim);
+    request_victim_move(ref, remote_sha, track_sha, is_victim);
 
     if(remote_sha[equal]){
         request_update_tracking(ref, remote_sha, track_sha);
@@ -61,7 +61,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim){
 
     request_update_tracking(ref, remote_sha, track_sha);
     
-    request_ff(ref, remote_sha, track_sha, is_victim);
+    request_conv_move(ref, remote_sha, track_sha, is_victim);
 }
 function request_update_tracking(ref, remote_sha, track_sha){
     for(side in sides){
@@ -82,14 +82,14 @@ function request_update_tracking(ref, remote_sha, track_sha){
         a_fetch[side][ref];
     }
 }
-function request_ff(ref, remote_sha, track_sha, is_victim,    side, aside, ref_owner){
+function request_conv_move(ref, remote_sha, track_sha, is_victim,    side, aside, ref_owner){
+    if(is_victim)
+        return;
+
     if(!track_sha[equal])
         return;
     
     if(track_sha[empty])
-        return;
-
-    if(is_victim)
         return;
 
     for(side in sides){
@@ -110,11 +110,14 @@ function request_ff(ref, remote_sha, track_sha, is_victim,    side, aside, ref_o
         }
 
         # Let's allow updating of the another side conventional refs. Remember fast-forward updating candidates.
-        trace(ref " check-fast-forward; outdated on " origin[side]);
-        a_ff_candidates[ref];
+        trace(ref " check-conventional-move; outdated on " origin[side]);
+        a_conv_move[ref][remote_sha[side]];
     }
 }
-function request_nff(ref, remote_sha, track_sha, is_victim,    side, aside){
+function request_victim_move(ref, remote_sha, track_sha, is_victim,    side, aside){
+    if(!is_victim)
+        return;
+
     if(remote_sha[empty_any])
         return;
     if(track_sha[empty_any])
@@ -126,9 +129,6 @@ function request_nff(ref, remote_sha, track_sha, is_victim,    side, aside){
     if(!track_sha[equal])
         return;
     
-    if(!is_victim)
-        return;
-
     # We expect that request_update_tracking will request required here fetching.
 
     for(side in sides){
@@ -144,7 +144,7 @@ function request_nff(ref, remote_sha, track_sha, is_victim,    side, aside){
 
         # Let's allow updating of the another side conventional refs. Remember fast-forward updating candidates.
         trace(ref " request-non-fast-forward; ref changed on " origin[side] " only");
-        a_nff_candidates[ref][remote_sha[side]];
+        a_victim_move[ref][remote_sha[side]];
     }
 }
 
@@ -155,13 +155,15 @@ function actions_to_refspecs(    side, aside, ref){
         }
     }
 
-    for(ref in a_ff_candidates){
-        append_by_val(out_ff_candidates, ref);
+    for(ref in a_conv_move){
+        for(sha in a_conv_move[ref]){
+            append_by_val(out_conv_move, ref " " sha);
+        }
     }
 
-    for(ref in a_nff_candidates){
-        for(sha in a_nff_candidates[ref]){
-            append_by_val(out_nff_candidates, ref " " sha);
+    for(ref in a_victim_move){
+        for(sha in a_victim_move[ref]){
+            append_by_val(out_victim_move, ref " " sha);
         }
     }
 }
@@ -170,8 +172,8 @@ function refspecs_to_stream(){
     print out_fetch[side_a];
     print out_fetch[side_b];
 
-    print out_ff_candidates[val];
-    print out_nff_candidates[val];
+    print out_conv_move[val];
+    print out_victim_move[val];
 
     # Must print finishing line otherwise previous empty lines will be ignored by mapfile command in bash.
     print "{[end-of-results]}"

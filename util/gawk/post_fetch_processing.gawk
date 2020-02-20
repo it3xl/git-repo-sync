@@ -92,10 +92,10 @@ function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, 
         }
     }
 
-    if(ff_candidates_to_refspec(ref)){
+    if(conv_move_to_refspec(ref)){
         return;
     }
-    if(nff_candidates_to_refspec(ref, remote_sha, track_sha)){
+    if(victim_move_to_refspec(ref, remote_sha, track_sha)){
         return;
     }
 
@@ -109,13 +109,16 @@ function set_solve_action(is_victim, ref){
         a_solve[ref];
     }
 }
-function ff_candidates_to_refspec(ref,    ref_item, cmd, parent_sha, parent_side, child_side){
-    for(ref_item in ff_candidates){
-        if(ref_item == ref){
-            break;
+function conv_move_to_refspec(ref,    ref_item, action_sha, cmd, parent_sha, parent_side, child_side, action_key, moving_back, owner_action, force_key){
+    for(ref_item in conv_move){
+        if(ref_item != ref){
+            continue;
         }
+        for(action_sha in conv_move[ref_item]){}
+
+        break;
     }
-    if(ref != ref_item){
+    if(ref_item != ref){
         return;
     }
 
@@ -129,25 +132,41 @@ function ff_candidates_to_refspec(ref,    ref_item, cmd, parent_sha, parent_side
     } else if(parent_sha == refs[ref][track[side_b]][sha_key]){
         parent_side = side_b;
     } else{
-        trace(ref " blocked-fast-forward; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
+        trace(ref " rejected-fast-forward; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
 
         return;
     }
 
     child_side = asides[parent_side];
+    action_key = "action-fast-forward";
+
+    moving_back = parent_sha == action_sha;
+    if(moving_back){
+        owner_action = index(ref, prefix[parent_side]) == 1;
+        if(!owner_action){
+            # Moving back from a non-owner side is forbidden.
+            return;
+        }
+        parent_side = child_side;
+        child_side = asides[parent_side];
+        force_key = "+";
+        action_key = "action-moving-back";
+
+        append_by_val(out_notify_solving, "moving-back | " prefix[parent_side] " | " ref " | from " refs[ref][track[parent_side]][sha_key] " to " refs[ref][track[child_side]][sha_key]);
+    }
     
-    trace(ref " action-fast-forward; from " origin[parent_side] " to " origin[child_side]);
-    out_push[parent_side] = out_push[parent_side] "  " refs[ref][track[child_side]][ref_key] ":" refs[ref][remote[parent_side]][ref_key];
+    trace(ref " " action_key "; from " origin[parent_side] " to " origin[child_side]);
+    out_push[parent_side] = out_push[parent_side] "  " force_key refs[ref][track[child_side]][ref_key] ":" refs[ref][remote[parent_side]][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
 }
-function nff_candidates_to_refspec(ref, remote_sha, track_sha,    ref_item, action_sha, source_side, target_side){
-    for(ref_item in nff_candidates){
+function victim_move_to_refspec(ref, remote_sha, track_sha,    ref_item, action_sha, source_side, target_side){
+    for(ref_item in victim_move){
         if(ref_item != ref){
             continue;
         }
-        for(action_sha in nff_candidates[ref_item]){}
+        for(action_sha in victim_move[ref_item]){}
 
         break;
     }

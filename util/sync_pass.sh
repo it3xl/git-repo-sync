@@ -77,13 +77,13 @@ function sync_pass(){
 
     fetch_spec1="${pre_proc_list[0]}";
     fetch_spec2="${pre_proc_list[1]}";
-    ff_candidates="${pre_proc_list[2]//$env_awk_newline_substitution/$'\n'}";
-    nff_candidates="${pre_proc_list[3]//$env_awk_newline_substitution/$'\n'}";
+    conv_move="${pre_proc_list[2]//$env_awk_newline_substitution/$'\n'}";
+    victim_move="${pre_proc_list[3]//$env_awk_newline_substitution/$'\n'}";
     end_of_results="${pre_proc_list[4]}";
 
     # Let's export for an usage in post_fetch_processing.gawk.
-    export ff_candidates
-    export nff_candidates
+    export conv_move
+    export victim_move
 
     end_of_results_expected='{[end-of-results]}';
     # This comparison must have double quotes on the second operand. Otherwise it doesn't work.
@@ -100,10 +100,10 @@ function sync_pass(){
         echo "$fetch_spec1"
         echo fetch_spec2
         echo "$fetch_spec2"
-        echo ff_candidates
-        echo "$ff_candidates"
-        echo nff_candidates
-        echo "$nff_candidates"
+        echo conv_move
+        echo "$conv_move"
+        echo victim_move
+        echo "$victim_move"
     fi;
     # exit
 

@@ -81,16 +81,22 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
         remote[side] = "remote@" prefix[side];
     }
     
-    split(ENVIRON["ff_candidates"], split_arr, "\n");
+    split(ENVIRON["conv_move"], split_arr, "\n");
     for(ind in split_arr){
-        ref = split_arr[ind];
-        if(!ref){
+        val = split_arr[ind];
+
+        split(val, split_val, " ");
+
+        ref = split_val[1];
+        sha = split_val[2];
+        if(!ref || !sha){
             continue;
         }
-        ff_candidates[ref];
+        
+        conv_move[ref][sha];
     }
     
-    split(ENVIRON["nff_candidates"], split_arr, "\n");
+    split(ENVIRON["victim_move"], split_arr, "\n");
     for(ind in split_arr){
         val = split_arr[ind];
 
@@ -102,7 +108,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
             continue;
         }
 
-        nff_candidates[ref][sha];
+        victim_move[ref][sha];
     }
 }
 BEGINFILE { # Preparing processing for every portion of refs.
