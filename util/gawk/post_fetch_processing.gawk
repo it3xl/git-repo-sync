@@ -152,7 +152,7 @@ function conv_move_to_refspec(ref,    ref_item, action_sha, cmd, parent_sha, par
         force_key = "+";
         action_key = "action-moving-back";
 
-        append_by_val(out_notify_solving, "moving-back | " prefix[parent_side] " | " ref " | from " refs[ref][track[parent_side]][sha_key] " to " refs[ref][track[child_side]][sha_key]);
+        append_by_val(out_notify_solving, "moving-back | " prefix[parent_side] " | " ref " | out-of " refs[ref][track[parent_side]][sha_key] " to " refs[ref][track[child_side]][sha_key]);
     }
     
     trace(ref " " action_key "; from " origin[parent_side] " to " origin[child_side]);
@@ -278,7 +278,7 @@ function operations_to_refspecs(    side, aside, ref){
             out_push[side] = out_push[side] "  +" refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key];
 
             if(refs[ref][remote[side]][sha_key]){
-                append_by_val(out_notify_solving, "conflict-solving | " prefix[side] " | " ref " | " refs[ref][remote[side]][sha_key]);
+                append_by_val(out_notify_solving, "conflict-solving | " prefix[side] " | " ref " | out-of " refs[ref][remote[side]][sha_key] " to " refs[ref][remote[aside]][sha_key]);
             }
         }
     }
