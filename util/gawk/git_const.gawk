@@ -6,11 +6,11 @@ BEGIN { # Constants.
     sha_key = "sha";
     ref_key = "ref";
 
-    side_a = 1;
-    side_b = 2;
+    side_a = "a";
+    side_b = "b";
 
-    sides[side_a] = 1;
-    sides[side_b] = 2;
+    sides[side_a] = side_a;
+    sides[side_b] = side_b;
     
     asides[side_a] = sides[side_b]
     asides[side_b] = sides[side_a]
