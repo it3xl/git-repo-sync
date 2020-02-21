@@ -92,7 +92,10 @@ function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, 
         }
     }
 
-    if(conv_move_to_refspec(ref)){
+    if(move_to_refspec(ref, conv_move, is_victim)){
+        return;
+    }
+    if(move_to_refspec(ref, victim_move, is_victim)){
         return;
     }
     if(victim_move_to_refspec(ref, remote_sha, track_sha)){
@@ -109,12 +112,12 @@ function set_solve_action(is_victim, ref){
         a_solve[ref];
     }
 }
-function conv_move_to_refspec(ref,    ref_item, action_sha, cmd, parent_sha, parent_side, child_side, action_key, moving_back, owner_action, force_key){
-    for(ref_item in conv_move){
+function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, cmd, parent_sha, parent_side, child_side, action_key, moving_back, owner_action, force_key){
+    for(ref_item in source_refs){
         if(ref_item != ref){
             continue;
         }
-        for(action_sha in conv_move[ref_item]){}
+        for(action_sha in source_refs[ref_item]){}
 
         break;
     }
@@ -132,7 +135,7 @@ function conv_move_to_refspec(ref,    ref_item, action_sha, cmd, parent_sha, par
     } else if(parent_sha == refs[ref][track[side_b]][sha_key]){
         parent_side = side_b;
     } else{
-        trace(ref " rejected-fast-forward; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
+        trace(ref " rejected-move; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
 
         return;
     }
@@ -142,10 +145,12 @@ function conv_move_to_refspec(ref,    ref_item, action_sha, cmd, parent_sha, par
 
     moving_back = parent_sha == action_sha;
     if(moving_back){
-        owner_action = index(ref, prefix[parent_side]) == 1;
-        if(!owner_action){
-            # Moving back from a non-owner side is forbidden.
-            return;
+        if(!is_victim){
+            owner_action = index(ref, prefix[parent_side]) == 1;
+            if(!owner_action){
+                # Moving back from a non-owner side is forbidden.
+                return;
+            }
         }
         parent_side = child_side;
         child_side = asides[parent_side];
@@ -327,7 +332,10 @@ function set_victim_refspec(    ref, sha_a, sha_a_txt, sha_b, sha_b_txt, cmd, ne
         }
 
         trace("victim-solving: " ref " on " origin[side_winner] " beat " origin[side_victim] " with " sha_a_txt " vs " sha_b_txt);
+
         out_push[side_victim] = out_push[side_victim] "  +" refs[ref][track[side_winner]][ref_key] ":" refs[ref][remote[side_victim]][ref_key];
+
+        append_by_val(out_notify_solving, "victim-solving | " prefix[side_victim] " | " ref " | out-of " refs[ref][remote[side_victim]][sha_key] " to " refs[ref][remote[aside]][side_winner]);
     }
 }
 
