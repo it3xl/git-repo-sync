@@ -1,7 +1,7 @@
 set -euf +x -o pipefail
 
 echo
-echo Start `basename $0`
+echo Start $(basename $BASH_SOURCE)
 
 invoke_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$invoke_path/util/set_env.sh" "$@"
@@ -34,9 +34,9 @@ else
     echo '@' RESULT: Refs are the same. Exit.
     echo
     
-    exit
+    # exit
 fi
 
 
 echo
-echo End `basename $0`
+echo End $(basename $BASH_SOURCE)
