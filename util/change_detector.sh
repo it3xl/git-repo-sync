@@ -1,6 +1,6 @@
 
 if [[ $env_allow_async == 1 ]]; then
-    echo '! Async (async remote refs check is used)'
+    echo '! Async (async remote refs checks are used)'
     
     mkdir -p "$path_async_output"
 
@@ -40,32 +40,24 @@ if [[ $env_allow_async == 1 ]]; then
         exit $err_remote_refs_b;
     fi;
 else
-    echo '! Sync (sync remote refs check is used)'
+    echo '! Sync (sync remote refs checks are used)'
     
     remote_refs_b=$(git ls-remote --heads "$url_b" $sync_ref_specs)
     remote_refs_a=$(git ls-remote --heads "$url_a" $sync_ref_specs)
 fi;
 
 
-track_refs_a_sha=$(git for-each-ref --format="%(objectname)" "refs/remotes/$origin_a/")
-track_refs_b_sha=$(git for-each-ref --format="%(objectname)" "refs/remotes/$origin_b/")
+track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
+track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
 
-# Let's check the local checking repository is new and empty. For a fast filling of the local checking repo.
 ## remote_count=$(echo "$remote_refs_a" | awk 'END { print NR }';)
-## track_count=$(echo "$track_refs_a_sha" | awk 'END { print NR }';)
-##
-mapfile -t remote_refs < <(echo "$remote_refs_a")
-remote_count=${#remote_refs[@]}
-mapfile -t track_refs < <(echo "$track_refs_a_sha")
-track_count=${#track_refs[@]}
+## track_count=$(echo "$track_refs_a" | awk 'END { print NR }';)
 
+export remote_refs_a;
+export remote_refs_b;
+export track_refs_a;
+export track_refs_b;
 
-changes_detected=0
-if [[ "$remote_refs_a" != "$remote_refs_b" \
-    || "$track_refs_a_sha" != "$track_refs_b_sha" \
-    || $remote_count != $track_count ]];
-then
-    changes_detected=1
-fi
-
+changes_detected=$(gawk --file="$path_git_sync_util/gawk/change_detector.gawk")
+echo
 
