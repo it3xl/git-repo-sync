@@ -27,7 +27,7 @@ function main_processing(    ref){
     operations_to_refspecs();
     refspecs_to_stream();
 }
-function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, ref_type){
+function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_type){
     for(side in sides){
         remote_sha[side] = refs[ref][remote[side]][sha_key];
         track_sha[side] = refs[ref][track[side]][sha_key];
@@ -73,30 +73,9 @@ function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, 
         return;
     }
 
-    ref_type = is_victim ? "victim" : "conv";
-
-    if(track_sha[equal]){
-        for(side in sides){
-            aside = asides[side];
-            if(!remote_sha[side] && remote_sha[aside] == track_sha[common]){
-                if(deletion_allowed){
-                    trace(ref ": action-del on " origin[aside] "; it is disappeared from " origin[side]);
-                    a_del[aside][ref];
-                }else{
-                    if(is_victim){
-                        trace(ref "; " ref_type ":action-restore-as-del-blocked on " origin[aside] "; disappeared from " origin[side]);
-                        a_restore[ref];
-                    }else{
-                        trace(ref "; " ref_type ":action-solve-as-del-blocked on " origin[aside] "; disappeared from " origin[side]);
-                        a_conv_solve[ref];
-                    }
-                }
-
-                return;
-            }
-        }
+    if(del_to_action(ref, is_victim, remote_sha, track_sha)){
+        return;
     }
-
     if(move_to_refspec(ref, conv_move, is_victim)){
         return;
     }
@@ -107,11 +86,58 @@ function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, 
         return;
     }
 
+    ref_type = is_victim ? "victim" : "conv";
     trace(ref "; " ref_type ":action-solve-all-others; it has different track or/and remote branch commits");
     if(is_victim){
         a_victim_solve[ref];
     }else{
         a_conv_solve[ref];
+    }
+}
+function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, deletion_state, unowned_ref, action_key){
+    if(!track_sha[equal]){
+        return;
+    }
+
+    for(side in sides){
+        aside = asides[side];
+
+        deletion_state = !remote_sha[side] && remote_sha[aside] == track_sha[common];
+        if(!deletion_state){
+            continue;
+        }
+
+        if(is_victim){
+            if(deletion_allowed){
+                trace(ref ": action-del-victim on " origin[aside] "; it is disappeared from " origin[side]);
+                a_del[aside][ref];
+            }else{
+                trace(ref "; action-blocked-del-victim-restore on " origin[aside] "; disappeared from " origin[side]);
+                a_restore[ref];
+            }
+
+            return 1;
+        }
+
+        unowned_ref = index(ref, prefix[aside]) == 1;
+
+        if(!deletion_allowed || unowned_ref){
+            action_key = "action-blocked-del-conv";
+            if(unowned_ref){
+                action_key = action_key "&unowned-ref";
+            }
+
+            trace(ref "; " action_key " on " origin[aside] "; disappeared from " origin[side]);
+            a_conv_solve[ref];
+
+            return 1;
+        }
+
+        
+        trace(ref ": action-del-conv on " origin[aside] "; it is disappeared from " origin[side]);
+        a_del[aside][ref];
+
+        return 1;
     }
 }
 function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, cmd, parent_sha, parent_side, child_side, action_key, moving_back, owner_action, force_key){
