@@ -83,8 +83,13 @@ function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, 
                     trace(ref ": action-del on " origin[aside] "; it is disappeared from " origin[side]);
                     a_del[aside][ref];
                 }else{
-                    trace(ref "; " ref_type ":action-solve-as-del-blocked on " origin[aside] "; is disappeared from " origin[side] " and deletion is blocked");
-                    set_solve_action(is_victim, ref);
+                    if(is_victim){
+                        trace(ref "; " ref_type ":action-restore-as-del-blocked on " origin[aside] "; disappeared from " origin[side]);
+                        a_restore[ref];
+                    }else{
+                        trace(ref "; " ref_type ":action-solve-as-del-blocked on " origin[aside] "; disappeared from " origin[side]);
+                        a_conv_solve[ref];
+                    }
                 }
 
                 return;
@@ -103,13 +108,10 @@ function state_to_action(ref,    remote_sha, track_sha, side, aside, is_victim, 
     }
 
     trace(ref "; " ref_type ":action-solve-all-others; it has different track or/and remote branch commits");
-    set_solve_action(is_victim, ref);
-}
-function set_solve_action(is_victim, ref){
     if(is_victim){
         a_victim_solve[ref];
     }else{
-        a_solve[ref];
+        a_conv_solve[ref];
     }
 }
 function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, cmd, parent_sha, parent_side, child_side, action_key, moving_back, owner_action, force_key){
@@ -230,14 +232,8 @@ function actions_to_operations(    side, aside, ref, ref_owner){
     }
 
     for(side in sides){
-        for(ref in a_victim_solve){
-            op_victim_winner_search[ref];
-        }
-    }
-
-    for(side in sides){
         aside = asides[side];
-        for(ref in a_solve){
+        for(ref in a_conv_solve){
             ref_owner = index(ref, prefix[side]) == 1;
 
             if(!ref_owner){
@@ -300,29 +296,34 @@ function operations_to_refspecs(    side, aside, ref){
     }
 }
 
-function set_victim_refspec(    ref, sha_a, sha_a_txt, sha_b, sha_b_txt, cmd, newest_sha, side_winner, side_victim){
-    for(ref in op_victim_winner_search){
+function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt, remote_sha_b, track_sha_b, track_sha_b_txt, cmd, newest_sha, side_winner, side_victim){
+    for(ref in a_victim_solve){
         # We expects that "no sha" cases will be processed by common NFF-solving actions.
         # But this approach with variables help to solve severe errors. Also it makes code more resilient.
-        sha_a = refs[ref][track[side_a]][sha_key];
-        sha_a_txt = sha_a ? sha_a : "<no-sha>"
-        sha_b = refs[ref][track[side_b]][sha_key];
-        sha_b_txt = sha_b ? sha_b : "<no-sha>"
 
-        if(sha_a && sha_b){
+        remote_sha_a = refs[ref][remote[side_a]][sha_key];
+        track_sha_a = refs[ref][track[side_a]][sha_key];
+
+        remote_sha_b = refs[ref][remote[side_b]][sha_key];
+        track_sha_b = refs[ref][track[side_b]][sha_key];
+
+        # d_trace("a " ref "; track_sha_a:" track_sha_a "; remote_sha_a:" remote_sha_a);
+        # d_trace("b " ref "; track_sha_b:" track_sha_b "; remote_sha_b:" remote_sha_b);
+
+        if(track_sha_a && track_sha_b){
             cmd = "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1"
             cmd | getline newest_sha;
             close(cmd);
-        } else if(sha_a){
-           newest_sha =  sha_a;
-        } else if(sha_b){
-           newest_sha =  sha_b;
+        } else if(track_sha_a){
+           newest_sha =  track_sha_a;
+        } else if(track_sha_b){
+           newest_sha =  track_sha_b;
         }
 
-        if(newest_sha == sha_a){
+        if(newest_sha == track_sha_a){
             side_winner = side_a
             side_victim = side_b
-        } else if(newest_sha == sha_b){
+        } else if(newest_sha == track_sha_b){
             side_winner = side_b
             side_victim = side_a
         } else {
@@ -331,7 +332,9 @@ function set_victim_refspec(    ref, sha_a, sha_a_txt, sha_b, sha_b_txt, cmd, ne
             continue;
         }
 
-        trace("victim-solving: " ref " on " origin[side_winner] " beat " origin[side_victim] " with " sha_a_txt " vs " sha_b_txt);
+        track_sha_a_txt = track_sha_a ? track_sha_a : "<no-sha>"
+        track_sha_b_txt = track_sha_b ? track_sha_b : "<no-sha>"
+        trace("victim-solving: " ref " on " origin[side_winner] " beat " origin[side_victim] " with " track_sha_a_txt " vs " track_sha_b_txt);
 
         out_push[side_victim] = out_push[side_victim] "  +" refs[ref][track[side_winner]][ref_key] ":" refs[ref][remote[side_victim]][ref_key];
 
