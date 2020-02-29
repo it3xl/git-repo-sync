@@ -176,12 +176,12 @@ function sync_pass(){
     del_spec="${proc_list[0]}";
     notify_del="${proc_list[1]//$env_awk_newline_substitution/$'\n'}";
 
-    push_spec1="${proc_list[2]}";
-    push_spec2="${proc_list[3]}";
+    push_spec_a="${proc_list[2]}";
+    push_spec_b="${proc_list[3]}";
     notify_solving="${proc_list[4]//$env_awk_newline_substitution/$'\n'}";
 
-    post_fetch_spec1="${proc_list[5]}";
-    post_fetch_spec2="${proc_list[6]}";
+    post_fetch_spec_a="${proc_list[5]}";
+    post_fetch_spec_b="${proc_list[6]}";
 
     end_of_results="${proc_list[7]}";
 
@@ -191,16 +191,16 @@ function sync_pass(){
         echo "$del_spec"
         echo notify_del is
         echo "$notify_del"
-        echo push_spec1 is
-        echo "$push_spec1"
-        echo push_spec2 is
-        echo "$push_spec2"
+        echo push_spec_a is
+        echo "$push_spec_a"
+        echo push_spec_b is
+        echo "$push_spec_b"
         echo notify_solving is
         echo "$notify_solving"
-        echo post_fetch_spec1 is
-        echo "$post_fetch_spec1"
-        echo post_fetch_spec2 is
-        echo "$post_fetch_spec2"
+        echo post_fetch_spec_a is
+        echo "$post_fetch_spec_a"
+        echo post_fetch_spec_b is
+        echo "$post_fetch_spec_b"
     fi;
     # exit
 
@@ -233,12 +233,12 @@ function sync_pass(){
     fi;
 
 
-    if [[ $env_allow_async == 1 && -n "$push_spec1" && -n "$push_spec2" ]]; then
+    if [[ $env_allow_async == 1 && -n "$push_spec_a" && -n "$push_spec_b" ]]; then
         echo $'\n>' Push Async
 
-        { git push $origin_a $push_spec1 || true; } > "$path_async_output/push1.txt" &
+        { git push $origin_a $push_spec_a || true; } > "$path_async_output/push1.txt" &
         pid_push1=$!
-        { git push $origin_b $push_spec2 || true; } > "$path_async_output/push2.txt" &
+        { git push $origin_b $push_spec_b || true; } > "$path_async_output/push2.txt" &
         pid_push2=$!
         
         push_report1="> Push $origin_a "
@@ -247,22 +247,22 @@ function sync_pass(){
         wait $pid_push2 && push_report2+="(async success)" || push_report2+="(async failure)"
         
         echo $push_report1
-        echo $push_spec1
+        echo $push_spec_a
         cat < "$path_async_output/push1.txt"
 
         echo $push_report2
-        echo $push_spec2
+        echo $push_spec_b
         cat < "$path_async_output/push2.txt"
     else
-        if [[ -n "$push_spec1" ]]; then
+        if [[ -n "$push_spec_a" ]]; then
             echo $'\n>' Push $origin_a
-            echo $push_spec1
-            git push $origin_a $push_spec1 || true
+            echo $push_spec_a
+            git push $origin_a $push_spec_a || true
         fi;
-        if [[ -n "$push_spec2" ]]; then
+        if [[ -n "$push_spec_b" ]]; then
             echo $'\n>' Push $origin_b
-            echo $push_spec2
-            git push $origin_b $push_spec2 || true
+            echo $push_spec_b
+            git push $origin_b $push_spec_b || true
         fi;
     fi;
 
@@ -276,12 +276,12 @@ function sync_pass(){
     fi;
 
 
-    if [[ $env_allow_async == 1 && -n "$post_fetch_spec1" && -n "$post_fetch_spec2" ]]; then
+    if [[ $env_allow_async == 1 && -n "$post_fetch_spec_a" && -n "$post_fetch_spec_b" ]]; then
         echo $'\n>' Post-fetch Async
 
-        git fetch --no-tags $origin_a $post_fetch_spec1 > "$path_async_output/post_fetch1.txt" &
+        git fetch --no-tags $origin_a $post_fetch_spec_a > "$path_async_output/post_fetch1.txt" &
         pid_post_fetch1=$!
-        git fetch --no-tags $origin_b $post_fetch_spec2 > "$path_async_output/post_fetch2.txt" &
+        git fetch --no-tags $origin_b $post_fetch_spec_b > "$path_async_output/post_fetch2.txt" &
         pid_post_fetch2=$!
         
         post_fetch_report1="> Post-fetch $origin_a "
@@ -290,22 +290,22 @@ function sync_pass(){
         wait $pid_post_fetch2 && post_fetch_report2+="(async success)" || post_fetch_report2+="(async failure)"
         
         echo $post_fetch_report1
-        echo $post_fetch_spec1
+        echo $post_fetch_spec_a
         cat < "$path_async_output/post_fetch1.txt"
 
         echo $post_fetch_report2
-        echo $post_fetch_spec2
+        echo $post_fetch_spec_b
         cat < "$path_async_output/post_fetch2.txt"
     else
-        if [[ -n "$post_fetch_spec1" ]]; then
+        if [[ -n "$post_fetch_spec_a" ]]; then
             echo $'\n>' Post-fetch $origin_a
-            echo $post_fetch_spec1
-            git fetch --no-tags $origin_a $post_fetch_spec1
+            echo $post_fetch_spec_a
+            git fetch --no-tags $origin_a $post_fetch_spec_a
         fi;
-        if [[ -n "$post_fetch_spec2" ]]; then
+        if [[ -n "$post_fetch_spec_b" ]]; then
             echo $'\n>' Post-fetch $origin_b
-            echo $post_fetch_spec2
-            git fetch --no-tags $origin_b $post_fetch_spec2
+            echo $post_fetch_spec_b
+            git fetch --no-tags $origin_b $post_fetch_spec_b
         fi;
     fi;
 }
