@@ -20,16 +20,20 @@ function unlock_deletion(    rr_a, rr_b, tr_a, tr_b){
     if(!tr_a || !tr_b)
         return;
 
-    deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch doesn't match everywhere"
+    # Blocks any deletion if must_exist_branch refs are unmatched everywhere.
+    # Now I'm considering that this hearts rare-sync scenarios.
+    if(false){
+        deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch doesn't match everywhere"
 
-    if(rr_a != rr_b)
-        return;
+        if(rr_a != rr_b)
+            return;
 
-    if(tr_a != tr_b)
-        return;
-        
-    if(rr_a != tr_b)
-        return;
+        if(tr_a != tr_b)
+            return;
+            
+        if(rr_a != tr_b)
+            return;
+    }
     
     deletion_blocked_by = ""
     deletion_allowed = 1;
