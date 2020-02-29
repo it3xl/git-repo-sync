@@ -57,7 +57,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
         # I.e. you can replace remote repos all at once, as gitSync will be the source of truth.
         # But if you don't run gitSync for a while and have deleted a branch on both side repos manually then gitSync will recreate it.
         # Re-delete the branch again and use gitSync. Silly))
-        a_restore[ref];
+        a_restore_both[ref];
 
         return;
     }
@@ -113,7 +113,7 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
                 a_del[aside][ref];
             }else{
                 trace(ref "; action-blocked-del-victim-restore on " origin[aside] "; disappeared from " origin[side]);
-                a_restore[ref];
+                a_restore_del[ref];
             }
 
             return 1;
@@ -129,10 +129,10 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
 
             trace(ref "; " action_key " on " origin[aside] "; disappeared from " origin[side]);
             a_conv_solve[ref];
+            append_by_val(out_notify_solving, "blocked-del-conventional-ref | " prefix[side] " | " ref " | " action_key " | restoring-to:" refs[ref][track[side]][sha_key]);
 
             return 1;
         }
-
         
         trace(ref ": action-del-conv on " origin[aside] "; it is disappeared from " origin[side]);
         a_del[aside][ref];
@@ -239,14 +239,26 @@ function victim_move_to_refspec(ref, remote_sha, track_sha,    ref_item, action_
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
 }
-function actions_to_operations(    side, aside, ref, ref_owner){
-    for(ref in a_restore){
+function actions_to_operations(    side, aside, ref, track_sha, remote_sha, ref_owner){
+    for(ref in a_restore_both){
         for(side in sides){
-            if(!refs[ref][track[side]][sha_key]){
+            track_sha = refs[ref][track[side]][sha_key];
+            if(!track_sha){
                 continue;
             }
             op_push_restore[side][ref];
-            #op_post_fetch[side][ref];
+            append_by_val(out_notify_solving, "restore-tracked | " side " | " ref " | restoring-to:" track_sha);
+        }
+    }
+    for(ref in a_restore_del){
+        for(side in sides){
+            track_sha = refs[ref][track[side]][sha_key];
+            remote_sha = refs[ref][remote[side]][sha_key]
+            if(remote_sha){
+                continue;
+            }
+            op_push_restore[side][ref];
+            append_by_val(out_notify_solving, "blocked-del-victim-restore | " side " | " ref " | restoring-to:" sha);
         }
     }
 
@@ -268,10 +280,8 @@ function actions_to_operations(    side, aside, ref, ref_owner){
 
             if(refs[ref][remote[side]][sha_key]){
                 op_push_nff[aside][ref];
-                #op_post_fetch[aside][ref];
             } else if(refs[ref][remote[aside]][sha_key]){
                 op_push_nff[side][ref];
-                #op_post_fetch[side][ref];
             }
         }
     }
@@ -314,7 +324,7 @@ function operations_to_refspecs(    side, aside, ref){
     # We may use post fetching as workaround for network fails and program interruptions.
     # Also FF-updating may fail in case of rare conflicting with a remote repo.
     # Without the post fetching these cases will not be resolved ever.
-    # But we don't use it for now as we've migrated to preprocessing git fetching.
+    # But we don't use it for now as we migrated to preprocessing git fetching.
     for(side in op_post_fetch){
         for(ref in op_post_fetch[side]){
             out_post_fetch[side] = out_post_fetch[side] "  +" refs[ref][remote[side]][ref_key] ":" refs[ref][track[side]][ref_key];
