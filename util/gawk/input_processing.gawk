@@ -146,5 +146,7 @@ function prefix_name_key() { # Generates a common key for all 4 locations of eve
     split($3, split_refs, ref_prefix);
     $3 = split_refs[2];
 }
-
+END {
+    process_restore_side_state();
+}
 

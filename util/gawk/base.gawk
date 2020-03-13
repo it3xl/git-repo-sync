@@ -1,6 +1,19 @@
 @include "util.gawk"
 
 function unlock_deletion(    rr_a, rr_b, tr_a, tr_b){
+    if(restore_side[side_both]){
+        deletion_blocked_by = "Deletion blocked as all sides need to be restored"
+        return;
+    }
+    if(restore_side[side_a]){
+        deletion_blocked_by = "Deletion blocked as side A needs to be restored"
+        return;
+    }
+    if(restore_side[side_b]){
+        deletion_blocked_by = "Deletion blocked as side B needs to be restored"
+        return;
+    }
+
     if(!must_exist_branch){
         deletion_blocked_by = "Deletion blocked as a branch that must exist on all repos isn't provided in project configuration settings"
         return;
@@ -68,6 +81,23 @@ function append_by_val(host, addition){
     host[val] = host[val] (host[val] ? newline_substitution : "") addition;
 }
 
+function process_restore_side_state(    not_empty, remote_sha){
+    for (side in sides) {
+        for (ref in refs) {
+            remote_sha = refs[ref][remote[side]][sha_key];
+            if(!remote_sha)
+                continue;
+
+            not_empty[side] = 1;
+            break;
+        }
+    }
+
+    restore_side[side_a] = !not_empty[side_a]
+    restore_side[side_b] = !not_empty[side_b]
+    restore_side[side_any] = restore_side[side_a] || restore_side[side_b];
+    restore_side[side_both] = restore_side[side_a] && restore_side[side_b];
+}
 
 
 

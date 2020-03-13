@@ -8,6 +8,9 @@ BEGIN { # Constants.
 
     side_a = "a";
     side_b = "b";
+    
+    side_any = "side_any";
+    side_both = "side_both";
 
     sides[side_a] = side_a;
     sides[side_b] = side_b;

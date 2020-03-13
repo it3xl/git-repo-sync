@@ -28,6 +28,9 @@ function main_processing(    ref){
     refspecs_to_stream();
 }
 function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_type){
+    if(restore_side[side_any])
+        return;
+
     for(side in sides){
         remote_sha[side] = refs[ref][remote[side]][sha_key];
         track_sha[side] = refs[ref][track[side]][sha_key];
@@ -239,15 +242,37 @@ function victim_move_to_refspec(ref, remote_sha, track_sha,    ref_item, action_
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
 }
-function actions_to_operations(    side, aside, ref, track_sha, remote_sha, ref_owner){
+function actions_to_operations(    side, aside, ref, restore_both, track_sha, another_track_sha, remote_sha, ref_owner){
+    restore_both = restore_side[side_both];
+    for(side in sides){
+        if(!restore_side[side]){
+            continue
+        }
+        for(ref in refs){
+            track_sha = refs[ref][track[side]][sha_key];
+            if(!track_sha){
+                continue;
+            }
+            if(restore_both){
+                op_push_restore_from_track[side][ref];
+                append_by_val(out_notify_solving, "restore-both-sides | " side " | " ref " | restoring-to:" track_sha);
+            }else{
+                aside = asides[side];
+                another_track_sha = refs[ref][track[aside]][sha_key];
+
+                op_push_restore_from_another[side][ref];
+                append_by_val(out_notify_solving, "restore-side-from-another | " side " | " ref " | restoring-to:" another_track_sha);
+            }
+        }
+    }
     for(ref in a_restore_both){
         for(side in sides){
             track_sha = refs[ref][track[side]][sha_key];
             if(!track_sha){
                 continue;
             }
-            op_push_restore[side][ref];
-            append_by_val(out_notify_solving, "restore-tracked | " side " | " ref " | restoring-to:" track_sha);
+            op_push_restore_from_track[side][ref];
+            append_by_val(out_notify_solving, "restore-both-tracked | " side " | " ref " | restoring-to:" track_sha);
         }
     }
     for(ref in a_restore_del){
@@ -257,7 +282,7 @@ function actions_to_operations(    side, aside, ref, track_sha, remote_sha, ref_
             if(remote_sha){
                 continue;
             }
-            op_push_restore[side][ref];
+            op_push_restore_from_track[side][ref];
             append_by_val(out_notify_solving, "blocked-del-victim-restore | " side " | " ref " | restoring-to:" sha);
         }
     }
@@ -295,9 +320,16 @@ function operations_to_refspecs(    side, aside, ref){
         }
     }
 
-    for(side in op_push_restore){
-        for(ref in op_push_restore[side]){
+    for(side in op_push_restore_from_track){
+        for(ref in op_push_restore_from_track[side]){
             out_push[side] = out_push[side] "  +" refs[ref][track[side]][ref_key] ":" refs[ref][remote[side]][ref_key];
+        }
+    }
+
+    for(side in op_push_restore_from_another){
+        aside = asides[side];
+        for(ref in op_push_restore_from_another[side]){
+            out_push[side] = out_push[side] "  +" refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key];
         }
     }
 
