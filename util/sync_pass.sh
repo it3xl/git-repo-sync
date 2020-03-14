@@ -173,7 +173,7 @@ function sync_pass(){
     fi;
     # exit
 
-    del_spec="${proc_list[0]}";
+    remove_tracking_spec="${proc_list[0]}";
     notify_del="${proc_list[1]//$env_awk_newline_substitution/$'\n'}";
 
     push_spec_a="${proc_list[2]}";
@@ -187,8 +187,8 @@ function sync_pass(){
 
     if [[ $env_trace_refs == 1 ]]; then
         echo
-        echo del_spec is
-        echo "$del_spec"
+        echo remove_tracking_spec is
+        echo "$remove_tracking_spec"
         echo notify_del is
         echo "$notify_del"
         echo push_spec_a is
@@ -217,10 +217,9 @@ function sync_pass(){
 
     mkdir -p "$path_async_output"
 
-    if [[ -n "$del_spec" ]]; then
+    if [[ -n "$remove_tracking_spec" ]]; then
         echo $'\n>' Delete branches
-        #echo $del_spec
-        git branch --delete --force --remotes $del_spec
+        git branch --delete --force --remotes $remove_tracking_spec
     fi;
 
     if [[ -n "$notify_del" ]]; then

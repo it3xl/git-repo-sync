@@ -53,14 +53,10 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
     is_victim = index(ref, pref_victim) == 1;
 
     if(remote_sha[empty]){
-        # As we here this means that remote repos don't know the current ref but gitSync knows it somehow.
+        # A branch in the ref was deleted manually in both repos.
 
-        trace(ref ": action-restore on both remotes; is unknown");
-        # This actions supports independents of gitSync from its remoter repos.
-        # I.e. you can replace remote repos all at once, as gitSync will be the source of truth.
-        # But if you don't run gitSync for a while and have deleted a branch on both side repos manually then gitSync will recreate it.
-        # Re-delete the branch again and use gitSync. Silly))
-        a_restore_both[ref];
+        trace(ref ": action-remove-tracking-as-unknown-on-both-remotes");
+        a_remove_tracking_both[ref];
 
         return;
     }
@@ -71,7 +67,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
         trace("!Warning!");
         trace("!! Something went wrong for " ref ". It is still untracked.");
         trace("!! Possibly the program or the network were interrupted.");
-        trace("!! We will try to sync it during the second sync pass.");
+        trace("!! We will try to sync it later (during the second sync pass).");
 
         return;
     }
@@ -265,14 +261,14 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
             }
         }
     }
-    for(ref in a_restore_both){
+    for(ref in a_remove_tracking_both){
         for(side in sides){
             track_sha = refs[ref][track[side]][sha_key];
             if(!track_sha){
                 continue;
             }
-            op_push_restore_from_track[side][ref];
-            append_by_val(out_notify_solving, "restore-both-tracked | " side " | " ref " | restoring-to:" track_sha);
+            op_remove_both_tracking[side][ref];
+            append_by_val(out_notify_solving, "tracking-removed | " side " | " ref " | " track_sha);
         }
     }
     for(ref in a_restore_del){
@@ -312,10 +308,16 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
     }
 }
 function operations_to_refspecs(    side, aside, ref){
+    for(side in op_remove_both_tracking){
+        for(ref in op_remove_both_tracking[side]){
+            out_remove_tracking = out_remove_tracking "  " origin[side] "/" ref;
+        }
+    }
+
     for(side in sides){
         for(ref in op_del_track){
             if(refs[ref][track[side]][sha_key]){
-                out_del = out_del "  " origin[side] "/" ref;
+                out_remove_tracking = out_remove_tracking "  " origin[side] "/" ref;
             }
         }
     }
@@ -411,7 +413,7 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt,
 }
 
 function refspecs_to_stream(){
-    print out_del;
+    print out_remove_tracking;
     print out_notify_del[val];
 
     print out_push[side_a];
