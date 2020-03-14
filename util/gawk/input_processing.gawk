@@ -14,7 +14,7 @@ BEGIN { # Parameters.
 function initial_states_processing(    side, split_arr, split_val, ind, ref, val, sha){
     must_exist_branch = ENVIRON["must_exist_branch"];
     if(!must_exist_branch)
-        write("Deletion is blocked. Parameter must_exist_branch is empty");
+        write("Deletion is blocked as the must_exist_branch variable is empty");
         
     origin_a = ENVIRON["origin_a"];
     if(!origin_a){

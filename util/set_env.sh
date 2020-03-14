@@ -58,7 +58,7 @@
         if [[ ! ${url_b:+1} ]]; then missed_repo_settings+="url_b  "; fi
 
         if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo properties must be set:  $missed_repo_settings"; fi
-        if [[ ! ${must_exist_branch:+1} ]]; then echo "Warning! The refs' deletion will not be working without setting the must_exist_branch property"; fi
+        if [[ ! ${must_exist_branch:+1} ]]; then echo "Warning! Refs' deletion will be ignored until must_exist_branch variable is unset"; fi
 
         if [[ ${missed_repo_settings:+1} ]]; then
             exit 102;
