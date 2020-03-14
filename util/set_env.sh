@@ -110,16 +110,8 @@
         export pref_victim
         export must_exist_branch
 
-        pref_a_conv_safe=${pref_a_conv: : -1}
-        pref_a_conv_safe=${pref_a_conv_safe//\//-}
-        export pref_a_conv_safe
-
-        pref_b_conv_safe=${pref_b_conv: : -1}
-        pref_b_conv_safe=${pref_b_conv_safe//\//-}
-        export pref_b_conv_safe
-
-        export origin_a=orig_a_$pref_a_conv_safe
-        export origin_b=orig_b_$pref_b_conv_safe
+        export origin_a=origin_a
+        export origin_b=origin_b
 
         export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 
