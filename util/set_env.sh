@@ -78,7 +78,7 @@
         pref_b_conv is '$pref_b_conv'"
 
         if [[ "$pref_a_conv" && "$pref_a_conv" == "$pref_b_conv" ]]; then
-            echo "Error! Exit! We expect that you assign different letters for conventional ref prefixes. $conventional_prefixes_trace_values"
+            echo "Error! Exit! We expected you to assign different values for conventional ref prefixes. $conventional_prefixes_trace_values"
 
             exit 103;
         fi;
