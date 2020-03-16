@@ -48,8 +48,6 @@
 
         if [[ ${git_sync_project_folder:+1} ]]; then
             env_project_folder=$git_sync_project_folder
-        elif [[ ${url_a:+1} || ${url_b:+1} ]]; then
-            env_project_folder=default_env_sync_project
         else
             git_sync_env_run_settings_script "$@"
         fi
