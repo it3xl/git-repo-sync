@@ -49,7 +49,7 @@
 # @ You may limit manipulations of conventional refs for a non-owner remote repository.
 # @ See further parameters.
 #
-# pref_a_conv=a/
+# pref_a_conv=a-
 # pref_b_conv=b-
 
 

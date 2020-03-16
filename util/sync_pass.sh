@@ -39,8 +39,8 @@ function sync_pass(){
     ((++git_sync_pass_num_required))
     echo '!' Running $git_sync_pass_num_required sync pass
 
-    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
-    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
+    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_a)
+    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_b)
 
     if [[ $env_trace_refs == 1 ]]; then
         echo
@@ -92,7 +92,7 @@ function sync_pass(){
         echo
         
         # !!! EXIT !!!
-        exit 2002;
+        exit 22;
     fi;
 
     if [[ $env_trace_refs == 1 ]]; then
@@ -142,8 +142,8 @@ function sync_pass(){
     fi;
 
 
-    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
-    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
+    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_a)
+    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_b)
 
     if [[ $env_trace_refs == 1 ]]; then
         echo
@@ -211,7 +211,7 @@ function sync_pass(){
         echo
         
         # !!! EXIT !!!
-        exit 2003
+        exit 23
     fi;
 
 

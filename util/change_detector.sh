@@ -47,8 +47,8 @@ else
 fi;
 
 
-track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_a/")
-track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" "refs/remotes/$origin_b/")
+track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_a)
+track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_b)
 
 ## remote_count=$(echo "$remote_refs_a" | awk 'END { print NR }';)
 ## track_count=$(echo "$track_refs_a" | awk 'END { print NR }';)

@@ -19,7 +19,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     origin_a = ENVIRON["origin_a"];
     if(!origin_a){
         write("Error. Parameter origin_a is empty");
-        exit 1002;
+        exit 82;
     }
     origin[side_a] = origin_a;
     origin_a = ""
@@ -27,30 +27,32 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     origin_b = ENVIRON["origin_b"];
     if(!origin_b){
         write("Error. Parameter origin_b is empty");
-        exit 1003;
+        exit 83;
     }
     origin[side_b] = origin_b;
     origin_b = ""
     
     pref_a_conv = ENVIRON["pref_a_conv"];
     if(!pref_a_conv){
-        write("Error. Parameter pref_a_conv is empty");
-        exit 1004;
+        d_trace("The conventional B prefix isn't defined. Conventional branches sync functionality is disabled.")
+        # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
+        pref_a_conv = "{pref_a_conv var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
     }
     prefix[side_a] = pref_a_conv;
     pref_a_conv = ""
     
     pref_b_conv = ENVIRON["pref_b_conv"];
     if(!pref_b_conv){
-        write("Error. Parameter pref_b_conv is empty");
-        exit 1005;
+        d_trace("The conventional B prefix isn't defined. Conventional branches sync functionality is disabled.")
+        # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
+        pref_b_conv = "{pref_b_conv var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
     }
     prefix[side_b] = pref_b_conv;
     pref_b_conv = ""
 
     pref_victim = ENVIRON["pref_victim"];
     if(!pref_victim){
-        trace("The victim branches are isn't defined. This functionality is ignored.")
+        d_trace("The victim prefix isn't defined. Victim branches sync functionality is disabled.")
         # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
         pref_victim = "{pref_victim var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names. .. .~^:}";
     }
@@ -58,7 +60,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     newline_substitution = ENVIRON["env_awk_newline_substitution"];
     if(!newline_substitution){
         write("Error. Parameter newline_substitution is empty");
-        exit 1006;
+        exit 86;
     }
 
     for(side in sides){

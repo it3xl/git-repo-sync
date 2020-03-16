@@ -100,13 +100,23 @@
             exit 104;
         fi;
 
-        if [[ ( ! "$pref_a_conv" || ! "$pref_a_conv" ) || ! "$pref_victim" ]]; then
+        if [[ ( ! "$pref_a_conv" || ! "$pref_b_conv" ) && ! "$pref_victim" ]]; then
             echo "Error! Exit! You have to configure victim or both conventional ref prefixes. $prefixes_trace_values"
 
             exit 105;
         fi;
-        sync_ref_specs="$pref_a_conv* $pref_b_conv* ${pref_victim:+${pref_victim}*}"
+
+        sync_ref_specs="${pref_a_conv:+${pref_a_conv}*  }${pref_b_conv:+${pref_b_conv}*  }${pref_victim:+${pref_victim}*  }"
         export sync_ref_specs
+
+        export origin_a=origin_a
+        export origin_b=origin_b
+
+        track_ref_specs_a="${pref_a_conv:+refs/remotes/$origin_a/${pref_a_conv}*  }${pref_b_conv:+refs/remotes/$origin_a/${pref_b_conv}*  }${pref_victim:+refs/remotes/$origin_a/${pref_victim}*  }"
+        export track_ref_specs_a
+
+        track_ref_specs_b="${pref_a_conv:+refs/remotes/$origin_b/${pref_a_conv}*  }${pref_b_conv:+refs/remotes/$origin_b/${pref_b_conv}*  }${pref_victim:+refs/remotes/$origin_b/${pref_victim}*  }"
+        export track_ref_specs_b
 
         export pref_a_conv
         export url_a
@@ -114,9 +124,6 @@
         export url_b
         export pref_victim
         export must_exist_branch
-
-        export origin_a=origin_a
-        export origin_b=origin_b
 
         export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 
