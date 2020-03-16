@@ -6,28 +6,35 @@
 
     function git_sync_env_run_settings_script(){
 
-        file_name_repo_settings="${1-}"
+        local file_name_repo_settings="${1-}"
 
         [[ $# -eq 0 ]] && {
             file_name_repo_settings="default_sync_project.sh"
         }
 
         relative_settings_file="$path_git_sync/$file_name_repo_settings"
+        relative_sibling_settings_file="$path_git_sync/../git-repo-sync.repo_settings/$file_name_repo_settings"
+
         absolute_settings_file="$file_name_repo_settings"
         subfolder_settings_file="$path_git_sync/repo_settings/$file_name_repo_settings"
+        
+
         if [[ -f "$relative_settings_file" ]]; then
-            echo Settings. Using relative. $relative_settings_file
+            echo Settings. Using relative config file. $relative_settings_file
             source "$relative_settings_file"
+        elif [[ -f "$relative_sibling_settings_file" ]]; then
+            echo Settings. Injecting sibling relative config file. $relative_sibling_settings_file
+            source "$relative_sibling_settings_file"
         elif [[ -f "$absolute_settings_file" ]]; then
-            echo Settings. Using absolute. $absolute_settings_file
+            echo Settings. Using absolute config file. $absolute_settings_file
             source "$absolute_settings_file"
         elif [[ -f "$subfolder_settings_file" ]]; then
-            echo Settings. Using repo_settings subfolder. $subfolder_settings_file
+            echo Settings. Using repo_settings subfolder config file. $subfolder_settings_file
             source "$subfolder_settings_file"
         else
             echo "Error! Exit! The first parameter must be an absolute path, relative path or a name of a file with your sync-project repo settings."
             echo The '"'$file_name_repo_settings'"' is not recognized as a file.
-            
+
             exit 101;
         fi
 
@@ -56,7 +63,7 @@
         if [[ ! ${url_b:+1} ]]; then missed_repo_settings+="url_b  "; fi
 
         if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo properties must be set:  $missed_repo_settings"; fi
-        if [[ ! ${must_exist_branch:+1} ]]; then echo "Warning! Refs' deletion will be ignored until must_exist_branch variable is unset"; fi
+        if [[ ! ${must_exist_branch:+1} ]]; then echo "Warning! Deletion of refs will be ignored as must_exist_branch variable is unset"; fi
 
         if [[ ${missed_repo_settings:+1} ]]; then
             exit 102;
