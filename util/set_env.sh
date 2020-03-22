@@ -111,10 +111,16 @@
         export origin_a=origin_a
         export origin_b=origin_b
 
-        track_ref_specs_a="${pref_a_conv:+refs/remotes/$origin_a/${pref_a_conv}*  }${pref_b_conv:+refs/remotes/$origin_a/${pref_b_conv}*  }${pref_victim:+refs/remotes/$origin_a/${pref_victim}*  }"
+        track_ref_specs_a="${pref_a_conv:+refs/remotes/$origin_a/${pref_a_conv}*  }`
+                          `${pref_b_conv:+refs/remotes/$origin_a/${pref_b_conv}*  }`
+                          `${pref_victim:+refs/remotes/$origin_a/${pref_victim}*  }`
+                          `refs/remotes/$origin_a/$same_sha_sync_enabling_branch"
         export track_ref_specs_a
 
-        track_ref_specs_b="${pref_a_conv:+refs/remotes/$origin_b/${pref_a_conv}*  }${pref_b_conv:+refs/remotes/$origin_b/${pref_b_conv}*  }${pref_victim:+refs/remotes/$origin_b/${pref_victim}*  }"
+        track_ref_specs_b="${pref_a_conv:+refs/remotes/$origin_b/${pref_a_conv}*  }`
+                          `${pref_b_conv:+refs/remotes/$origin_b/${pref_b_conv}*  }`
+                          `${pref_victim:+refs/remotes/$origin_b/${pref_victim}*  }`
+                          `refs/remotes/$origin_b/$same_sha_sync_enabling_branch"
         export track_ref_specs_b
 
         export pref_a_conv

@@ -1,5 +1,5 @@
-
 @include "base.gawk"
+
 
 BEGIN {
     write_after_line("> main processing");
@@ -28,7 +28,7 @@ function main_processing(    ref){
     refspecs_to_stream();
 }
 function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_type){
-    if(restore_side[side_any])
+    if(remote_empty[side_any])
         return;
 
     for(side in sides){
@@ -50,7 +50,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
     track_sha[empty] = !(track_sha[side_a] || track_sha[side_b]);
     track_sha[empty_any] = !track_sha[side_a] || !track_sha[side_b];
 
-    is_victim = index(ref, pref_victim) == 1;
+    is_victim = use_victim_sync(ref);
 
     if(remote_sha[empty]){
         # A branch in the ref was deleted manually in both repos.
@@ -239,9 +239,9 @@ function victim_move_to_refspec(ref, remote_sha, track_sha,    ref_item, action_
     return 1;
 }
 function actions_to_operations(    side, aside, ref, restore_both, track_sha, another_track_sha, remote_sha, ref_owner){
-    restore_both = restore_side[side_both];
+    restore_both = remote_empty[side_both];
     for(side in sides){
-        if(!restore_side[side]){
+        if(!remote_empty[side]){
             continue
         }
         for(ref in refs){

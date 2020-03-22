@@ -1,15 +1,16 @@
-@include "util.gawk"
+@include "global.gawk"
+
 
 function unlock_deletion(){
-    if(restore_side[side_both]){
+    if(remote_empty[side_both]){
         deletion_blocked_by = "Deletion blocked as all sides need to be restored"
         return;
     }
-    if(restore_side[side_a]){
+    if(remote_empty[side_a]){
         deletion_blocked_by = "Deletion blocked as side A needs to be restored"
         return;
     }
-    if(restore_side[side_b]){
+    if(remote_empty[side_b]){
         deletion_blocked_by = "Deletion blocked as side B needs to be restored"
         return;
     }
@@ -46,24 +47,9 @@ function append_by_val(host, addition){
     host[val] = host[val] (host[val] ? newline_substitution : "") addition;
 }
 
-function process_restore_side_state(    not_empty, remote_sha){
-    for (side in sides) {
-        for (ref in refs) {
-            remote_sha = refs[ref][remote[side]][sha_key];
-            if(!remote_sha)
-                continue;
-
-            not_empty[side] = 1;
-            break;
-        }
-    }
-
-    restore_side[side_a] = !not_empty[side_a]
-    restore_side[side_b] = !not_empty[side_b]
-    restore_side[side_any] = restore_side[side_a] || restore_side[side_b];
-    restore_side[side_both] = restore_side[side_a] && restore_side[side_b];
+function use_victim_sync(ref){
+    return ref == same_sha_sync_enabling_branch || index(ref, pref_victim) == 1;
 }
-
 
 
 

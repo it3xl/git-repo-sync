@@ -1,5 +1,5 @@
-@include "util.gawk"
-@include "git_const.gawk"
+@include "global.gawk"
+
 
 BEGIN { # Constants.
     val = "val";
@@ -156,8 +156,26 @@ function prefix_name_key() { # Generates a common key for all 4 locations of eve
     $3 = split_refs[2];
 }
 END {
-    delete refs[same_sha_sync_enabling_branch];
+    # delete refs[same_sha_sync_enabling_branch];
 
-    process_restore_side_state();
+    process_remote_empty();
+}
+
+function process_remote_empty(    not_empty, remote_sha){
+    for (side in sides) {
+        for (ref in refs) {
+            remote_sha = refs[ref][remote[side]][sha_key];
+            if(!remote_sha)
+                continue;
+
+            not_empty[side] = 1;
+            break;
+        }
+    }
+
+    remote_empty[side_a] = !not_empty[side_a]
+    remote_empty[side_b] = !not_empty[side_b]
+    remote_empty[side_any] = remote_empty[side_a] || remote_empty[side_b];
+    remote_empty[side_both] = remote_empty[side_a] && remote_empty[side_b];
 }
 

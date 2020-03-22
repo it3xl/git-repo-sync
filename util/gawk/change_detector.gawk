@@ -1,5 +1,4 @@
-@include "util.gawk"
-@include "git_const.gawk"
+@include "global.gawk"
 
 
 BEGIN {
@@ -44,9 +43,11 @@ function parse_refs(env_var, source_key, side,    split_arr, ind, val, split_val
     }
 }
 END {
-    changed = 0;
+    set_side_emptiness();
 
     block_sync();
+
+    changed = 0;
 
     for (ref in refs) {
         a_remote = refs[ref][side_a][remote]
@@ -75,39 +76,52 @@ END {
     write("> change detecting end");
 }
 
-function block_sync(    sha_a, sha_b, side){
-    sha_a = refs[same_sha_sync_enabling_branch][side_a][remote];
-    sha_b = refs[same_sha_sync_enabling_branch][side_b][remote];
+function set_side_emptiness(    has){
+    for (side in sides) {
+        for (ref in refs) {
+            if(!refs[ref][side][remote])
+                continue;
 
-    delete refs[same_sha_sync_enabling_branch];
-
-    if(!sha_a && !sha_b){
-        write("Syncing blocked as all remote repos have no \"" same_sha_sync_enabling_branch "\" branch");
-        
-        exit 91;
+            has[side][remote] = 1;
+            break;
+        }
     }
 
-    if(sha_a && sha_b && sha_a != sha_b){
-        write("Syncing blocked as \"" same_sha_sync_enabling_branch "\" branch points to different commits in remote Git-repositories");
-        write(sha_a "  vs  " sha_b)
-
-        exit 92;
-    }
-
-    block_sync_non_empty(sha_a, side_a);
-    block_sync_non_empty(sha_b, side_b);
+    emptiness[side_a][remote] = !has[side_a][remote]
+    emptiness[side_b][remote] = !has[side_b][remote]
+    emptiness[side_any][remote] = emptiness[side_a][remote] || emptiness[side_b][remote];
+    emptiness[side_both][remote] = emptiness[side_a][remote] && emptiness[side_b][remote];
 }
 
-function block_sync_non_empty(side_sha, side,    ref){
-    if(side_sha){
+function block_sync(    ref){
+    ref = same_sha_sync_enabling_branch;
+
+    if(emptiness[side_both][remote]){
+
+        if(!refs[ref][side_a][track] &&
+            !refs[ref][side_b][track]){
+
+            write("Syncing blocked as all remote repos have no \"" ref "\" branch");
+            
+            exit 91;
+        }
+
         return;
     }
 
-    for(ref in refs){
-        if(refs[ref][side][remote]){
-            write("Syncing blocked as \"" same_sha_sync_enabling_branch "\" branch doesn't exist in the \""side"\" remote repo");
-
-            exit 92;
-        }
-    }
+    _block_sync_by_side(refs[ref][side_a][remote], side_a);
+    _block_sync_by_side(refs[ref][side_b][remote], side_b);
 }
+function _block_sync_by_side(remote_sha, side,    ref){
+    if(remote_sha){
+        return;
+    }
+    if(emptiness[side][remote]){
+        return;
+    }
+
+    write("Syncing blocked as \"" same_sha_sync_enabling_branch "\" branch doesn't exist in the \""side"\" remote repo");
+
+    exit 92;
+}
+
