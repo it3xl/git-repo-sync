@@ -5,6 +5,12 @@
 BEGIN {
     write_after_line("> change detecting");
 
+    same_sha_sync_enabling_branch = ENVIRON["same_sha_sync_enabling_branch"];
+    if(!same_sha_sync_enabling_branch){
+        write("Synchronization is blocked as the same_sha_sync_enabling_branch variable is empty");
+        exit 81;
+    }
+
     remote = "remote"
     track = "track"
 
@@ -15,7 +21,8 @@ BEGIN {
     
     exit;
 }
-function parse_refs(env_var, source, side,    split_arr, ind, val, split_val, sha, ref){
+
+function parse_refs(env_var, source_key, side,    split_arr, ind, val, split_val, sha, ref){
     split(ENVIRON[env_var], split_arr, "\n");
 
     for(ind in split_arr){
@@ -33,11 +40,13 @@ function parse_refs(env_var, source, side,    split_arr, ind, val, split_val, sh
             continue;
         }
         
-        refs[ref][side][source] = sha;
+        refs[ref][side][source_key] = sha;
     }
 }
 END {
     changed = 0;
+
+    block_sync();
 
     for (ref in refs) {
         a_remote = refs[ref][side_a][remote]
@@ -66,3 +75,39 @@ END {
     write("> change detecting end");
 }
 
+function block_sync(    sha_a, sha_b, side){
+    sha_a = refs[same_sha_sync_enabling_branch][side_a][remote];
+    sha_b = refs[same_sha_sync_enabling_branch][side_b][remote];
+
+    delete refs[same_sha_sync_enabling_branch];
+
+    if(!sha_a && !sha_b){
+        write("Syncing blocked as all remote repos have no \"" same_sha_sync_enabling_branch "\" branch");
+        
+        exit 91;
+    }
+
+    if(sha_a && sha_b && sha_a != sha_b){
+        write("Syncing blocked as \"" same_sha_sync_enabling_branch "\" branch points to different commits in remote Git-repositories");
+        write(sha_a "  vs  " sha_b)
+
+        exit 92;
+    }
+
+    block_sync_non_empty(sha_a, side_a);
+    block_sync_non_empty(sha_b, side_b);
+}
+
+function block_sync_non_empty(side_sha, side,    ref){
+    if(side_sha){
+        return;
+    }
+
+    for(ref in refs){
+        if(refs[ref][side][remote]){
+            write("Syncing blocked as \"" same_sha_sync_enabling_branch "\" branch doesn't exist in the \""side"\" remote repo");
+
+            exit 92;
+        }
+    }
+}

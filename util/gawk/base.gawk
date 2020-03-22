@@ -1,6 +1,6 @@
 @include "util.gawk"
 
-function unlock_deletion(    rr_a, rr_b, tr_a, tr_b){
+function unlock_deletion(){
     if(restore_side[side_both]){
         deletion_blocked_by = "Deletion blocked as all sides need to be restored"
         return;
@@ -13,42 +13,7 @@ function unlock_deletion(    rr_a, rr_b, tr_a, tr_b){
         deletion_blocked_by = "Deletion blocked as side B needs to be restored"
         return;
     }
-
-    if(!must_exist_branch){
-        deletion_blocked_by = "Deletion blocked as a branch that must exist on all repos isn't provided in project configuration settings"
-        return;
-    }
-
-    rr_a = refs[must_exist_branch][remote[side_a]][sha_key];
-    rr_b = refs[must_exist_branch][remote[side_b]][sha_key];
-
-    tr_a = refs[must_exist_branch][track[side_a]][sha_key];
-    tr_b = refs[must_exist_branch][track[side_b]][sha_key];
-
-    deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch isn't exist on all remote repos"
-    if(!rr_a || !rr_b)
-        return;
-
-    deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch isn't tracked yet"
-    if(!tr_a || !tr_b)
-        return;
-
-    # Blocks any deletion if must_exist_branch refs are unmatched everywhere.
-    # Now I'm considering that this hearts rare-sync scenarios.
-    if(false){
-        deletion_blocked_by = "Deletion blocked as \"" must_exist_branch "\" branch doesn't match everywhere"
-
-        if(rr_a != rr_b)
-            return;
-
-        if(tr_a != tr_b)
-            return;
-            
-        if(rr_a != tr_b)
-            return;
-    }
     
-    deletion_blocked_by = ""
     deletion_allowed = 1;
 }
 function generate_missing_refs(    ref){

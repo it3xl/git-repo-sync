@@ -63,20 +63,19 @@
         if [[ ! ${url_b:+1} ]]; then missed_repo_settings+="url_b  "; fi
 
         if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo properties must be set:  $missed_repo_settings"; fi
-        if [[ ! ${must_exist_branch:+1} ]]; then echo "Warning! Deletion of refs will be ignored as must_exist_branch variable is unset"; fi
 
         if [[ ${missed_repo_settings:+1} ]]; then
             exit 102;
         fi
 
-        ${pref_a_link:+}
-        ${pref_b_link:+}
 
-        ${pref_a_conv:+}
-        ${pref_b_conv:+}
+        same_sha_sync_enabling_branch=${same_sha_sync_enabling_branch:-it3xl-git_repo_sync-enabled}
+
+        pref_a_conv=${pref_a_conv:-}
+        pref_b_conv=${pref_b_conv:-}
 
         # If this var is empty, then we ignore the Victim branches functionality and its "The latest action wins" conflict solving strategy.
-        ${pref_victim:+}
+        pref_victim=${pref_victim:-}
 
         conventional_prefixes_trace_values="
         pref_a_conv is '$pref_a_conv'
@@ -106,7 +105,7 @@
             exit 105;
         fi;
 
-        sync_ref_specs="${pref_a_conv:+${pref_a_conv}*  }${pref_b_conv:+${pref_b_conv}*  }${pref_victim:+${pref_victim}*  }"
+        sync_ref_specs="${pref_a_conv:+${pref_a_conv}*  }${pref_b_conv:+${pref_b_conv}*  }${pref_victim:+${pref_victim}*  }$same_sha_sync_enabling_branch"
         export sync_ref_specs
 
         export origin_a=origin_a
@@ -123,7 +122,7 @@
         export pref_b_conv
         export url_b
         export pref_victim
-        export must_exist_branch
+        export same_sha_sync_enabling_branch
 
         export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 
@@ -159,6 +158,8 @@
 
     }
     git_sync_env_init "$@"
+
+    source "$path_git_sync_util/set_base_logic.sh"
 }
 
 

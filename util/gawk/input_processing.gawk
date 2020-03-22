@@ -12,9 +12,11 @@ BEGIN { # Parameters.
     initial_states_processing();
 }
 function initial_states_processing(    side, split_arr, split_val, ind, ref, val, sha){
-    must_exist_branch = ENVIRON["must_exist_branch"];
-    if(!must_exist_branch)
-        write("Deletion is blocked as the must_exist_branch variable is empty");
+    same_sha_sync_enabling_branch = ENVIRON["same_sha_sync_enabling_branch"];
+    if(!same_sha_sync_enabling_branch){
+        write("Synchronization is blocked as the same_sha_sync_enabling_branch variable is empty");
+        exit 81;
+    }
         
     origin_a = ENVIRON["origin_a"];
     if(!origin_a){
@@ -125,23 +127,28 @@ function file_states_processing() {
 }
 { # Ref states preparation.
     if(!$2){
-        # Empty input stream of an empty refs' var.
+        # Empty input stream of an empty refs' variable or an empty line.
         next;
     }
-        
+    
+    prepare_ref_sates();
+}
+function prepare_ref_sates(    ref){
     prefix_name_key();
 
-    if(index($3, prefix[side_a]) != 1 \
-        && index($3, prefix[side_b]) != 1 \
-        && index($3, pref_victim) != 1 \
+    ref = $3;
+    if(ref != same_sha_sync_enabling_branch \
+        && index(ref, prefix[side_a]) != 1 \
+        && index(ref, prefix[side_b]) != 1 \
+        && index(ref, pref_victim) != 1 \
         ){
-        trace("!unexpected " $2 " (" dest ") " $1 "; branch name (" $3 ") has no allowed prefixes");
+        trace("!unexpected " $2 " (" dest ") " $1 "; branch name (" ref ") has no allowed prefixes");
 
         next;
     }
     
-    refs[$3][dest][sha_key] = $1;
-    refs[$3][dest][ref_key] = $2;
+    refs[ref][dest][sha_key] = $1;
+    refs[ref][dest][ref_key] = $2;
 }
 function prefix_name_key() { # Generates a common key for all 4 locations of every ref.
     $3 = $2
@@ -149,6 +156,8 @@ function prefix_name_key() { # Generates a common key for all 4 locations of eve
     $3 = split_refs[2];
 }
 END {
+    delete refs[same_sha_sync_enabling_branch];
+
     process_restore_side_state();
 }
 
