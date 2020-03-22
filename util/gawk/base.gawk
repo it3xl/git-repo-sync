@@ -19,24 +19,24 @@ function unlock_deletion(){
 }
 function generate_missing_refs(    ref){
     for(ref in refs){
-        if(!refs[ref][remote[side_a]][ref_key]){
-            refs[ref][remote[side_a]][ref_key] = remote_refs_prefix ref;
+        if(!refs[ref][side_a][remote][ref_key]){
+            refs[ref][side_a][remote][ref_key] = remote_refs_prefix ref;
         }
-        if(!refs[ref][remote[side_b]][ref_key]){
-            refs[ref][remote[side_b]][ref_key] = remote_refs_prefix ref;
+        if(!refs[ref][side_b][remote][ref_key]){
+            refs[ref][side_b][remote][ref_key] = remote_refs_prefix ref;
         }
-        if(!refs[ref][track[side_a]][ref_key]){
-            refs[ref][track[side_a]][ref_key] = track_refs_prefix origin[side_a] "/" ref;
+        if(!refs[ref][side_a][track][ref_key]){
+            refs[ref][side_a][track][ref_key] = track_refs_prefix origin[side_a] "/" ref;
         }
-        if(!refs[ref][track[side_b]][ref_key]){
-            refs[ref][track[side_b]][ref_key] = track_refs_prefix origin[side_b] "/" ref;
+        if(!refs[ref][side_b][track][ref_key]){
+            refs[ref][side_b][track][ref_key] = track_refs_prefix origin[side_b] "/" ref;
         }
 
         # d_trace("ref is " ref);
-        # d_trace("track ref_key side_a " refs[ref][track[side_a]][ref_key]);
-        # d_trace("track ref_key side_b " refs[ref][track[side_b]][ref_key]);
-        # d_trace("remote ref_key side_a " refs[ref][remote[side_a]][ref_key]);
-        # d_trace("remote ref_key side_b " refs[ref][remote[side_b]][ref_key]);
+        # d_trace("track ref_key side_a " refs[ref][side_a][track][ref_key]);
+        # d_trace("track ref_key side_b " refs[ref][side_b][track][ref_key]);
+        # d_trace("remote ref_key side_a " refs[ref][side_a][remote][ref_key]);
+        # d_trace("remote ref_key side_b " refs[ref][side_b][remote][ref_key]);
     }
 }
 

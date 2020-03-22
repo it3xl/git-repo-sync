@@ -64,11 +64,6 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
         write("Error. Parameter newline_substitution is empty");
         exit 86;
     }
-
-    for(side in sides){
-        track[side] = "track@" prefix[side];
-        remote[side] = "remote@" prefix[side];
-    }
     
     split(ENVIRON["conv_move"], split_arr, "\n");
     for(ind in split_arr){
@@ -104,23 +99,28 @@ BEGINFILE { # Preparing processing for every portion of refs.
     file_states_processing();
 }
 function file_states_processing() {
-    dest = "";
+    current_dest = "";
+    current_side = "";
     ref_prefix = "";
     switch (++file_num) {
         case 1:
-            dest = remote[side_a];
+            current_dest = remote;
+            current_side = side_a;
             ref_prefix = remote_refs_prefix;
             break;
         case 2:
-            dest = remote[side_b];
+            current_dest = remote;
+            current_side = side_b;
             ref_prefix = remote_refs_prefix;
             break;
         case 3:
-            dest = track[side_a];
+            current_dest = track;
+            current_side = side_a;
             ref_prefix = track_refs_prefix origin[side_a] "/";
             break;
         case 4:
-            dest = track[side_b];
+            current_dest = track;
+            current_side = side_b;
             ref_prefix = track_refs_prefix origin[side_b] "/";
             break;
     }
@@ -142,13 +142,13 @@ function prepare_ref_sates(    ref){
         && index(ref, prefix[side_b]) != 1 \
         && index(ref, pref_victim) != 1 \
         ){
-        trace("!unexpected " $2 " (" dest ") " $1 "; branch name (" ref ") has no allowed prefixes");
+        trace("!unexpected " $2 " in " current_dest " " $1 "; branch name (" ref ") has no allowed prefixes");
 
         next;
     }
     
-    refs[ref][dest][sha_key] = $1;
-    refs[ref][dest][ref_key] = $2;
+    refs[ref][current_side][current_dest][sha_key] = $1;
+    refs[ref][current_side][current_dest][ref_key] = $2;
 }
 function prefix_name_key() { # Generates a common key for all 4 locations of every ref.
     $3 = $2
@@ -164,7 +164,7 @@ END {
 function process_remote_empty(    not_empty, remote_sha){
     for (side in sides) {
         for (ref in refs) {
-            remote_sha = refs[ref][remote[side]][sha_key];
+            remote_sha = refs[ref][side][remote][sha_key];
             if(!remote_sha)
                 continue;
 

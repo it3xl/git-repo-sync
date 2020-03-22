@@ -10,9 +10,6 @@ BEGIN {
         exit 81;
     }
 
-    remote = "remote"
-    track = "track"
-
     parse_refs("remote_refs_a", remote, side_a);
     parse_refs("remote_refs_b", remote, side_b);
     parse_refs("track_refs_a", track, side_a);
@@ -21,7 +18,7 @@ BEGIN {
     exit;
 }
 
-function parse_refs(env_var, source_key, side,    split_arr, ind, val, split_val, sha, ref){
+function parse_refs(env_var, dest_key, side,    split_arr, ind, val, split_val, sha, ref){
     split(ENVIRON[env_var], split_arr, "\n");
 
     for(ind in split_arr){
@@ -39,7 +36,7 @@ function parse_refs(env_var, source_key, side,    split_arr, ind, val, split_val
             continue;
         }
         
-        refs[ref][side][source_key] = sha;
+        refs[ref][side][dest_key] = sha;
     }
 }
 END {

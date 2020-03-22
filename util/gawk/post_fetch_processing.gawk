@@ -32,8 +32,8 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
         return;
 
     for(side in sides){
-        remote_sha[side] = refs[ref][remote[side]][sha_key];
-        track_sha[side] = refs[ref][track[side]][sha_key];
+        remote_sha[side] = refs[ref][side][remote][sha_key];
+        track_sha[side] = refs[ref][side][track][sha_key];
     }
 
     remote_sha[equal] = remote_sha[side_a] == remote_sha[side_b];
@@ -128,7 +128,7 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
 
             trace(ref "; " action_key " on " origin[aside] "; disappeared from " origin[side]);
             a_conv_solve[ref];
-            append_by_val(out_notify_solving, "blocked-del-conventional-ref | " prefix[side] " | " ref " | " action_key " | restoring-to:" refs[ref][track[side]][sha_key]);
+            append_by_val(out_notify_solving, "blocked-del-conventional-ref | " prefix[side] " | " ref " | " action_key " | restoring-to:" refs[ref][side][track][sha_key]);
 
             return 1;
         }
@@ -152,14 +152,14 @@ function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, c
         return;
     }
 
-    cmd = "git merge-base " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key];
+    cmd = "git merge-base " refs[ref][side_a][track][ref_key] " " refs[ref][side_b][track][ref_key];
     
     cmd | getline parent_sha;
     close(cmd);
 
-    if(parent_sha == refs[ref][track[side_a]][sha_key]){
+    if(parent_sha == refs[ref][side_a][track][sha_key]){
         parent_side = side_a;
-    } else if(parent_sha == refs[ref][track[side_b]][sha_key]){
+    } else if(parent_sha == refs[ref][side_b][track][sha_key]){
         parent_side = side_b;
     } else{
         trace(ref " rejected-move; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
@@ -184,11 +184,11 @@ function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, c
         force_key = "+";
         action_key = "action-moving-back";
 
-        append_by_val(out_notify_solving, "moving-back | " prefix[parent_side] " | " ref " | out-of " refs[ref][track[parent_side]][sha_key] " to " refs[ref][track[child_side]][sha_key]);
+        append_by_val(out_notify_solving, "moving-back | " prefix[parent_side] " | " ref " | out-of " refs[ref][parent_side][track][sha_key] " to " refs[ref][child_side][track][sha_key]);
     }
     
     trace(ref " " action_key "; from " origin[parent_side] " to " origin[child_side]);
-    out_push[parent_side] = out_push[parent_side] "  " force_key refs[ref][track[child_side]][ref_key] ":" refs[ref][remote[parent_side]][ref_key];
+    out_push[parent_side] = out_push[parent_side] "  " force_key refs[ref][child_side][track][ref_key] ":" refs[ref][parent_side][remote][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
@@ -233,7 +233,7 @@ function victim_move_to_refspec(ref, remote_sha, track_sha,    ref_item, action_
     target_side = asides[source_side];
 
     trace(ref " action-non-fast-forward to " action_sha);
-    out_push[target_side] = out_push[target_side] "  +" refs[ref][track[source_side]][ref_key] ":" refs[ref][remote[target_side]][ref_key];
+    out_push[target_side] = out_push[target_side] "  +" refs[ref][source_side][track][ref_key] ":" refs[ref][target_side][remote][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
@@ -245,7 +245,7 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
             continue
         }
         for(ref in refs){
-            track_sha = refs[ref][track[side]][sha_key];
+            track_sha = refs[ref][side][track][sha_key];
             if(!track_sha){
                 continue;
             }
@@ -254,7 +254,7 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
                 append_by_val(out_notify_solving, "restore-both-sides | " side " | " ref " | restoring-to:" track_sha);
             }else{
                 aside = asides[side];
-                another_track_sha = refs[ref][track[aside]][sha_key];
+                another_track_sha = refs[ref][aside][track][sha_key];
 
                 op_push_restore_from_another[side][ref];
                 append_by_val(out_notify_solving, "restore-side-from-another | " side " | " ref " | restoring-to:" another_track_sha);
@@ -263,7 +263,7 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
     }
     for(ref in a_remove_tracking_both){
         for(side in sides){
-            track_sha = refs[ref][track[side]][sha_key];
+            track_sha = refs[ref][side][track][sha_key];
             if(!track_sha){
                 continue;
             }
@@ -273,8 +273,8 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
     }
     for(ref in a_restore_del){
         for(side in sides){
-            track_sha = refs[ref][track[side]][sha_key];
-            remote_sha = refs[ref][remote[side]][sha_key]
+            track_sha = refs[ref][side][track][sha_key];
+            remote_sha = refs[ref][side][remote][sha_key]
             if(remote_sha){
                 continue;
             }
@@ -299,9 +299,9 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
                 continue;
             }
 
-            if(refs[ref][remote[side]][sha_key]){
+            if(refs[ref][side][remote][sha_key]){
                 op_push_nff[aside][ref];
-            } else if(refs[ref][remote[aside]][sha_key]){
+            } else if(refs[ref][aside][remote][sha_key]){
                 op_push_nff[side][ref];
             }
         }
@@ -316,7 +316,7 @@ function operations_to_refspecs(    side, aside, ref){
 
     for(side in sides){
         for(ref in op_del_track){
-            if(refs[ref][track[side]][sha_key]){
+            if(refs[ref][side][track][sha_key]){
                 out_remove_tracking = out_remove_tracking "  " origin[side] "/" ref;
             }
         }
@@ -324,32 +324,32 @@ function operations_to_refspecs(    side, aside, ref){
 
     for(side in op_push_restore_from_track){
         for(ref in op_push_restore_from_track[side]){
-            out_push[side] = out_push[side] "  +" refs[ref][track[side]][ref_key] ":" refs[ref][remote[side]][ref_key];
+            out_push[side] = out_push[side] "  +" refs[ref][side][track][ref_key] ":" refs[ref][side][remote][ref_key];
         }
     }
 
     for(side in op_push_restore_from_another){
         aside = asides[side];
         for(ref in op_push_restore_from_another[side]){
-            out_push[side] = out_push[side] "  +" refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key];
+            out_push[side] = out_push[side] "  +" refs[ref][aside][track][ref_key] ":" refs[ref][side][remote][ref_key];
         }
     }
 
     for(side in op_push_del){
         for(ref in op_push_del[side]){
-            out_push[side] = out_push[side] "  +:" refs[ref][remote[side]][ref_key];
+            out_push[side] = out_push[side] "  +:" refs[ref][side][remote][ref_key];
             
-            append_by_val(out_notify_del, "deletion | " prefix[side] " | " ref " | " refs[ref][remote[side]][sha_key]);
+            append_by_val(out_notify_del, "deletion | " prefix[side] " | " ref " | " refs[ref][side][remote][sha_key]);
         }
     }
 
     for(side in op_push_nff){
         aside = asides[side];
         for(ref in op_push_nff[side]){
-            out_push[side] = out_push[side] "  +" refs[ref][track[aside]][ref_key] ":" refs[ref][remote[side]][ref_key];
+            out_push[side] = out_push[side] "  +" refs[ref][aside][track][ref_key] ":" refs[ref][side][remote][ref_key];
 
-            if(refs[ref][remote[side]][sha_key]){
-                append_by_val(out_notify_solving, "conflict-solving | " prefix[side] " | " ref " | out-of " refs[ref][remote[side]][sha_key] " to " refs[ref][remote[aside]][sha_key]);
+            if(refs[ref][side][remote][sha_key]){
+                append_by_val(out_notify_solving, "conflict-solving | " prefix[side] " | " ref " | out-of " refs[ref][side][remote][sha_key] " to " refs[ref][aside][remote][sha_key]);
             }
         }
     }
@@ -361,7 +361,7 @@ function operations_to_refspecs(    side, aside, ref){
     # But we don't use it for now as we migrated to preprocessing git fetching.
     for(side in op_post_fetch){
         for(ref in op_post_fetch[side]){
-            out_post_fetch[side] = out_post_fetch[side] "  +" refs[ref][remote[side]][ref_key] ":" refs[ref][track[side]][ref_key];
+            out_post_fetch[side] = out_post_fetch[side] "  +" refs[ref][side][remote][ref_key] ":" refs[ref][side][track][ref_key];
         }
     }
 }
@@ -371,17 +371,17 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt,
         # We expects that "no sha" cases will be processed by common NFF-solving actions.
         # But this approach with variables help to solve severe errors. Also it makes code more resilient.
 
-        remote_sha_a = refs[ref][remote[side_a]][sha_key];
-        track_sha_a = refs[ref][track[side_a]][sha_key];
+        remote_sha_a = refs[ref][side_a][remote][sha_key];
+        track_sha_a = refs[ref][side_a][track][sha_key];
 
-        remote_sha_b = refs[ref][remote[side_b]][sha_key];
-        track_sha_b = refs[ref][track[side_b]][sha_key];
+        remote_sha_b = refs[ref][side_b][remote][sha_key];
+        track_sha_b = refs[ref][side_b][track][sha_key];
 
         # d_trace("a " ref "; track_sha_a:" track_sha_a "; remote_sha_a:" remote_sha_a);
         # d_trace("b " ref "; track_sha_b:" track_sha_b "; remote_sha_b:" remote_sha_b);
 
         if(track_sha_a && track_sha_b){
-            cmd = "git rev-list " refs[ref][track[side_a]][ref_key] " " refs[ref][track[side_b]][ref_key] " --max-count=1"
+            cmd = "git rev-list " refs[ref][side_a][track][ref_key] " " refs[ref][side_b][track][ref_key] " --max-count=1"
             cmd | getline newest_sha;
             close(cmd);
         } else if(track_sha_a){
@@ -406,9 +406,9 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt,
         track_sha_b_txt = track_sha_b ? track_sha_b : "<no-sha>"
         trace("victim-solving: " ref " on " origin[side_winner] " beat " origin[side_victim] " with " track_sha_a_txt " vs " track_sha_b_txt);
 
-        out_push[side_victim] = out_push[side_victim] "  +" refs[ref][track[side_winner]][ref_key] ":" refs[ref][remote[side_victim]][ref_key];
+        out_push[side_victim] = out_push[side_victim] "  +" refs[ref][side_winner][track][ref_key] ":" refs[ref][side_victim][remote][ref_key];
 
-        append_by_val(out_notify_solving, "victim-solving | " prefix[side_victim] " | " ref " | out-of " refs[ref][remote[side_victim]][sha_key] " to " refs[ref][remote[aside]][side_winner]);
+        append_by_val(out_notify_solving, "victim-solving | " prefix[side_victim] " | " ref " | out-of " refs[ref][side_victim][remote][sha_key] " to " refs[ref][side_winner][remote][sha_key]);
     }
 }
 

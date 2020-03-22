@@ -22,8 +22,8 @@ function main_processing(    ref){
 }
 function state_to_action(ref,    remote_sha, track_sha, side, is_victim){
     for(side in sides){
-        remote_sha[side] = refs[ref][remote[side]][sha_key];
-        track_sha[side] = refs[ref][track[side]][sha_key];
+        remote_sha[side] = refs[ref][side][remote][sha_key];
+        track_sha[side] = refs[ref][side][track][sha_key];
     }
 
     remote_sha[equal] = remote_sha[side_a] == remote_sha[side_b];
@@ -151,7 +151,7 @@ function request_victim_move(ref, remote_sha, track_sha, is_victim,    side, asi
 function actions_to_refspecs(    side, aside, ref){
     for(side in a_fetch){
         for(ref in a_fetch[side]){
-            out_fetch[side] = out_fetch[side] "  +" refs[ref][remote[side]][ref_key] ":" refs[ref][track[side]][ref_key];
+            out_fetch[side] = out_fetch[side] "  +" refs[ref][side][remote][ref_key] ":" refs[ref][side][track][ref_key];
         }
     }
 

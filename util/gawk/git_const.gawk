@@ -3,6 +3,9 @@ BEGIN { # Constants.
     track_refs_prefix = "refs/remotes/";
     remote_refs_prefix = "refs/heads/";
 
+    remote = "remote"
+    track = "track"
+
     sha_key = "sha";
     ref_key = "ref";
 
