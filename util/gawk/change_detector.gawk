@@ -98,7 +98,7 @@ function block_sync(    ref){
         if(!refs[ref][side_a][track] &&
             !refs[ref][side_b][track]){
 
-            write("Syncing blocked as all remote repos have no \"" ref "\" branch");
+            write("Syncing is blocked as all remote repos have no \"" ref "\" branch");
             
             exit 91;
         }
@@ -117,7 +117,7 @@ function _block_sync_by_side(remote_sha, side,    ref){
         return;
     }
 
-    write("Syncing blocked as \"" same_sha_sync_enabling_branch "\" branch doesn't exist in the \""side"\" remote repo");
+    write("Syncing is blocked as \"" same_sha_sync_enabling_branch "\" branch doesn't exist in the \""side"\" remote repo");
 
     exit 92;
 }
