@@ -69,7 +69,7 @@
         fi
 
 
-        same_sha_sync_enabling_branch=${same_sha_sync_enabling_branch:-it3xl-git_repo_sync-enabled}
+        sync_enabling_branch=${sync_enabling_branch:-it3xl-git_repo_sync-enabled}
 
         pref_a_conv=${pref_a_conv:-}
         pref_b_conv=${pref_b_conv:-}
@@ -105,7 +105,7 @@
             exit 105;
         fi;
 
-        sync_ref_specs="${pref_a_conv:+${pref_a_conv}*  }${pref_b_conv:+${pref_b_conv}*  }${pref_victim:+${pref_victim}*  }$same_sha_sync_enabling_branch"
+        sync_ref_specs="${pref_a_conv:+${pref_a_conv}*  }${pref_b_conv:+${pref_b_conv}*  }${pref_victim:+${pref_victim}*  }$sync_enabling_branch"
         export sync_ref_specs
 
         export origin_a=origin_a
@@ -114,13 +114,13 @@
         track_ref_specs_a="${pref_a_conv:+refs/remotes/$origin_a/${pref_a_conv}*  }`
                           `${pref_b_conv:+refs/remotes/$origin_a/${pref_b_conv}*  }`
                           `${pref_victim:+refs/remotes/$origin_a/${pref_victim}*  }`
-                          `refs/remotes/$origin_a/$same_sha_sync_enabling_branch"
+                          `refs/remotes/$origin_a/$sync_enabling_branch"
         export track_ref_specs_a
 
         track_ref_specs_b="${pref_a_conv:+refs/remotes/$origin_b/${pref_a_conv}*  }`
                           `${pref_b_conv:+refs/remotes/$origin_b/${pref_b_conv}*  }`
                           `${pref_victim:+refs/remotes/$origin_b/${pref_victim}*  }`
-                          `refs/remotes/$origin_b/$same_sha_sync_enabling_branch"
+                          `refs/remotes/$origin_b/$sync_enabling_branch"
         export track_ref_specs_b
 
         export pref_a_conv
@@ -128,7 +128,7 @@
         export pref_b_conv
         export url_b
         export pref_victim
-        export same_sha_sync_enabling_branch
+        export sync_enabling_branch
 
         export use_bash_git_credential_helper=${use_bash_git_credential_helper-}
 

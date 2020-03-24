@@ -48,7 +48,7 @@ function append_by_val(host, addition){
 }
 
 function use_victim_sync(ref){
-    return ref == same_sha_sync_enabling_branch || index(ref, pref_victim) == 1;
+    return ref == sync_enabling_branch || index(ref, pref_victim) == 1;
 }
 
 

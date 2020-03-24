@@ -12,9 +12,9 @@ BEGIN { # Parameters.
     initial_states_processing();
 }
 function initial_states_processing(    side, split_arr, split_val, ind, ref, val, sha){
-    same_sha_sync_enabling_branch = ENVIRON["same_sha_sync_enabling_branch"];
-    if(!same_sha_sync_enabling_branch){
-        write("Synchronization is blocked as the same_sha_sync_enabling_branch variable is empty");
+    sync_enabling_branch = ENVIRON["sync_enabling_branch"];
+    if(!sync_enabling_branch){
+        write("Synchronization is blocked as the sync_enabling_branch variable is empty");
         exit 81;
     }
         
@@ -137,7 +137,7 @@ function prepare_ref_sates(    ref){
     prefix_name_key();
 
     ref = $3;
-    if(ref != same_sha_sync_enabling_branch \
+    if(ref != sync_enabling_branch \
         && index(ref, prefix[side_a]) != 1 \
         && index(ref, prefix[side_b]) != 1 \
         && index(ref, pref_victim) != 1 \
@@ -156,7 +156,7 @@ function prefix_name_key() { # Generates a common key for all 4 locations of eve
     $3 = split_refs[2];
 }
 END {
-    # delete refs[same_sha_sync_enabling_branch];
+    # delete refs[sync_enabling_branch];
 
     process_remote_empty();
 }

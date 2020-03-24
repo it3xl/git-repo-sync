@@ -4,9 +4,9 @@
 # If you want your remote Git-repositories to be synchronized by this tool then they have to have
 #   it3xl-git_repo_sync-enabled   branch on the same commit (i.e. the same SHA).
 # Exception, if you're synchronizing an empty Git-repository with a repository that has this branch.
-# You can change this branch name by changing a value of the variable same_sha_sync_enabling_branch.
+# You can change this branch name by changing a value of the variable sync_enabling_branch.
 #
-# same_sha_sync_enabling_branch=it3xl-git_repo_sync-enabled
+# sync_enabling_branch=it3xl-git_repo_sync-enabled
 
 
 # This is a configuration file for your synchronization project of two remote Git repositories.

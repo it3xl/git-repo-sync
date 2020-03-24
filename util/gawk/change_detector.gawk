@@ -4,9 +4,9 @@
 BEGIN {
     write_after_line("> change detecting");
 
-    same_sha_sync_enabling_branch = ENVIRON["same_sha_sync_enabling_branch"];
-    if(!same_sha_sync_enabling_branch){
-        write("Synchronization is blocked as the same_sha_sync_enabling_branch variable is empty");
+    sync_enabling_branch = ENVIRON["sync_enabling_branch"];
+    if(!sync_enabling_branch){
+        write("Synchronization is blocked as the sync_enabling_branch variable is empty");
         exit 81;
     }
 
@@ -91,7 +91,7 @@ function set_side_emptiness(    has){
 }
 
 function block_sync(    ref){
-    ref = same_sha_sync_enabling_branch;
+    ref = sync_enabling_branch;
 
     if(emptiness[side_both][remote]){
 
@@ -117,7 +117,7 @@ function _block_sync_by_side(remote_sha, side,    ref){
         return;
     }
 
-    write("Syncing is blocked as \"" same_sha_sync_enabling_branch "\" branch doesn't exist in the \""side"\" remote repo");
+    write("Syncing is blocked as \"" sync_enabling_branch "\" branch doesn't exist in the \""side"\" remote repo");
 
     exit 92;
 }

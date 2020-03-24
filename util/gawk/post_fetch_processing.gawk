@@ -366,7 +366,7 @@ function operations_to_refspecs(    side, aside, ref){
     }
 }
 
-function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt, remote_sha_b, track_sha_b, track_sha_b_txt, cmd, newest_sha, side_winner, side_victim){
+function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt, remote_sha_b, track_sha_b, track_sha_b_txt, cmd, newest_sha, side_winner, side_victim, victim_sha){
     for(ref in a_victim_solve){
         # We expects that "no sha" cases will be processed by common NFF-solving actions.
         # But this approach with variables help to solve severe errors. Also it makes code more resilient.
@@ -408,7 +408,11 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt,
 
         out_push[side_victim] = out_push[side_victim] "  +" refs[ref][side_winner][track][ref_key] ":" refs[ref][side_victim][remote][ref_key];
 
-        append_by_val(out_notify_solving, "victim-solving | " prefix[side_victim] " | " ref " | out-of " refs[ref][side_victim][remote][sha_key] " to " refs[ref][side_winner][remote][sha_key]);
+        victim_sha = refs[ref][side_victim][remote][sha_key];
+        # Do not show solving for new branch creation.
+        if(victim_sha){
+            append_by_val(out_notify_solving, "victim-solving | " side_victim " | " ref " | out-of " victim_sha " to " refs[ref][side_winner][remote][sha_key]);
+        }
     }
 }
 
