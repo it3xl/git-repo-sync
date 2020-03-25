@@ -161,7 +161,13 @@ function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, c
         parent_side = side_a;
     } else if(parent_sha == refs[ref][side_b][track][sha_key]){
         parent_side = side_b;
-    } else{
+    } else if(!parent_sha && ref == sync_enabling_branch){
+        write("\nSyncing is blocked as you are trying to sync unrelated Git-remote repositories");
+        write("\"" ref "\" has different SHA and has no a parent commit");
+        write("\"" ref "\" located in " side_a ":" refs[ref][side_a][remote][sha_key] " vs " side_b ":" refs[ref][side_b][remote][sha_key]);
+        
+        exit 99;
+    } else {
         trace(ref " rejected-move; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
 
         return;
