@@ -33,8 +33,10 @@ function create_sync_repo(){
         echo Initializing git-cred as use_bash_git_credential_helper is set to $use_bash_git_credential_helper
 
         if [[ ! -f "$git_cred" ]]; then
-            echo Error! Exit! You have to update/download Git-SubModules of git-sync project to use $git_cred
+            echo
+            echo Error! Exit! You have to update/download Git-SubModules of git-repo-sync project to use $git_cred
             echo Or delete "use_bash_git_credential_helper=1" from your sync project settings file.
+            echo
             
             delete_project_repo_and_exit
         fi
