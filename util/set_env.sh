@@ -71,11 +71,11 @@
 
         sync_enabling_branch=${sync_enabling_branch:-it3xl-git_repo_sync-enabled}
 
-        pref_a_conv=${pref_a_conv:-}
-        pref_b_conv=${pref_b_conv:-}
+        pref_a_conv=${side_a_conventional_branches_prefix:-}
+        pref_b_conv=${side_b_conventional_branches_prefix:-}
 
         # If this var is empty, then we ignore the Victim branches functionality and its "The latest action wins" conflict solving strategy.
-        pref_victim=${pref_victim:-}
+        pref_victim=${victim_branches_prefix:-}
 
         conventional_prefixes_trace_values="
         pref_a_conv is '$pref_a_conv'

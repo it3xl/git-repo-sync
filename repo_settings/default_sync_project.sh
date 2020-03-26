@@ -43,12 +43,12 @@
 
 # Configure a prefix of the Victim Ref Sync functionality if you wish to use this type of syncing.
 #
-# pref_victim=@
+# victim_branches_prefix=@
 
 # Configure prefixes of the Conventional Ref Sync functionality if you wish to use this type of syncing.
 #
-# pref_a_conv=a-
-# pref_b_conv=b-
+# side_a_conventional_branches_prefix=a-
+# side_b_conventional_branches_prefix=b-
 
 
 
