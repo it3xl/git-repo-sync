@@ -88,7 +88,7 @@ See my contacts at [it3xl.ru](http://it3xl.ru).
 
 I use my **bash Git Credential Helper [git-cred](https://github.com/it3xl/bash-git-credential-helper)**<br/>
 It passes to Git credentials from enviroment variables created by Continues Intergration tools like Jenkins.<br/>
-It is **[inegrated](https://github.com/it3xl/git-sync/blob/master/repo_settings/default_sync_project.sh)** now with git-sync. 
+It is **[inegrated](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)** now with git-repo-sync. 
 
 ## What to expect next
 
@@ -99,7 +99,7 @@ I've temporary postponed this feature. Everybody can live without it. Although i
 We have some branches that reflect all our stands (dev, test, UAT, pre-prod).  
 Any commit three runs complete CI/CD processes.  
 It is useful to allow any team sides to put this branches at any position, on any commit.  
-I think it is time to add such branches into git-sync.
+I think it is time to add such branches into git-repo-sync.
 
 E.g.  
 **victim/test-stand**  
@@ -112,16 +112,16 @@ Here is my [glossary](https://it3xl.blogspot.com/2018/02/glossary-of-synchroniza
 ## How to Use
 
 You need to describe the prefixes and simple details of your real remote repositories in a simple config-file.<br/>
-Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-sync/blob/master/repo_settings/default_sync_project.sh).
+Create the same file as [your_repo_some_name.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh).
 
-Run the **git-sync** and pass a path to your config file as a parameter.<br/>
+Run the **git-repo-sync** and pass a path to your config file as a parameter.<br/>
 
     bash git-sync.sh "relative_or_absolute_path/project_settings.sh"
 
-Run **git-sync** so periodically, better once in a minute.
+Run **git-repo-sync** so periodically, better once in a minute.
 
-That's all. You may work and forget about **git-sync**.<br/>
-In the case of any synchronization interruption **git-sync** will do everything right.
+That's all. You may work and forget about **git-repo-sync**.<br/>
+In the case of any synchronization interruption **git-repo-sync** will do everything right.
 
 ### Prepare Environment
 
@@ -131,5 +131,5 @@ Install Git
 
 For \*nix users - update you bash and awk to any modern version
 
-Tune any automation to invocate **git-sync** periodically - crons, schedulers, Jenkins, GitLab-CI, etc.
+Tune any automation to invocate **git-repo-sync** periodically - crons, schedulers, Jenkins, GitLab-CI, etc.
 

@@ -28,7 +28,7 @@
 ## Create a copy of this file and pass the copied file absolute path to git-sync.sh as the first parameter for every run.
 
 
-# ! Note! Synchronization artifacts of your project will be saved at "git-sync/sync-projects/<name-of-configuration-file-without-extension>".
+# ! Note! Synchronization artifacts of your project will be saved at "git-repo-sync/sync-projects/<name-of-configuration-file-without-extension>".
 
 
 # Change variables below to describe your Git remote repositories and how you want to synchronize.
@@ -54,7 +54,7 @@
 
 # !Additional configuration notes!
 
-# Integration with git-cred, the "bash Git Credential Helper" from https://github.com/it3xl/git-sync
+# Integration with git-cred, the "bash Git Credential Helper" from https://github.com/it3xl/bash-git-credential-helper
 # 
 # The git-cred allows you to use credential values from environment variables
 #  that are defined automatically by any Continues Integration (CI) tool.
@@ -65,7 +65,7 @@
 #
 # Integration steps
 #
-# Load Git sub-modules of git-sync (https://github.com/it3xl/git-sync)
+# Load Git sub-modules of git-repo-sync (https://github.com/it3xl/git-repo-sync)
 #
 # Before any call to git-sync.sh or request-git-sync.sh, define the following environment variables in your CI-server (tool)
 #   For the repo in $url_a
