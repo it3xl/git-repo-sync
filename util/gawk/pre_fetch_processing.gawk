@@ -7,6 +7,7 @@ BEGIN {
 
 @include "input_processing.gawk"
 
+
 END {
     main_processing();
     write("> pre processing end");

@@ -7,6 +7,7 @@ BEGIN {
 
 @include "input_processing.gawk"
 
+
 END {
     main_processing();
     write("> main processing end");
@@ -118,7 +119,7 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
             return 1;
         }
 
-        unowned_ref = index(ref, prefix[aside]) == 1;
+        unowned_ref = side_conv_ref(ref, aside);
 
         if(!deletion_allowed || unowned_ref){
             action_key = "action-blocked-del-conv";
@@ -179,7 +180,7 @@ function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, c
     moving_back = parent_sha == action_sha;
     if(moving_back){
         if(!is_victim){
-            owner_action = index(ref, prefix[parent_side]) == 1;
+            owner_action = side_conv_ref(ref, parent_side);
             if(!owner_action){
                 # Moving back from a non-owner side is forbidden.
                 return;
@@ -299,16 +300,16 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
     for(side in sides){
         aside = asides[side];
         for(ref in a_conv_solve){
-            ref_owner = index(ref, prefix[side]) == 1;
+            ref_owner = side_conv_ref(ref, side);
 
             if(!ref_owner){
                 continue;
             }
 
             if(refs[ref][side][remote][sha_key]){
-                op_push_nff[aside][ref];
+                op_conv_push_nff[aside][ref];
             } else if(refs[ref][aside][remote][sha_key]){
-                op_push_nff[side][ref];
+                op_conv_push_nff[side][ref];
             }
         }
     }
@@ -345,13 +346,13 @@ function operations_to_refspecs(    side, aside, ref){
         for(ref in op_push_del[side]){
             out_push[side] = out_push[side] "  +:" refs[ref][side][remote][ref_key];
             
-            append_by_val(out_notify_del, "deletion | " prefix[side] " | " ref " | " refs[ref][side][remote][sha_key]);
+            append_by_val(out_notify_del, "deletion | " side " | " ref " | " refs[ref][side][remote][sha_key]);
         }
     }
 
-    for(side in op_push_nff){
+    for(side in op_conv_push_nff){
         aside = asides[side];
-        for(ref in op_push_nff[side]){
+        for(ref in op_conv_push_nff[side]){
             out_push[side] = out_push[side] "  +" refs[ref][aside][track][ref_key] ":" refs[ref][side][remote][ref_key];
 
             if(refs[ref][side][remote][sha_key]){

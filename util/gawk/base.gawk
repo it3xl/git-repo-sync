@@ -48,8 +48,34 @@ function append_by_val(host, addition){
 }
 
 function use_victim_sync(ref){
-    return ref == sync_enabling_branch || index(ref, pref_victim) == 1;
+    if(explicit_victim_ref(ref))
+        return 1;
+
+    if(use_conv_sync(ref)){
+        # sync_enabling_branch may be a conventional branch.
+        return 0;
+    }
+
+    # by default sync_enabling_branch uses the victim syncing.
+    return ref == sync_enabling_branch;
 }
 
+function use_conv_sync(ref) {
+    return side_a_conv_ref(ref) || side_b_conv_ref(ref);
+}
 
+function side_conv_ref(ref, side){
+    return index(ref, prefix[side]) == 1;
+}
 
+function side_a_conv_ref(ref){
+    return side_conv_ref(ref, side_a);
+}
+
+function side_b_conv_ref(ref){
+    return side_conv_ref(ref, side_b);
+}
+
+function explicit_victim_ref(ref){
+    return index(ref, pref_victim) == 1;
+}

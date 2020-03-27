@@ -54,7 +54,7 @@ function sync_pass(){
         echo "$track_refs_b"
     fi;
 
-    # gawk --file="$path_git_sync_util/gawk/proto.gawk" <(echo)
+    # gawk --file="$path_git_sync/../proto/proto.gawk" <(echo)
     # exit
 
 
