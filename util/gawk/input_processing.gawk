@@ -142,7 +142,7 @@ function prepare_ref_sates(    ref){
         && !side_a_conv_ref(ref) \
         && !side_b_conv_ref(ref) \
         ){
-        trace("!unexpected " $2 " in " current_dest " " $1 "; branch name (" ref ") has no allowed prefixes");
+        trace("!unexpected " $2 " in " current_dest " " $1 "; branch name (" ref ") has no allowed prefixes or not allowed");
 
         next;
     }

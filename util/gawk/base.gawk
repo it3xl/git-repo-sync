@@ -56,7 +56,7 @@ function use_victim_sync(ref){
         return 0;
     }
 
-    # by default sync_enabling_branch uses the victim syncing.
+    # by default sync_enabling_branch uses the victim syncing strategy.
     return ref == sync_enabling_branch;
 }
 
