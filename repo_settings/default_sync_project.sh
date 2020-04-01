@@ -1,73 +1,100 @@
 
-# !Warning!
-#
-# If you want your remote Git-repositories to be synchronized by this tool then they have to have
-#   it3xl-git_repo_sync-enabled   branch on the same commit (i.e. the same SHA).
-# Exception, if you're synchronizing an empty Git-repository with a repository that has this branch.
-# You can change this branch name by changing a value of the variable sync_enabling_branch.
-#
-# sync_enabling_branch=it3xl-git_repo_sync-enabled
+# url_a=https://your-repo1-url.org/git/my_repo.git
+# url_b=https://git.your-repo2-url.org/my_repo.git
 
-
-# This is a configuration file for your synchronization project of two remote Git repositories.
-#
-# You have the following options to configure synchronization of your two remote Git-repositories.
-#
-## Uncomment and set the following variables in this file.
-#
-## Call your script file in which you have declared the variables and added git-sync.sh invocation.
-#
-## Declare the variables in your environment and then call git-sync.sh from there.
-#
-## Create a copy of this file and pass the copied file name to git-sync.sh as the first parameter for every run.
-### Your file will be searched in the following folders:
-### git-repo-sync/repo_settings/  - This is the first option.
-### git-repo-sync.repo_settings/  - This is the second option. This folder is the sibling to gitSync root folder.
-### Example: $ ./git-sync.sh my-sync-project.sh
-#
-## Create a copy of this file and pass the copied file absolute path to git-sync.sh as the first parameter for every run.
-
-
-# ! Note! Synchronization artifacts of your project will be saved at "git-repo-sync/sync-projects/<name-of-configuration-file-without-extension>".
-
-
-# Change variables below to describe your Git remote repositories and how you want to synchronize.
-
-# Assign real URLs to your remote Git-repos. (Sorry, it just wasn't tested with SSH)
-## Example
-## url_a=https://your-repo1-url.org/git/my_repo.git
-## url_b=https://git.your-repo2-url.org/my_repo.git
-#
-# url_a=
-# url_b=
-
-# Configure a prefix of the Victim Ref Sync functionality if you wish to use this type of syncing.
-#
 # victim_branches_prefix=@
 
-# Configure prefixes of the Conventional Ref Sync functionality if you wish to use this type of syncing.
-#
 # side_a_conventional_branches_prefix=a-
 # side_b_conventional_branches_prefix=b-
 
+# sync_enabling_branch=${victim_branches_prefix}test
+# sync_enabling_branch=${side_a_conventional_branches_prefix}prod
+# sync_enabling_branch=it3xl-git_repo_sync-enabled
+
+# use_bash_git_credential_helper=1
 
 
-# !Additional configuration notes!
+#
+# #
+# # # Instruction
+# #
+#
 
-# Integration with git-cred, the "bash Git Credential Helper" from https://github.com/it3xl/bash-git-credential-helper
+
+# # This File
+# This is a configuration file for your synchronization project of two remote Git repositories.
+# You have the following options to configure synchronization of your two remote Git-repositories.
+#
+# * Uncomment and modify variables in this file.
+#
+# * Declare the variables in your script file and add git-sync.sh invocation.
+#
+# * Declare the variables in your environment and call git-sync.sh.
+#
+# * Create a copy of this file and pass the name of the copied file to git-sync.sh as the first parameter for every run.
+# * Example of an invocation: $ ./git-sync.sh my-sync-project.sh
+# * Your file will be searched in the following folders:
+# ** git-repo-sync/repo_settings/  - This is the first option.
+# ** git-repo-sync.repo_settings/  - This is the second option. This folder is the sibling to gitSync root folder.
+#
+# * Create a copy of this file and pass the absolute path of the copied file to git-sync.sh as the first parameter for every run.
+#
+# ! Note! Synchronization artifacts of your project will be located at "git-repo-sync/sync-projects/<name-of-configuration-file-without-extension>".
+
+# # url_a
+# # url_b
+# Let's call your two synchronized remote Git repositories as sides A and B.
+# Then url_a and url_b point to git remote repository of the A side and B side accordingly.
+# SSH addresses wasn't tested yet.
+
+# # victim_branches_prefix
+# Git-branches with a prefix from this variable will be updated under a Victim Syncing strategy.
+# This means everybody can do whatever they want with such branches.
+# And any last action will win in case of a conflict.
+# You can relocate it to any position, move it back, delete, etc.
+# The default value is empty that means this syncing strategy will be disabled.
+# The most common value is "@".
+# Examples: @dev, @dev-staging, @test, @test-staging
+
+# # side_a_conventional_branches_prefix
+# Git-branches with a prefix from this variable will be owned by the A side.
+#
+# # side_b_conventional_branches_prefix
+# Git-branches with a prefix from this variable will be owned by the B side.
+#
+# Such branches will be updated under a Conventional Syncing strategy.
+# You can do whatever you want with these branches from an owning side repository.
+# And you can only do forward updating commits and merges from a non-owning side repository.
+# There is no default value. The most common value is an abbreviation of a client or vendor companies.
+# Omitted or empty values will disable Conventional Syncing strategy.
+# Examples: client-uat, client-uat-staging; vendor-uat, vendor-uat-staging
+
+# # sync_enabling_branch
+# This variable represents a special branch name.
+# Your syncing remote Git-repositories must have such the branch to allow synchronization by git-repo-sync.
+# Exception, if you're starting to synchronize an empty Git-repository with a repository that already has this branch.
+# Existence of this branch protects you from synchronizing of unrelated Git-repositories, i.e. different projects.
+# By default this branch will be updating under Victim Sync strategy. But you can add a conventional prefix to it.
+# The default value is "it3xl-git_repo_sync-enabled".
+# Examples: @test, client-prod, vendor-master, it3xl-git_repo_sync-enabled
+
+
+
+# # use_bash_git_credential_helper
+# This variables enables using of git-cred, the "bash Git Credential Helper" from https://github.com/it3xl/bash-git-credential-helper
 # 
-# The git-cred allows you to use credential values from environment variables
+# Git-cred allows you to use Git-credential values from environment variables
 #  that are defined automatically by any Continues Integration (CI) tool.
 #
 # You can use git-cred as an external tool and tune everything manually.
-# But configuring it here allows you to initialize git-cred only once during your git-repo-sync project creation.
-# Also git-cred supports seamlessly migrations and relocations of your CI tool.
+# But configuring it here allows you to initialize git-cred only once.
+# BTW, git-cred allows git-repo-sync folder free relocation.
 #
-# Integration steps
+### Before using git-cred you must complete the following steps.
 #
-# Load Git sub-modules of git-repo-sync (https://github.com/it3xl/git-repo-sync)
+## Load Git sub-modules of git-repo-sync (https://github.com/it3xl/git-repo-sync)
 #
-# Before any call to git-sync.sh or request-git-sync.sh, define the following environment variables in your CI-server (tool)
+## Before any call to git-sync.sh or request-git-sync.sh, define the following environment variables in your CI-server (tool)
 #   For the repo in $url_a
 # git_cred_username_repo_a=some-login
 # git_cred_password_repo_a=some-password
@@ -75,8 +102,6 @@
 # git_cred_username_repo_b=another-login
 # git_cred_password_repo_b=another-password
 #
-# Assign the following variable to 1.
-#
-# use_bash_git_credential_helper=1
+## Assign use_bash_git_credential_helper variable to 1.
 
 
