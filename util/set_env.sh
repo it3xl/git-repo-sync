@@ -10,6 +10,8 @@
 
         [[ $# -eq 0 ]] && {
             file_name_repo_settings="default_sync_project.sh"
+
+            echo "Info. No configuration file in the first parameter. $file_name_repo_settings file will be used."
         }
 
         relative_settings_file="$path_git_sync/$file_name_repo_settings"
@@ -54,8 +56,12 @@
         export AWKPATH="$path_git_sync_util/gawk"
 
         if [[ ${git_sync_project_folder:+1} ]]; then
+            echo 'Info. Configuration will be taken from the current shell environment because git_sync_project_folder variable is defined'
+
             env_project_folder=$git_sync_project_folder
         else
+            echo 'Info. Configuration will be taken from the first parameter because git_sync_project_folder variable is not defined'
+
             git_sync_env_run_settings_script "$@"
         fi
 
@@ -99,8 +105,8 @@
             exit 104;
         fi;
 
-        if [[ ( ! "$pref_a_conv" || ! "$pref_b_conv" ) && ! "$pref_victim" ]]; then
-            echo "Error! Exit! You have to configure victim or both conventional ref prefixes. $prefixes_trace_values"
+        if [[ ! "$pref_a_conv" && ! "$pref_b_conv" && ! "$pref_victim" ]]; then
+            echo "Error! Exit! You have to configure victim or any conventional ref prefixes. $prefixes_trace_values"
 
             exit 105;
         fi;

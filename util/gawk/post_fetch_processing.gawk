@@ -129,7 +129,7 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
 
             trace(ref "; " action_key " on " origin[aside] "; disappeared from " origin[side]);
             a_conv_solve[ref];
-            append_by_val(out_notify_solving, "blocked-del-conventional-ref | " prefix[side] " | " ref " | " action_key " | restoring-to:" refs[ref][side][track][sha_key]);
+            append_by_val(out_notify_solving, "blocked-del-conventional-ref | " side " | " ref " | " action_key " | restoring-to:" refs[ref][side][track][sha_key]);
 
             return 1;
         }
@@ -191,7 +191,7 @@ function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, c
         force_key = "+";
         action_key = "action-moving-back";
 
-        append_by_val(out_notify_solving, "moving-back | " prefix[parent_side] " | " ref " | out-of " refs[ref][parent_side][track][sha_key] " to " refs[ref][child_side][track][sha_key]);
+        append_by_val(out_notify_solving, "moving-back | " parent_side " | " ref " | out-of " refs[ref][parent_side][track][sha_key] " to " refs[ref][child_side][track][sha_key]);
     }
     
     trace(ref " " action_key "; from " origin[parent_side] " to " origin[child_side]);
@@ -356,7 +356,7 @@ function operations_to_refspecs(    side, aside, ref){
             out_push[side] = out_push[side] "  +" refs[ref][aside][track][ref_key] ":" refs[ref][side][remote][ref_key];
 
             if(refs[ref][side][remote][sha_key]){
-                append_by_val(out_notify_solving, "conflict-solving | " prefix[side] " | " ref " | out-of " refs[ref][side][remote][sha_key] " to " refs[ref][aside][remote][sha_key]);
+                append_by_val(out_notify_solving, "conflict-solving | " side " | " ref " | out-of " refs[ref][side][remote][sha_key] " to " refs[ref][aside][remote][sha_key]);
             }
         }
     }

@@ -11,6 +11,8 @@
 # sync_enabling_branch=${side_a_conventional_branches_prefix}prod
 # sync_enabling_branch=it3xl-git_repo_sync-enabled
 
+# git_sync_project_folder=my-git-project
+
 # use_bash_git_credential_helper=1
 
 
@@ -28,8 +30,10 @@
 # * Uncomment and modify variables in this file.
 #
 # * Declare the variables in your script file and add git-sync.sh invocation.
+# * git_sync_project_folder variable is mandatory in this case.
 #
 # * Declare the variables in your environment and call git-sync.sh.
+# * git_sync_project_folder variable is mandatory in this case.
 #
 # * Create a copy of this file and pass the name of the copied file to git-sync.sh as the first parameter for every run.
 # * Example of an invocation: $ ./git-sync.sh my-sync-project.sh
@@ -77,6 +81,12 @@
 # By default this branch will be updating under Victim Sync strategy. But you can add a conventional prefix to it.
 # The default value is "it3xl-git_repo_sync-enabled".
 # Examples: @test, client-prod, vendor-master, it3xl-git_repo_sync-enabled
+
+# # git_sync_project_folder
+# This variable will be used only if you configure you sync project through a shell environment.
+# It defines a folder name to store your sync artifacts in "git-repo-sync/sync-projects/" directory.
+# If you pass to git-sync.sh the name or path of a configuration file as the first parameter 
+# then the folder name will be the same as the provided configuration file name. 
 
 
 

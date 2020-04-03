@@ -64,8 +64,13 @@ function use_conv_sync(ref) {
     return side_a_conv_ref(ref) || side_b_conv_ref(ref);
 }
 
-function side_conv_ref(ref, side){
-    return index(ref, prefix[side]) == 1;
+function side_conv_ref(ref, side,    conv_pref){
+    conv_pref = prefix[side];
+    if(!conv_pref){
+        return 0;
+    }
+
+    return index(ref, conv_pref) == 1;
 }
 
 function side_a_conv_ref(ref){
@@ -77,5 +82,9 @@ function side_b_conv_ref(ref){
 }
 
 function explicit_victim_ref(ref){
+    if(!pref_victim){
+        return 0;
+    }
+
     return index(ref, pref_victim) == 1;
 }

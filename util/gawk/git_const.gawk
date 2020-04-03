@@ -9,8 +9,8 @@ BEGIN { # Constants.
     sha_key = "sha";
     ref_key = "ref";
 
-    side_a = "a";
-    side_b = "b";
+    side_a = "A";
+    side_b = "B";
     
     side_any = "side_any";
     side_both = "side_both";
