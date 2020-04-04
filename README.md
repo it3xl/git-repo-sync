@@ -44,7 +44,7 @@ The repositories will behave as a single remote Git repository.
 
 ## Auto Conflicts Solving Strategies
 
-Conflict solving strategy will be applyed based on prefixes of your branches. See how to configure these [prefixes](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh).
+A conflict solving strategy will be applyed based on prefixes of your branches. See how to configure these [prefixes](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh).
 
 ### Victim Strategy
 
