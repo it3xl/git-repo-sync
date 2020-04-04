@@ -4,13 +4,15 @@
 
 **git-repo-sync** synchronizes git-branches between two remote Git-repositories.
 
-* Only Git-branches with prefixes will be synchronized. You can configure the prefixes.
-* Requires Git, bash and GAWK installed on your machine.
-* It has two automated conflict solving strategy.
-* All possible Git-operations and synchronizaton are fully covered by auto tests.
+With **git-repo-sync** you forget that your teams have two remote Git-repository.
+
+* Only Git-branches with prefixes will be synchronized. You can configure this prefixes.
+* Requires Git, bash and GAWK installed on your machine. (It could be updated to work with outdated Git, bash and AWK.)
+* It has two automated conflict solving strategies which are described below.
+* All possible Git-operations and synchronizatons are fully covered by auto tests.
 * It is resilient for HTTP fails and interruptions. (Usage with SSH wasn't tested yet.)
 * Has integration with **bash Git Credential Helper [git-cred](https://github.com/it3xl/bash-git-credential-helper)**
-* It doesn't synchronize Git-tags. (Some popular Git-servers block Git-tags manipulations.)
+* It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * You can work on the same Git-branch simultaneously in different remote Git-repositories.
 * For autumation servers. For greater readability, you can separate the [verification](https://github.com/it3xl/git-repo-sync/blob/master/request-git-sync.sh) and synchronization phases across different projects.
 
