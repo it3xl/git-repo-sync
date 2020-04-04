@@ -22,7 +22,7 @@ The repositories will behave as a single remote Git repository.
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
 
 ### Autumation Servers Support
-* For greater readability, you can separate [verification](https://github.com/it3xl/git-repo-sync/blob/master/request-git-sync.sh) and synchronization phases across different projects.
+* For greater readability, you can separate verification and synchronization phases across different projects.
 * Multiple configuration capabilities are supported.
 * **git-repo-sync** has integration with **bash Git Credential Helper [git-cred](https://github.com/it3xl/bash-git-credential-helper)**
 
