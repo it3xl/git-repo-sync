@@ -30,8 +30,8 @@ With **git-repo-sync** you forget that your teams have two remote Git-repository
 
 ## Prefixes Examples
 
-* <b>@</b>dev
-* <b>company-A-</b>prod
+* <b class="text-red">@</b>dev
+* <b class="text-green">company-A-</b>prod
 * <b>vendor/</b>master
 * <b>@</b>test-stand
 * <b>client-</b>uat-stand
