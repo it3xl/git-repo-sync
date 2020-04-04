@@ -7,7 +7,7 @@
 With **git-repo-sync** you forget that your teams have two remote Git-repository.
 
 * Only Git-branches with prefixes will be synchronized. You can configure this prefixes.
-* Requires Git, bash and GAWK installed on your machine. (It could be updated to work with outdated Git, bash and AWK.)
+* Requires Git and bash installed on your machine. (It could be updated to work with outdated Git, bash and AWK.)
 * It has two automated conflict solving strategies which are described below.
 * All possible Git-operations and synchronizatons are fully covered by auto tests.
 * It is resilient for HTTP fails and interruptions. (Usage with SSH wasn't tested yet.)
