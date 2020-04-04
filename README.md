@@ -30,7 +30,7 @@ The repositories will behave as a single remote Git repository.
 
 * You should configure 4 or more inviroment variables of **git-repo-sync** as described in this [default synchronization project](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) file.
 * Run [git-sync.sh](https://github.com/it3xl/git-repo-sync/blob/master/git-sync.sh) periodically.
-* Intervals of synchronization from one minute to several hours will be enough. It is not a trouble to run it once in a week.
+* Intervals of synchronization from one minute to several hours will be enough. This is not a problem if you run it once a week or even a month.
 
 * `For automation servers.` After every syncronization, analyse notification files to send notifications about branch deletions or conflict solving.
 
