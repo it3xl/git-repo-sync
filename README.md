@@ -7,7 +7,7 @@
 You can forget about the problem that you have to deal with two remote repositories.
 The repositories will behave as a single remote Git repository.
 
-* Only Git-branches with conventional prefixes will be synchronized. You can configure this prefixes.
+* Only Git-branches with conventional prefixes will be synchronized. You have to configure this [prefixes](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh).
 * You can work on the same Git-branch simultaneously in different remote Git-repositories.
 * **git-repo-sync** requires only Git and bash installed on your machine. (It could be updated to work with outdated Git, bash and AWK.)
 * All possible Git-operations and synchronizatons are fully covered by auto tests.
