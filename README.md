@@ -9,6 +9,7 @@ The repositories will behave as a single remote Git repository.
 
 * Only Git-branches with conventional prefixes will be synchronized. You have to configure this [prefixes](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh).
 * You can work on the same Git-branch simultaneously in different remote Git-repositories.
+* With a single copy of **git-repo-sync** you can synchronize as many Git-repository pairs as you want.
 * **git-repo-sync** requires only Git and bash installed on your machine. (It could be updated to work with outdated Git, bash and AWK.)
 * All possible Git-operations and synchronizatons are fully covered by auto tests.
 * It has two automated conflict solving strategies which are described below.
@@ -32,7 +33,10 @@ The repositories will behave as a single remote Git repository.
 * Run [git-sync.sh](https://github.com/it3xl/git-repo-sync/blob/master/git-sync.sh) periodically.
 * Intervals of synchronization from one minute to several hours will be enough. This is not a problem if you run it once a week or even a month.
 
-* `For automation servers.` After every syncronization, analyse notification files to send notifications about branch deletions or conflict solving.
+## How To - Automation servers
+* After every syncronization, analyse notification files to send notifications about branch deletions or conflict solving.
+* See instructions on how to configure synchronization for another pair of remote Git repositories.
+* Number of pairs is unlimited. Every pair is a separate project.
 
 ## Prefixes Examples
 
