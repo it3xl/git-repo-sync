@@ -4,12 +4,12 @@
 
 **git-repo-sync** synchronizes git-branches between two remote Git-repositories.
 
-You can forget about the problem that you have to deal with two remote repositories.
-The repositories will behave as a single remote Git repository.
+With this tool, you will forget that you have two remote Git-repositories. The repositories will behave as a single remote Git repository.  
+You can imagine this as a two entry points for a single remote Git-repository.
 
 * Only Git-branches with conventional prefixes will be synchronized. You have to configure this [prefixes](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh).
 * You can work on the same Git-branch simultaneously in different remote Git-repositories.
-* With a single copy of **git-repo-sync** you can synchronize as many Git-repository pairs as you want.
+* With a single copy of **git-repo-sync** you can synchronize as many Git-repository pairs as you want. Every pair is a sync project.
 * **git-repo-sync** requires only Git and bash installed on your machine. (It could be updated to work with outdated Git, bash and AWK.)
 * All possible Git-operations and synchronizatons are fully covered by auto tests.
 * It has two automated conflict solving strategies which are described below.
