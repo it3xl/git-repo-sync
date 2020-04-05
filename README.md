@@ -30,6 +30,7 @@ You can imagine this as a two entry points for a single remote Git-repository.
 * For greater readability, you can separate verification and synchronization phases across different projects.
 * Multiple configuration capabilities are supported.
 * **git-repo-sync** has integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)**
+* You shouldn't do anything in case of connectivity fails. Continue to run **git-repo-sync** and everything will be restored automatically.
 
 ## How To Start
 
@@ -38,7 +39,8 @@ You can imagine this as a two entry points for a single remote Git-repository.
 * Intervals of synchronization from one minute to several hours will be enough. This is not a problem if you run it once a week or even a month.
 
 ## How To - Automation servers
-* After every synchronization, analyze notification files to send notifications about branch deletions or conflict solving.
+* After every synchronization, analyze notification files to send notifications about branch deletions or conflict solving.  
+See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals`
 * See instructions on how to configure synchronization for another pair of remote Git repositories.
 * Number of pairs is unlimited. Every pair is a separate project.
 
