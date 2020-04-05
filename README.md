@@ -5,7 +5,7 @@
 **git-repo-sync** synchronizes git-branches between two remote Git-repositories.
 
 With this tool, you will forget that you have two remote Git-repositories for the same software product.  
-The repositories will behave as a single remote Git repository.  
+The repositories will be behaving as a single remote Git-repository.  
 You can imagine this as a two entry points for a single remote Git-repository.
 
 * Only Git-branches with conventional prefixes will be synchronized. You have to configure this [prefixes](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh).
