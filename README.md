@@ -66,11 +66,16 @@ You can relocate it to any position, move it back, delete, etc.
 
 ### Conventional Strategy
 
+Conventional strategy solves conflicting Git-commits in your favor.  
+It limits number of possible operations on your Git-branches for your partner from another remote Git-repository.  
+And vice versa.
+
 Let's call your two synchronized remote Git-repositories as sides.  
 Let's agree that every side owns its own prefix for Git-branches.  
 Then let's call branches with these prefixes as Conventional branches.  
-You can do whatever you want with Conventional branches from the owning side, i.e. repository.  
-And you can only do "forward updating commits" and merges from a non-owning side.
+
+You can do whatever you want with Conventional branches from your owning side, i.e. repository.  
+But you can only do "forward updating commits" and merges for non-owned branches from another side.
 
 ## Required Specification
 
@@ -79,6 +84,10 @@ And you can only do "forward updating commits" and merges from a non-owning side
 * For \*nix users - do not use outdated versions of bash.
 * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc.  
 Or do it yourself.
+
+## Thoughts
+
+You are welcomed to share your thoughts, for example in [issues](https://github.com/it3xl/git-repo-sync/issues)
 
 ## Contacts
 
