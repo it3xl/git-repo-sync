@@ -12,7 +12,7 @@ You can imagine this as a two entry points for a single remote Git-repository.
   * victim_branches_prefix variable
   * side_a_conventional_branches_prefix variable
   * side_b_conventional_branches_prefix variable
-* You can work on the same Git-branch simultaneously in different remote Git-repositories.
+* Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
 * With a single copy of **git-repo-sync** you can synchronize as many Git-repository pairs as you want. Every pair is a sync project.
 * **git-repo-sync** requires only Git and bash installed on your machine. (It could be updated to work with outdated Git, bash and AWK.)
 * All possible Git-operations and synchronizatons are fully covered by auto tests.
