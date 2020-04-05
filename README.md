@@ -19,14 +19,14 @@ You can imagine this as a two entry points for a single remote Git-repository.
 * It has two automated conflict solving strategies which are described below.
 * It is resilient for HTTP fails and interruptions. (Usage with SSH wasn't tested yet.)
 * It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
-* Prevention of an occasional deletion of an entire repository.
-* Prevention of occasional deletions by sinchronizaion of unrelated remote Git-repositories.
+* It has protections from an occasional deletion of an entire repository.
+* There is a protections from deletion or replacing of Git-branches by occasional sinchronizaion of unrelated remote Git-repositories.
 * Arbitrary rewriting of history is supported.
 * You even may move branches back in history.
-* A single sync pass is enough in all circumstances.
-* **git-repo-sync** works with remote Git repositories asynchronously, by default.
 
 ### Autumation Servers Support
+* **git-repo-sync** works with remote Git repositories asynchronously, by default.
+* A single synchronization pass will be enough in all circumstances.
 * For greater readability, you can separate verification and synchronization phases across different projects.
 * Multiple configuration capabilities are supported.
 * **git-repo-sync** has integration with **bash Git Credential Helper [git-cred](https://github.com/it3xl/bash-git-credential-helper)**
