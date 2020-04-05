@@ -8,21 +8,21 @@ With this tool, you will forget that you have two remote Git-repositories for th
 The repositories will be behaving as a single remote Git-repository.  
 You can imagine this as a two entry points for a single remote Git-repository.
 
+* Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
 * Only Git-branches with conventional prefixes will be synchronized. You should configure these prefixes in
   * victim_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_a_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_b_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
-* Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
-* With a single copy of **git-repo-sync** you can synchronize as many Git-repository pairs as you want. Every pair is a sync project.
 * **git-repo-sync** requires only Git and bash installed on your machine. (It could be updated to work with outdated Git, bash and AWK.)
+* With a single copy of **git-repo-sync** you can synchronize as many Git-repository pairs as you want. Every pair is a sync project.
 * All possible Git-operations and synchronizatons are fully covered by auto tests.
-* It has two automated conflict solving strategies which are described below.
 * It is resilient for HTTP fails and interruptions. (Usage with SSH wasn't tested yet.)
 * It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * It has protections from an occasional deletion of an entire repository.
 * There is a protections from deletion or replacing of Git-branches by occasional sinchronizaion of unrelated remote Git-repositories.
 * Arbitrary rewriting of history is supported.
 * You even may move branches back in history.
+* It has two automated conflict solving strategies which are described below.
 
 ### Autumation Servers Support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
