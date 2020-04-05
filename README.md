@@ -40,9 +40,9 @@ You can imagine this as a two entry points for a single remote Git-repository.
 
 ## How To - Automation servers
 * After every synchronization, analyze notification files to send notifications about branch deletions or conflict solving.  
-See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals`
-  * notify_solving - for conflict solving
-  * notify_del - for deletions
+See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
+  * `notify_solving` - for conflict solving
+  * `notify_del` - for deletions
 * See [instructions](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) on how to configure synchronization for another pair of remote Git repositories.
 * Number of pairs is unlimited. Every pair is a separate project.
 
