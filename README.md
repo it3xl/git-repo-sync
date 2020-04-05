@@ -29,7 +29,7 @@ You can imagine this as a two entry points for a single remote Git-repository.
 * A single synchronization pass will be enough in all circumstances.
 * For greater readability, you can separate verification and synchronization phases across different projects.
 * Multiple configuration capabilities are supported.
-* **git-repo-sync** has integration with **bash Git Credential Helper [git-cred](https://github.com/it3xl/bash-git-credential-helper)**
+* **git-repo-sync** has integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)**
 
 ## How To Start
 
