@@ -57,7 +57,7 @@
             echo
             echo " @ Our tool is optimized to work with gawk. I.e. GNU Awk"
             echo " @ but your system has the following edition of awk by default"
-            awk -W version | head -n 1
+            awk -W version 2> /dev/null | head -n 1
 
             echo " @ You need to install gawk as we didn't adopted usage of other editions of awk."
             echo
