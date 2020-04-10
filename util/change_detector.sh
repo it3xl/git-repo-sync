@@ -58,6 +58,6 @@ export remote_refs_b;
 export track_refs_a;
 export track_refs_b;
 
-changes_detected=$($awk_edition --file="$path_git_sync_util/gawk/change_detector.gawk")
+changes_detected=$($env_awk_edition --file="$path_git_sync_util/gawk/change_detector.gawk")
 echo
 
