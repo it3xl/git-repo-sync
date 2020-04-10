@@ -63,10 +63,10 @@
             echo "  @ Your current awk is - $edition_of_awk"
 
             echo
-            echo "  @ We run gawk below, as in this case some shells show a tip on how to install it."
+            echo "  @ Run the gawk command yourself as some shells show a hint on how to install it."
             echo
 
-            $env_awk_edition
+            exit 102;
         }
 
         # AWKPATH is env variable of GAWK that is used by the @include directive.
