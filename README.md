@@ -13,7 +13,9 @@ You can imagine this as a two entry points for a single remote Git-repository.
   * victim_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_a_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_b_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
-* **git-repo-sync** requires only Git and bash installed on your machine. (It could be updated to work with outdated Git, bash and AWK.)
+* **git-repo-sync** requires only Git, bash and gAWK installed on your machine.
+  * On Windows, GNU Awk (gAWK) is already included in Git installation together with **bash**.
+  * It could be updated to work with outdated Git, bash and other AWK editions.
 * With a single copy of **git-repo-sync** you can synchronize as many Git-repository pairs as you want. Every pair is a sync project.
 * All possible Git-operations and synchronizations are fully covered by auto tests.
 * It is resilient for HTTP fails and interruptions. (Usage with SSH wasn't tested yet.)
