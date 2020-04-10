@@ -51,6 +51,21 @@
         export path_git_sync="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
         export path_git_sync_util="$path_git_sync/util"
 
+        type gawk || {
+            echo
+            echo "Error! Exit!"
+            echo
+            echo " @ Our tool is optimized to work with gawk. I.e. GNU Awk"
+            echo " @ but your system has the following edition of awk by default"
+            awk -W version | head -n 1
+
+            echo " @ You need to install gawk as we didn't adopted usage of other editions of awk."
+            echo
+            echo " @ We will launch gawk below, as in this case some OS-s show tip on how to install it."
+
+            gawk
+        }
+
         # AWKPATH is env variable of GAWK that is used by the @include directive.
         # We need to set AWKPATH because our current directory commonly points points out to the sync Git repo, not our GAWK scripts.
         export AWKPATH="$path_git_sync_util/gawk"
@@ -155,7 +170,8 @@
         export env_awk_trace_on=1
         export env_process_if_refs_are_the_same=0
 
-        export awk_edition=${awk_edition:-gawk}
+        #export awk_edition=${awk_edition:-gawk}
+        export awk_edition=gawk
 
         path_project_root="$path_git_sync/sync-projects/$env_project_folder"
         export path_sync_repo="$path_project_root/sync_repo"
