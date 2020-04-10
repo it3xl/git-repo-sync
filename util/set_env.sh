@@ -155,6 +155,8 @@
         export env_awk_trace_on=1
         export env_process_if_refs_are_the_same=0
 
+        export awk_edition=${awk_edition:-gawk}
+
         path_project_root="$path_git_sync/sync-projects/$env_project_folder"
         export path_sync_repo="$path_project_root/sync_repo"
         # Catches outputs of the fork-join async implementation.

@@ -54,12 +54,12 @@ function sync_pass(){
         echo "$track_refs_b"
     fi;
 
-    # gawk --file="$path_git_sync/../proto/proto.gawk" <(echo)
+    # $awk_edition --file="$path_git_sync/../proto/proto.gawk" <(echo)
     # exit
 
 
     pre_fetch_processing='pre_fetch_processing.gawk'
-    pre_proc_data=$(gawk --file="$path_git_sync_util/gawk/$pre_fetch_processing" \
+    pre_proc_data=$($awk_edition --file="$path_git_sync_util/gawk/$pre_fetch_processing" \
         <(echo "$remote_refs_a") \
         <(echo "$remote_refs_b") \
         <(echo "$track_refs_a") \
@@ -155,7 +155,7 @@ function sync_pass(){
     # exit
 
 
-    proc_data=$(gawk \
+    proc_data=$($awk_edition \
         --file="$path_git_sync_util/gawk/post_fetch_processing.gawk" \
         `# --lint` \
         <(echo "$remote_refs_a") \
