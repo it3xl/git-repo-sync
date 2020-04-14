@@ -28,7 +28,7 @@ You can imagine this as a two entry points for a single remote Git-repository.
 
 ### Automation Servers Support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
-* Because of bash, everything works much faster under \*nix OS-es.
+* it works faster under \*nix OS-es because bash on Windows could be slower.
 * A single synchronization pass will be enough in all circumstances.
 * For greater readability, you can separate verification and synchronization phases across different projects.
 * Multiple configuration capabilities are supported.
