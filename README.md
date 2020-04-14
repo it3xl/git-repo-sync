@@ -86,9 +86,11 @@ But you can only do "forward updating commits" and merges for non-owned branches
 
 * Use any \*nix or Window machine.
 * Install Git (for Windows, include bash during Git installation).
-* For \*nix users - do not use outdated versions of bash.
+* For \*nix users
+  * do not use outdated versions of bash.
+  * check that gAWK (GNU AWK) is installed on your machine.
 * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc.  
-Or do it yourself.
+Or run it yourself.
 
 ## Thoughts
 
