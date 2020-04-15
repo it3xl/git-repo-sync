@@ -49,8 +49,9 @@ Then your steps are as follows
 
 * Push changes to your remote Git-repository
 * Sync repost by running [git-sync.sh](https://github.com/it3xl/git-repo-sync/blob/master/git-sync.sh)
-* Check what conflicts were during your last sync. See **notify_solving** file at `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
-* Ask your team repeat conflicting (rejected) commits or merges after updating of their local repos.
+* Check what conflicts were during your last sync. See **notify_solving** file at 
+`git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
+* Ask your team to repeat these conflicting (rejected) commits or merges after updating of their local repos.
 
 ## How To - Automation servers
 * After every synchronization, analyze notification files to send notifications about branch deletions or conflict solving.  
