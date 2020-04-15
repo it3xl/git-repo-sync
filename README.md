@@ -48,7 +48,7 @@ You can imagine this as a two entry points for a single remote Git-repository.
 In this case, take the following steps.
 
 * Push changes to your remote Git-repository
-* Sync repost by running [git-sync.sh](https://github.com/it3xl/git-repo-sync/blob/master/git-sync.sh)
+* Sync your two repositories by running [git-sync.sh](https://github.com/it3xl/git-repo-sync/blob/master/git-sync.sh)
 * Check what conflicts were during your last sync. See **notify_solving** file at 
 `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
 * Ask your team to repeat these conflicting (rejected) commits or merges after updating of their local repos.
