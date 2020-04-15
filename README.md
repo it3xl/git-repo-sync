@@ -18,7 +18,8 @@ You can imagine this as a two entry points for a single remote Git-repository.
   * It could be updated to work with outdated Git, bash and other AWK editions.
 * With a single copy of **git-repo-sync** you can synchronize as many Git-repository pairs as you want. Every pair is a sync project.
 * All possible Git-operations and synchronizations are fully covered by auto tests.
-* It is resilient for HTTP fails and interruptions. (Usage with SSH wasn't tested yet.)
+* You can access your Git remote repos by URLs and file paths. Usage with SSH wasn't tested yet but someday I will try to use it.
+* It is resilient for HTTP fails and interruptions.
 * It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * It has protections from an occasional deletion of an entire repository.
 * There is a protections from deletion or replacing of Git-branches by occasional synchronization of unrelated remote Git-repositories.
