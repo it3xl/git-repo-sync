@@ -84,7 +84,7 @@ This means that everyone can do whatever they want with such branches.
 You can relocate it to any position, move it back, delete, etc.
 
 **Warning** for your branch assigned to **sync_enabling_branch** variable.  
-If this branch name has no prefix from mentioned prefixes then it will be synchronized under the Victim strategy.
+If this branch name doesn't have a prefix from the mentioned prefixes, it will be synchronized according to the Victim strategy.
 
 ### Conventional Strategy
 
