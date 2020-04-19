@@ -40,7 +40,7 @@ You can imagine this as a two entry points for a single remote Git-repository.
 ## How To Start
 
 * You should configure 4 or more environment variables of **git-repo-sync** as described in this [default synchronization project](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) file.
-* Let's protect your repositories from occasional deletion and other problems. Assignee an existing branch name to the sync_enabling_branch variable. Otherwise you have to create **it3xl-git_repo_sync-enabled** branch in your non empty remote repositories.
+* Let's protect your repositories from occasional deletion and other problems. Assignee an existing branch name to the **sync_enabling_branch** variable. Otherwise you have to create **it3xl-git_repo_sync-enabled** branch in your non empty remote repositories.
 * Run [git-sync.sh](https://github.com/it3xl/git-repo-sync/blob/master/git-sync.sh) periodically.
 * Intervals of synchronization from one minute to several hours will be enough. This is not a problem if you run it once a week or even a month.  
 But the more often you sync, the less often automatic conflict solving is used.
@@ -82,6 +82,9 @@ For a Git-branch, the most recent action will win in case of a conflict. Even mo
 
 This means that everyone can do whatever they want with such branches.  
 You can relocate it to any position, move it back, delete, etc.
+
+**Warning** for your branch assigned to **sync_enabling_branch** variable.  
+If this branch name has no prefix from mentioned prefixes then it will be synchronized under the Victim strategy.
 
 ### Conventional Strategy
 
