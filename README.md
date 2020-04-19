@@ -2,10 +2,10 @@
 
 ## Synchronization of Remote Git-repositories
 
-**git-repo-sync** synchronizes git-branches between two remote Git-repositories.
+**git-repo-sync** synchronizes git-branches between two remote Git-repositories.  
+You can synchronize as many pairs of repositories as you need.
 
-With this tool, you will forget that you have two remote Git-repositories for the same software product.  
-Your two remote repositories will be behaving as a single remote Git-repository.  
+With this tool, your two remote repositories will be behaving as a single remote Git-repository.  
 You can imagine this as a two entry points for a single remote Git-repository.
 
 * Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
