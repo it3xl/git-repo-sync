@@ -16,7 +16,7 @@ You can imagine this as a two entry points for a single remote Git-repository.
 * **git-repo-sync** requires only Git, bash and gAWK installed on your machine.
   * On Windows, GNU Awk (gAWK) is already included in Git installation together with **bash**.
   * It could be updated to work with outdated Git, bash and other AWK editions.
-* With a single copy of **git-repo-sync** you can synchronize as many Git-repository pairs as you want. Every pair is a sync project.
+* With a single copy of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
 * All possible Git-operations and synchronizations are fully covered by auto tests.
 * You can access your Git remote repos by URLs or by file paths.
   * Usage with SSH wasn't tested yet but someday I will try to use it.
