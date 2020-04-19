@@ -89,15 +89,14 @@ If this branch name has no prefix from mentioned prefixes then it will be synchr
 ### Conventional Strategy
 
 Conventional strategy solves conflicting Git-commits in your favor.  
-It limits number of possible operations on your Git-branches for your partner from another remote Git-repository.  
+And it limits number of possible operations on your Git-branches for your partner from his remote Git-repository.  
 And vice versa.
 
-Let's call your two synchronized remote Git-repositories as sides.  
+Let's call some two synchronized remote Git-repositories as sides.  
 Let's agree that every side owns its own prefix for Git-branches.  
-Then let's call branches with these prefixes as Conventional branches.  
 
-You can do whatever you want with Conventional branches from your owning side, i.e. repository.  
-But you can only do "forward updating commits" and merges for non-owned branches from another side.
+You can do whatever you want with branches that your side owns.  
+But you can only do "forward updating commits" and merges for non-owned branches of another side.
 
 ## Required Specification
 
