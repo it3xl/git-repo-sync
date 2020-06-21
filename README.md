@@ -104,7 +104,7 @@ But you can only do "forward updating commits" and merges for non-owned branches
 * Install Git (for Windows, include bash during Git installation).
 * For \*nix users
   * do not use outdated versions of bash.
-  * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mawk to gawk on Ubuntu.
+  * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
 * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc.  
 Or run it yourself.
 
