@@ -13,7 +13,7 @@ You can imagine this as a two entry points for a single remote Git-repository.
   * victim_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_a_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_b_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
-* **git-repo-sync** requires only Git, bash and gAWK installed on your machine.
+* **git-repo-sync** requires only Git, bash and GNU Awk (gAWK) installed on your machine.
   * On Windows, GNU Awk (gAWK) is already included in Git installation together with **bash**.
   * It could be updated to work with outdated Git, bash and other AWK editions.
 * With a single copy of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
@@ -104,7 +104,7 @@ But you can only do "forward updating commits" and merges for non-owned branches
 * Install Git (for Windows, include bash during Git installation).
 * For \*nix users
   * do not use outdated versions of bash.
-  * check that gAWK (GNU AWK) is installed on your machine.
+  * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mawk to gawk on Ubuntu.
 * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc.  
 Or run it yourself.
 
