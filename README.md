@@ -12,8 +12,6 @@ You can imagine this as a two entry points for a single remote Git-repository.
 This tool intentionally do not sync all branches!<br/>
 You agree in your team what prefixes to use and only such prefixed branches will be syncronized.
 
-If this tool will became popular, I'll add unprefixed branches support. 
-
 * Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
 * Only Git-branches with conventional prefixes will be synchronized. You should configure these prefixes in
   * victim_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
@@ -33,6 +31,8 @@ If this tool will became popular, I'll add unprefixed branches support.
 * Arbitrary rewriting of history is supported.
 * You even may move branches back in history.
 * It has two automated conflict solving strategies which are described below.
+
+If this tool will became popular, I'll add unprefixed branches support. 
 
 ### Automation Servers Support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
