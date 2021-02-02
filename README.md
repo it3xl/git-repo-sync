@@ -23,12 +23,11 @@ With this tool, your two remote repositories will be behaving as a single remote
 * You can access your Git remote repos by URLs or by file paths.
   * Usage of SSH wasn't tested.
 * It is resilient for HTTP fails and interruptions.
-* It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * It has protections from an occasional deletion of an entire repository.
 * There is a protections from deletion or replacing of Git-branches by occasional synchronization of unrelated remote Git-repositories.
 * Arbitrary rewriting of history is supported.
 * You even may move branches back in history.
-* It intentionally doesn't sync Git-tags.
+* It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * I've dropped unprefixed branches support and configuring for simplicity.
 
 ### Automation Servers Support
