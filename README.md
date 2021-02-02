@@ -19,7 +19,6 @@ With this tool, your two remote repositories will be behaving as a single remote
   * **side_b_conventional_branches_prefix** variable for the Conventional strategy.
 * Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
 * **git-repo-sync** requires Git, bash and gawk (GNU Awk) installed.
-* With a single installation of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
 * You can access your Git remote repos by URLs or by file paths.
   * Usage of SSH wasn't tested.
 * It is resilient for HTTP fails and interruptions.
@@ -27,6 +26,7 @@ With this tool, your two remote repositories will be behaving as a single remote
 * There is a protections from deletion or replacing of Git-branches by occasional synchronization of unrelated remote Git-repositories.
 * Arbitrary rewriting of history is supported.
 * You even may move branches back in history.
+* With a single installation of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
 * It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * I've dropped unprefixed branches support and configuring for simplicity.
 
