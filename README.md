@@ -2,16 +2,18 @@
 
 ## Synchronization of Remote Git-repositories
 
-**git-repo-sync** synchronizes selected git-branches between two remote Git-repositories.  
+**git-repo-sync** synchronizes selected git-branches between two remote Git-repositories.<br/>
+The main idea here is install and forget.
 
 With this tool, your two remote repositories will be behaving as a single remote Git-repository for selected branches.  
-You can imagine this as a two entry points for a single remote Git-repository.
 
-### Main Idea
-* This tool intentionally do not sync all branches!
+### Notes
+* This tool intentionally only syncs Git-branches with a prefix.
+* It is important to understand two automated conflict solving strategies which are described below.
+* Each configuring prefix relates to its own conflict solving strategy.
 * You agree which prefixes to use, and only such prefixed-branches will be synced.
-  *For example @feture-abc, dev-feature-abc, client-hotfix where we have prefixes **\@**, **dev-**, **client-**.
-* Only Git-branches with conventional prefixes will be synchronized. You should configure these prefixes in
+  * For example @feture-abc, dev-abc, client-hotfix. We used here the following prefixes **\@**, **dev-**, **client-**.
+* You should configure these prefixes in
   * victim_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_a_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_b_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
@@ -28,9 +30,8 @@ You can imagine this as a two entry points for a single remote Git-repository.
 * There is a protections from deletion or replacing of Git-branches by occasional synchronization of unrelated remote Git-repositories.
 * Arbitrary rewriting of history is supported.
 * You even may move branches back in history.
-* It has two automated conflict solving strategies which are described below.
-
-If this tool will became popular, I'll add unprefixed branches support. 
+* It intentionally doesn't sync Git-tags.
+* I've dropped unprefixed branches support and configuring for simplicity.
 
 ### Automation Servers Support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
