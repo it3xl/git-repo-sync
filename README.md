@@ -2,21 +2,21 @@
 
 ## Synchronization of Remote Git-repositories
 
-**git-repo-sync** synchronizes selected git-branches between two remote Git-repositories.<br/>
+**git-repo-sync** synchronizes conventional (selected) git-branches between two remote Git-repositories.<br/>
 The main idea here is install and forget.
 
-With this tool, your two remote repositories will be behaving as a single remote Git-repository for selected branches.  
+With this tool, your two remote repositories will be behaving as a single remote Git-repository for conventional branches.  
 
 ### Notes
-* This tool intentionally only syncs Git-branches with a prefix.
-* It is important to understand two automated conflict solving strategies which are described below.
-* Each configuring prefix relates to its own conflict solving strategy.
+* This tool intentionally only syncs Git-branches with a prefix. I call it conventional prefixes.
 * You agree which prefixes to use, and only such prefixed-branches will be synced.
   * For example @feture-abc, dev-abc, client-hotfix. We used here the following prefixes **\@**, **dev-**, **client-**.
-* You should configure these prefixes in
-  * victim_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
-  * side_a_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
-  * side_b_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
+* It is important to understand two automated conflict solving strategies which are described below.
+* Each prefix relates to its own conflict solving strategy.
+* You should configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
+  * **victim_branches_prefix** variable for the Victim strategy.
+  * **side_a_conventional_branches_prefix** variable for the Conventional strategy.
+  * **side_b_conventional_branches_prefix** variable for the Conventional strategy.
 * Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
 * **git-repo-sync** requires only Git, bash and GNU Awk (gAWK) installed on your machine.
   * On Windows, GNU Awk (gAWK) is already included in Git installation together with **bash**.
