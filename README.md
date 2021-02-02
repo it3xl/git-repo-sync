@@ -10,7 +10,8 @@ You can imagine this as a two entry points for a single remote Git-repository.
 
 ### Main Idea
 This tool intentionally do not sync all branches!<br/>
-You agree in your team what prefixes to use and only such prefixed branches will be syncronized.
+You agree which prefixes to use, and only such prefixed-branches will be synced.<br/>
+For example @feture-abc, dev-feature-abc, client-hotfix where we have prefixes **\@**, **dev-**, **client-**.
 
 * Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
 * Only Git-branches with conventional prefixes will be synchronized. You should configure these prefixes in
