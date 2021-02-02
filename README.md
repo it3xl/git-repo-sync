@@ -2,7 +2,7 @@
 
 ## Synchronization of Remote Git-repositories
 
-**git-repo-sync** synchronizes conventional (selected) git-branches between two remote Git-repositories.<br/>
+The **git-repo-sync** synchronizes conventional (selected) git-branches between two remote Git-repositories.<br/>
 The main idea here is install and forget.
 
 With this tool, your two remote repositories will be behaving as a single remote Git-repository for conventional branches.  
