@@ -21,7 +21,7 @@ With this tool, your two remote repositories will be behaving as a single remote
 * **git-repo-sync** requires Git, bash and gawk (GNU Awk) installed.
 * With a single installation of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
 * You can access your Git remote repos by URLs or by file paths.
-  * Usage with SSH wasn't tested yet but someday I will try to use it.
+  * Usage of SSH wasn't tested.
 * It is resilient for HTTP fails and interruptions.
 * It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * It has protections from an occasional deletion of an entire repository.
