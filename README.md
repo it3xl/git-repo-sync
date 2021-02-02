@@ -3,26 +3,23 @@
 ## Synchronization of Remote Git-repositories
 
 **git-repo-sync** synchronizes selected git-branches between two remote Git-repositories.  
-You can synchronize as many pairs of repositories as you need within one installation.
 
 With this tool, your two remote repositories will be behaving as a single remote Git-repository for selected branches.  
 You can imagine this as a two entry points for a single remote Git-repository.
 
 ### Main Idea
-This tool intentionally do not sync all branches!<br/>
-You agree which prefixes to use, and only such prefixed-branches will be synced.<br/>
-For example @feture-abc, dev-feature-abc, client-hotfix where we have prefixes **\@**, **dev-**, **client-**.
-
-* Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
+* This tool intentionally do not sync all branches!
+* You agree which prefixes to use, and only such prefixed-branches will be synced.
+  *For example @feture-abc, dev-feature-abc, client-hotfix where we have prefixes **\@**, **dev-**, **client-**.
 * Only Git-branches with conventional prefixes will be synchronized. You should configure these prefixes in
   * victim_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_a_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * side_b_conventional_branches_prefix [variable](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
+* Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
 * **git-repo-sync** requires only Git, bash and GNU Awk (gAWK) installed on your machine.
   * On Windows, GNU Awk (gAWK) is already included in Git installation together with **bash**.
   * It could be updated to work with outdated Git, bash and other AWK editions.
-* With a single copy of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
-* All possible Git-operations and synchronizations are fully covered by auto tests.
+* With a single installation of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
 * You can access your Git remote repos by URLs or by file paths.
   * Usage with SSH wasn't tested yet but someday I will try to use it.
 * It is resilient for HTTP fails and interruptions.
