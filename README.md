@@ -18,9 +18,7 @@ With this tool, your two remote repositories will be behaving as a single remote
   * **side_a_conventional_branches_prefix** variable for the Conventional strategy.
   * **side_b_conventional_branches_prefix** variable for the Conventional strategy.
 * Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
-* **git-repo-sync** requires only Git, bash and GNU Awk (gAWK) installed on your machine.
-  * On Windows, GNU Awk (gAWK) is already included in Git installation together with **bash**.
-  * It could be updated to work with outdated Git, bash and other AWK editions.
+* **git-repo-sync** requires Git, bash and gawk (GNU Awk) installed.
 * With a single installation of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
 * You can access your Git remote repos by URLs or by file paths.
   * Usage with SSH wasn't tested yet but someday I will try to use it.
