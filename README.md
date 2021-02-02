@@ -10,7 +10,7 @@ With this tool, your two remote repositories will be behaving as a single remote
 ### Notes
 * This tool intentionally only syncs Git-branches with a prefix. I call it conventional prefixes.
 * You agree which prefixes to use, and only such prefixed-branches will be synced.
-  * For example @feture-abc, dev-abc, client-hotfix. We used here the following prefixes **\@**, **dev-**, **client-**.
+  * For example @feture-abc, dev-abc, client-hotfix where we use **\@**, **dev-**, **client-** as prefixes.
 * It is important to understand two automated conflict solving strategies which are described below.
 * Each prefix relates to its own conflict solving strategy.
 * You should configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
