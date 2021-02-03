@@ -35,7 +35,8 @@ function create_sync_repo(){
         if [[ ! -f "$git_cred" ]]; then
             echo
             echo Error! Exit! You have to update/download Git-SubModules of git-repo-sync project to use $git_cred
-            echo Or delete "use_bash_git_credential_helper=1" from your sync project settings file.
+            echo Run '"'git submodule init\; git submodule update --recursive'"' in the root folder of git-repo-sync.
+            echo Or comment out '"'use_bash_git_credential_helper=1'"' in your sync project settings file.
             echo
             
             delete_project_repo_and_exit

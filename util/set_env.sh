@@ -129,22 +129,33 @@
             exit 105;
         fi;
 
-        sync_ref_specs="${pref_a_conv:+${pref_a_conv}*  }${pref_b_conv:+${pref_b_conv}*  }${pref_victim:+${pref_victim}*  }$sync_enabling_branch"
-        export sync_ref_specs
-
         export origin_a=origin_a
         export origin_b=origin_b
 
-        track_ref_specs_a="${pref_a_conv:+refs/remotes/$origin_a/${pref_a_conv}*  }`
-                          `${pref_b_conv:+refs/remotes/$origin_a/${pref_b_conv}*  }`
-                          `${pref_victim:+refs/remotes/$origin_a/${pref_victim}*  }`
-                          `refs/remotes/$origin_a/$sync_enabling_branch"
-        export track_ref_specs_a
+        export victim_strategy__ignore_prefixes=${victim_strategy__ignore_prefixes-}
+        if [[ "$victim_strategy__ignore_prefixes" == '1' ]]; then
+            echo 'Info. *All branches sync *Victim strategy **The newest commit will win **Arbitrary branch relocations'
 
-        track_ref_specs_b="${pref_a_conv:+refs/remotes/$origin_b/${pref_a_conv}*  }`
-                          `${pref_b_conv:+refs/remotes/$origin_b/${pref_b_conv}*  }`
-                          `${pref_victim:+refs/remotes/$origin_b/${pref_victim}*  }`
-                          `refs/remotes/$origin_b/$sync_enabling_branch"
+            sync_ref_specs=;
+            track_ref_specs_a="refs/remotes/$origin_a"
+            track_ref_specs_b="refs/remotes/$origin_b"
+        else
+            sync_ref_specs="${pref_a_conv:+${pref_a_conv}*  }${pref_b_conv:+${pref_b_conv}*  }${pref_victim:+${pref_victim}*  }$sync_enabling_branch"
+
+            track_ref_specs_a="${pref_a_conv:+refs/remotes/$origin_a/${pref_a_conv}*  }`
+                            `${pref_b_conv:+refs/remotes/$origin_a/${pref_b_conv}*  }`
+                            `${pref_victim:+refs/remotes/$origin_a/${pref_victim}*  }`
+                            `refs/remotes/$origin_a/$sync_enabling_branch"
+
+            track_ref_specs_b="${pref_a_conv:+refs/remotes/$origin_b/${pref_a_conv}*  }`
+                            `${pref_b_conv:+refs/remotes/$origin_b/${pref_b_conv}*  }`
+                            `${pref_victim:+refs/remotes/$origin_b/${pref_victim}*  }`
+                            `refs/remotes/$origin_b/$sync_enabling_branch"
+        fi
+
+        export sync_ref_specs
+
+        export track_ref_specs_a
         export track_ref_specs_b
 
         export pref_a_conv

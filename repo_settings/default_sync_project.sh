@@ -1,11 +1,17 @@
+# Post your questions on https://github.com/it3xl/git-repo-sync/issues
+# I will be glad to explain the ambiguities and improve this documentation for others.
+
 
 # url_a=https://your-repo1-url.org/git/my_repo.git
 # url_b=https://git.your-repo2-url.org/my_repo.git
+
+# victim_strategy__ignore_prefixes=1
 
 # victim_branches_prefix=@
 
 # side_a_conventional_branches_prefix=a-
 # side_b_conventional_branches_prefix=b-
+
 
 # sync_enabling_branch=${victim_branches_prefix}test
 # sync_enabling_branch=${side_a_conventional_branches_prefix}prod
@@ -51,6 +57,13 @@
 # Then url_a and url_b point to git remote repository of the A side and B side accordingly.
 # SSH addresses wasn't tested yet.
 
+# # victim_strategy__ignore_prefixes
+# This is a new feature under development.
+# It disables all prefixes.
+# All repository branches became syncing. The Victim Sync strategy will be used.
+# That means that the latest commit will win in case of conflicts. Moving a Git-branch back in history works if the branch is synced.
+# Arbitrary branch modifications is allowed from booth synced Git-repositories.
+
 # # victim_branches_prefix
 # Git-branches with a prefix from this variable will be updated under a Victim Syncing strategy.
 # This means everybody can do whatever they want with such branches.
@@ -94,11 +107,11 @@
 # This variables enables using of git-cred, the "bash Git Credential Helper" from https://github.com/it3xl/bash-git-credential-helper
 # 
 # Git-cred allows you to use Git-credential values from environment variables
-#  that are defined automatically by any Continues Integration (CI) tool.
+#  which are defined automatically by any Continues Integration (CI) tool.
 #
 # You can use git-cred as an external tool and tune everything manually.
 # But configuring it here allows you to initialize git-cred only once.
-# BTW, git-cred allows git-repo-sync folder free relocation.
+# BTW, git-cred allows free relocation of an installation git-repo-sync folder.
 #
 ### Before using git-cred you must complete the following steps.
 #
