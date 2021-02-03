@@ -1,5 +1,5 @@
 # Post your questions on https://github.com/it3xl/git-repo-sync/issues
-# I will be glad to explain the ambiguities and improve this documentation for others.
+# I will be glad to explain the ambiguities and to improve this instruction for others.
 
 
 # url_a=https://your-repo1-url.org/git/my_repo.git

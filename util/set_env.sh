@@ -116,14 +116,16 @@
 
         if [[ "$pref_victim" \
             && ( "$pref_a_conv" == "$pref_victim" \
-            || "$pref_b_conv" == "$pref_victim" ) ]];
+                || "$pref_b_conv" == "$pref_victim" ) ]];
         then
             echo "Error! Exit! We expect that the victim ref prefix have letters different from conventional ref prefixes. $prefixes_trace_values"
 
             exit 104;
         fi;
 
-        if [[ ! "$pref_a_conv" && ! "$pref_b_conv" && ! "$pref_victim" ]]; then
+        export victim_strategy__ignore_prefixes=${victim_strategy__ignore_prefixes-}
+        
+        if [[ "$victim_strategy__ignore_prefixes" != '1' && ! "$pref_a_conv" && ! "$pref_b_conv" && ! "$pref_victim" ]]; then
             echo "Error! Exit! You have to configure victim or any conventional ref prefixes. $prefixes_trace_values"
 
             exit 105;
@@ -132,9 +134,8 @@
         export origin_a=origin_a
         export origin_b=origin_b
 
-        export victim_strategy__ignore_prefixes=${victim_strategy__ignore_prefixes-}
         if [[ "$victim_strategy__ignore_prefixes" == '1' ]]; then
-            echo 'Info. *All branches sync *Victim strategy **The newest commit will win **Arbitrary branch relocations'
+            echo 'Info. *All branches sync *Victim strategy **The newest commit will win **Arbitrary branch relocations and deletions'
 
             sync_ref_specs=;
             track_ref_specs_a="refs/remotes/$origin_a"
