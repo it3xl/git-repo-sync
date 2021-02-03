@@ -35,7 +35,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     origin_b = ""
     
     pref_a_conv = ENVIRON["pref_a_conv"];
-    # Do not mask conf prefix any more as eptiness checcing was added.
+    # Do not mask conf prefix any more as emptiness checking was added.
     # if(!pref_a_conv){
     #     d_trace("The conventional B prefix isn't defined. Conventional branches sync functionality is disabled.")
     #     # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
@@ -45,7 +45,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     pref_a_conv = ""
     
     pref_b_conv = ENVIRON["pref_b_conv"];
-    # Do not mask conf prefix any more as eptiness checcing was added.
+    # Do not mask conf prefix any more as emptiness checking was added.
     # if(!pref_b_conv){
     #     d_trace("The conventional B prefix isn't defined. Conventional branches sync functionality is disabled.")
     #     # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
@@ -55,7 +55,7 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     pref_b_conv = ""
 
     pref_victim = ENVIRON["pref_victim"];
-    # Do not mask conf prefix any more as eptiness checcing was added.
+    # Do not mask conf prefix any more as emptiness checking was added.
     # if(!pref_victim){
     #     d_trace("The victim prefix isn't defined. Victim branches sync functionality is disabled.")
     #     # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
@@ -134,9 +134,9 @@ function file_states_processing() {
         next;
     }
     
-    prepare_ref_sates();
+    prepare_ref_states();
 }
-function prepare_ref_sates(    ref){
+function prepare_ref_states(    ref){
     prefix_name_key();
 
     ref = $3;
