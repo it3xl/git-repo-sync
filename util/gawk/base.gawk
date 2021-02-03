@@ -48,6 +48,8 @@ function append_by_val(host, addition){
 }
 
 function use_victim_sync(ref){
+    if(force_victim_sync())
+        return 1;
     if(explicit_victim_ref(ref))
         return 1;
 
@@ -64,6 +66,14 @@ function use_conv_sync(ref) {
     return side_a_conv_ref(ref) || side_b_conv_ref(ref);
 }
 
+function side_a_conv_ref(ref){
+    return side_conv_ref(ref, side_a);
+}
+
+function side_b_conv_ref(ref){
+    return side_conv_ref(ref, side_b);
+}
+
 function side_conv_ref(ref, side,    conv_pref){
     conv_pref = prefix[side];
     if(!conv_pref){
@@ -73,18 +83,18 @@ function side_conv_ref(ref, side,    conv_pref){
     return index(ref, conv_pref) == 1;
 }
 
-function side_a_conv_ref(ref){
-    return side_conv_ref(ref, side_a);
-}
-
-function side_b_conv_ref(ref){
-    return side_conv_ref(ref, side_b);
-}
-
 function explicit_victim_ref(ref){
     if(!pref_victim){
         return 0;
     }
 
     return index(ref, pref_victim) == 1;
+}
+
+function force_victim_sync(){
+    return victim_strategy__ignore_prefixes == 1;
+}
+
+function sync_all_refs(){
+    return victim_strategy__ignore_prefixes == 1;
 }

@@ -34,6 +34,8 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     origin[side_b] = origin_b;
     origin_b = ""
     
+    victim_strategy__ignore_prefixes = ENVIRON["victim_strategy__ignore_prefixes"];
+
     pref_a_conv = ENVIRON["pref_a_conv"];
     # Do not mask conf prefix any more as emptiness checking was added.
     # if(!pref_a_conv){
@@ -140,7 +142,8 @@ function prepare_ref_states(    ref){
     prefix_name_key();
 
     ref = $3;
-    if(ref != sync_enabling_branch \
+    if( !sync_all_refs() \
+        && ref != sync_enabling_branch \
         && !explicit_victim_ref(ref) \
         && !side_a_conv_ref(ref) \
         && !side_b_conv_ref(ref) \
