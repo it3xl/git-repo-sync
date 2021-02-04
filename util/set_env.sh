@@ -122,10 +122,8 @@
 
             exit 104;
         fi;
-
-        export victim_strategy__ignore_prefixes=${victim_strategy__ignore_prefixes-}
         
-        if [[ "$victim_strategy__ignore_prefixes" != '1' && ! "$pref_a_conv" && ! "$pref_b_conv" && ! "$pref_victim" ]]; then
+        if [[ ! "$pref_a_conv" && ! "$pref_b_conv" && ! "$pref_victim" ]]; then
             echo "Error! Exit! You have to configure victim or any conventional ref prefixes. $prefixes_trace_values"
 
             exit 105;
@@ -134,13 +132,7 @@
         export origin_a=origin_a
         export origin_b=origin_b
 
-        if [[ "$victim_strategy__ignore_prefixes" == '1' ]]; then
-            echo 'Info. *All branches sync *Victim strategy **The newest commit will win **Arbitrary branch relocations and deletions'
-
-            sync_ref_specs=;
-            track_ref_specs_a="refs/remotes/$origin_a"
-            track_ref_specs_b="refs/remotes/$origin_b"
-        else
+        if [[ "$pref_victim" ]]; then
             sync_ref_specs="${pref_a_conv:+${pref_a_conv}*  }${pref_b_conv:+${pref_b_conv}*  }${pref_victim:+${pref_victim}*  }$sync_enabling_branch"
 
             track_ref_specs_a="${pref_a_conv:+refs/remotes/$origin_a/${pref_a_conv}*  }`
@@ -152,6 +144,12 @@
                             `${pref_b_conv:+refs/remotes/$origin_b/${pref_b_conv}*  }`
                             `${pref_victim:+refs/remotes/$origin_b/${pref_victim}*  }`
                             `refs/remotes/$origin_b/$sync_enabling_branch"
+        else
+            echo 'Info. *All-branches-sync mode! Use "..._prefix" configuration parameters to limit synced branches.'
+
+            sync_ref_specs=;
+            track_ref_specs_a="refs/remotes/$origin_a"
+            track_ref_specs_b="refs/remotes/$origin_b"
         fi
 
         export sync_ref_specs

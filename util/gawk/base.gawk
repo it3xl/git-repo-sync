@@ -20,16 +20,16 @@ function unlock_deletion(){
 function generate_missing_refs(    ref){
     for(ref in refs){
         if(!refs[ref][side_a][remote][ref_key]){
-            refs[ref][side_a][remote][ref_key] = remote_refs_prefix ref;
+            refs[ref][side_a][remote][ref_key] = remote_refs_path ref;
         }
         if(!refs[ref][side_b][remote][ref_key]){
-            refs[ref][side_b][remote][ref_key] = remote_refs_prefix ref;
+            refs[ref][side_b][remote][ref_key] = remote_refs_path ref;
         }
         if(!refs[ref][side_a][track][ref_key]){
-            refs[ref][side_a][track][ref_key] = track_refs_prefix origin[side_a] "/" ref;
+            refs[ref][side_a][track][ref_key] = track_refs_path origin[side_a] "/" ref;
         }
         if(!refs[ref][side_b][track][ref_key]){
-            refs[ref][side_b][track][ref_key] = track_refs_prefix origin[side_b] "/" ref;
+            refs[ref][side_b][track][ref_key] = track_refs_path origin[side_b] "/" ref;
         }
 
         # d_trace("ref is " ref);
@@ -48,18 +48,20 @@ function append_by_val(host, addition){
 }
 
 function use_victim_sync(ref){
-    if(force_victim_sync())
-        return 1;
-    if(explicit_victim_ref(ref))
-        return 1;
+    return !use_conv_sync(ref);
 
-    if(use_conv_sync(ref)){
-        # sync_enabling_branch may be a conventional branch.
-        return 0;
-    }
+    # if(use_conv_sync(ref)){
+    #     # sync_enabling_branch may be a conventional branch.
+    #     return 0;
+    # }
 
-    # by default sync_enabling_branch uses the victim syncing strategy.
-    return ref == sync_enabling_branch;
+    # if(force_victim_sync())
+    #     return 1;
+    # if(explicit_victim_ref(ref))
+    #     return 1;
+
+    # # by default sync_enabling_branch uses the victim syncing strategy.
+    # return ref == sync_enabling_branch;
 }
 
 function use_conv_sync(ref) {
@@ -91,10 +93,10 @@ function explicit_victim_ref(ref){
     return index(ref, pref_victim) == 1;
 }
 
-function force_victim_sync(){
-    return victim_strategy__ignore_prefixes == 1;
-}
+# function force_victim_sync(){
+#     return !pref_victim;
+# }
 
 function sync_all_refs(){
-    return victim_strategy__ignore_prefixes == 1;
+    return !pref_victim;
 }

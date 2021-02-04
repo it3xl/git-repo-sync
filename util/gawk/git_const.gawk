@@ -1,7 +1,7 @@
 
 BEGIN { # Constants.
-    track_refs_prefix = "refs/remotes/";
-    remote_refs_prefix = "refs/heads/";
+    track_refs_path = "refs/remotes/";
+    remote_refs_path = "refs/heads/";
 
     remote = "remote"
     track = "track"

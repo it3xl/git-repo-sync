@@ -33,8 +33,6 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     }
     origin[side_b] = origin_b;
     origin_b = ""
-    
-    victim_strategy__ignore_prefixes = ENVIRON["victim_strategy__ignore_prefixes"];
 
     pref_a_conv = ENVIRON["pref_a_conv"];
     # Do not mask conf prefix any more as emptiness checking was added.
@@ -111,22 +109,22 @@ function file_states_processing() {
         case 1:
             current_dest = remote;
             current_side = side_a;
-            ref_prefix = remote_refs_prefix;
+            ref_prefix = remote_refs_path;
             break;
         case 2:
             current_dest = remote;
             current_side = side_b;
-            ref_prefix = remote_refs_prefix;
+            ref_prefix = remote_refs_path;
             break;
         case 3:
             current_dest = track;
             current_side = side_a;
-            ref_prefix = track_refs_prefix origin[side_a] "/";
+            ref_prefix = track_refs_path origin[side_a] "/";
             break;
         case 4:
             current_dest = track;
             current_side = side_b;
-            ref_prefix = track_refs_prefix origin[side_b] "/";
+            ref_prefix = track_refs_path origin[side_b] "/";
             break;
     }
 }
