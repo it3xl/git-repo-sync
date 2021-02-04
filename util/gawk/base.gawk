@@ -50,6 +50,7 @@ function append_by_val(host, addition){
 function use_victim_sync(ref){
     return !use_conv_sync(ref);
 
+    # TODO.it3xl: Delete.
     # if(use_conv_sync(ref)){
     #     # sync_enabling_branch may be a conventional branch.
     #     return 0;
@@ -93,6 +94,7 @@ function explicit_victim_ref(ref){
     return index(ref, pref_victim) == 1;
 }
 
+# TODO.it3xl: Delete.
 # function force_victim_sync(){
 #     return !pref_victim;
 # }

@@ -60,7 +60,7 @@
             echo "  @ Our tool is optimized to work with gawk. I.e. GNU Awk (env_awk_edition = $env_awk_edition)"
             echo "  @ You need to install gawk as we didn't adopted other AWK editions yet."
             edition_of_awk=$(awk -W version 2> /dev/null | head -n 1)
-            echo "  @ Your current awk is - $edition_of_awk"
+            echo "  @ Your current awk is - '$edition_of_awk'"
 
             echo
             echo "  @ Run the gawk command yourself as some shells show a hint on how to install it."
@@ -86,10 +86,10 @@
         if [[ ! ${url_a:+1} ]]; then missed_repo_settings+="url_a  "; fi
         if [[ ! ${url_b:+1} ]]; then missed_repo_settings+="url_b  "; fi
 
-        if [[ ${missed_repo_settings:+1} ]]; then echo "Error! Exit! The following repo properties must be set:  $missed_repo_settings"; fi
-
         if [[ ${missed_repo_settings:+1} ]]; then
-            exit 102;
+            echo "Error! Exit! The following repo properties must be set:  $missed_repo_settings";
+
+            exit 103;
         fi
 
 
@@ -108,7 +108,7 @@
         if [[ "$pref_a_conv" && "$pref_a_conv" == "$pref_b_conv" ]]; then
             echo "Error! Exit! We expected you to assign different values for conventional ref prefixes. $conventional_prefixes_trace_values"
 
-            exit 103;
+            exit 104;
         fi;
 
         prefixes_trace_values="
@@ -120,14 +120,15 @@
         then
             echo "Error! Exit! We expect that the victim ref prefix have letters different from conventional ref prefixes. $prefixes_trace_values"
 
-            exit 104;
-        fi;
-        
-        if [[ ! "$pref_a_conv" && ! "$pref_b_conv" && ! "$pref_victim" ]]; then
-            echo "Error! Exit! You have to configure victim or any conventional ref prefixes. $prefixes_trace_values"
-
             exit 105;
         fi;
+        
+        # TODO.it3xl: Delete
+        # if [[ ! "$pref_a_conv" && ! "$pref_b_conv" && ! "$pref_victim" ]]; then
+        #     echo "Error! Exit! You have to configure victim or any conventional ref prefixes. $prefixes_trace_values"
+
+        #     exit 106;
+        # fi;
 
         export origin_a=origin_a
         export origin_b=origin_b

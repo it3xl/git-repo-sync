@@ -41,7 +41,7 @@
 # * In this case your config-file could be located in the following folders:
 # ** git-repo-sync/repo_settings
 # ** git-repo-sync/../git-repo-sync.repo_settings
-# * Use full path if you want to locate you config file in an arbitrary location.
+# * Use a full path or relative path to "git-repo-sync" if you want to locate you config file in an arbitrary location.
 # * Invocation example: $ ./git-sync.sh  my-sync-project.sh
 #
 ## Declare config variables in your script and add git-sync.sh invocation.
