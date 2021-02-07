@@ -174,20 +174,22 @@ function sync_pass(){
     fi;
     # exit
 
-    remove_tracking_spec="${proc_list[0]}";
-    notify_del="${proc_list[1]//$env_awk_newline_substitution/$'\n'}";
+    processing_requested="${proc_list[0]}";
+    remove_tracking_spec="${proc_list[1]}";
+    notify_del="${proc_list[2]//$env_awk_newline_substitution/$'\n'}";
 
-    push_spec_a="${proc_list[2]}";
-    push_spec_b="${proc_list[3]}";
-    notify_solving="${proc_list[4]//$env_awk_newline_substitution/$'\n'}";
+    push_spec_a="${proc_list[3]}";
+    push_spec_b="${proc_list[4]}";
+    notify_solving="${proc_list[5]//$env_awk_newline_substitution/$'\n'}";
 
-    post_fetch_spec_a="${proc_list[5]}";
-    post_fetch_spec_b="${proc_list[6]}";
+    post_fetch_spec_a="${proc_list[6]}";
+    post_fetch_spec_b="${proc_list[7]}";
 
-    end_of_results="${proc_list[7]}";
+    end_of_results="${proc_list[8]}";
 
     if [[ $env_trace_refs == 1 ]]; then
         echo
+        echo processing_requested is "$processing_requested"
         echo remove_tracking_spec is
         echo "$remove_tracking_spec"
         echo notify_del is
@@ -215,6 +217,9 @@ function sync_pass(){
         exit 23
     fi;
 
+    if [[ "$processing_requested" == '1' ]]; then
+        ((++post_fetch_processing_num))
+    fi;
 
     mkdir -p "$path_async_output"
 

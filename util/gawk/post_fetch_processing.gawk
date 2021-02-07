@@ -482,7 +482,13 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, trace_action, tr
     }
 }
 
-function refspecs_to_stream(    ){
+function refspecs_to_stream(    out_processing_requested){
+
+    out_processing_requested = 0 < length(out_remove_tracking out_push[side_a] out_push[side_b] out_post_fetch[side_a] out_post_fetch[side_b]);
+
+
+    print out_processing_requested;
+
     print out_remove_tracking;
     print out_notify_del[val];
 

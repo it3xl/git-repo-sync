@@ -169,6 +169,7 @@
 
         export git_sync_pass_num=0
         export git_sync_pass_num_required=0
+        export post_fetch_processing_num=0
 
         # The way we receive data from gawk we can't use new line char in the output. So we are using a substitution.
         export env_awk_newline_substitution='|||||'
