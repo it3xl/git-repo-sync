@@ -5,7 +5,7 @@ BEGIN { # Constants.
     val = "val";
     common = "common";
     equal = "equal";
-    empty = "empty";
+    empty_both = "empty_both";
     empty_any = "empty_any";
 }
 BEGIN { # Parameters.

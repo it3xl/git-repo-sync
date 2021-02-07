@@ -34,16 +34,16 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim){
         return;
 
     remote_sha[common] = remote_sha[equal] ? remote_sha[side_a] : "";
-    remote_sha[empty] = !(remote_sha[side_a] || remote_sha[side_b]);
+    remote_sha[empty_both] = !(remote_sha[side_a] || remote_sha[side_b]);
     remote_sha[empty_any] = !remote_sha[side_a] || !remote_sha[side_b];
 
     track_sha[common] = track_sha[equal] ? track_sha[side_a] : "";
-    track_sha[empty] = !(track_sha[side_a] || track_sha[side_b]);
+    track_sha[empty_both] = !(track_sha[side_a] || track_sha[side_b]);
     track_sha[empty_any] = !track_sha[side_a] || !track_sha[side_b];
 
     is_victim = use_victim_sync(ref);
 
-    if(remote_sha[empty])
+    if(remote_sha[empty_both])
         return;
     
     request_victim_move(ref, remote_sha, track_sha, is_victim);
@@ -54,7 +54,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim){
         return;
     }
 
-    if(track_sha[empty]){
+    if(track_sha[empty_both]){
         request_update_tracking(ref, remote_sha, track_sha);
 
         return;
@@ -90,7 +90,7 @@ function request_conv_move(ref, remote_sha, track_sha, is_victim,    side, aside
     if(!track_sha[equal])
         return;
     
-    if(track_sha[empty])
+    if(track_sha[empty_both])
         return;
 
     for(side in sides){
@@ -116,6 +116,8 @@ function request_conv_move(ref, remote_sha, track_sha, is_victim,    side, aside
     }
 }
 function request_victim_move(ref, remote_sha, track_sha, is_victim,    side, aside){
+    # This allows to decrease Git local request for regulary synced repos.
+
     if(!is_victim)
         return;
 
@@ -144,7 +146,7 @@ function request_victim_move(ref, remote_sha, track_sha, is_victim,    side, asi
         }
 
         # Let's allow updating of the another side conventional refs. Remember fast-forward updating candidates.
-        trace(ref " request-non-fast-forward; ref changed on " origin[side] " only");
+        trace(ref " request-non-fast-forward; ref changed only on " origin[side]);
         a_victim_move[ref][remote_sha[side]];
     }
 }

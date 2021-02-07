@@ -44,16 +44,16 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
         return;
 
     remote_sha[common] = remote_sha[equal] ? remote_sha[side_a] : "";
-    remote_sha[empty] = !(remote_sha[side_a] || remote_sha[side_b]);
+    remote_sha[empty_both] = !(remote_sha[side_a] || remote_sha[side_b]);
     remote_sha[empty_any] = !remote_sha[side_a] || !remote_sha[side_b];
 
     track_sha[common] = track_sha[equal] ? track_sha[side_a] : "";
-    track_sha[empty] = !(track_sha[side_a] || track_sha[side_b]);
+    track_sha[empty_both] = !(track_sha[side_a] || track_sha[side_b]);
     track_sha[empty_any] = !track_sha[side_a] || !track_sha[side_b];
 
     is_victim = use_victim_sync(ref);
 
-    if(remote_sha[empty]){
+    if(remote_sha[empty_both]){
         # A branch in the ref was deleted manually in both repos.
 
         trace(ref ": action-remove-tracking-as-unknown-on-both-remotes");
@@ -64,7 +64,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
 
     # ! All further actions assume that remote refs are unequal.
 
-    if(track_sha[empty]){
+    if(track_sha[empty_both]){
         trace("!Warning!");
         trace("!! Something went wrong for " ref ". It is still untracked.");
         trace("!! Possibly the program or the network were interrupted.");
@@ -76,13 +76,16 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
     if(del_to_action(ref, is_victim, remote_sha, track_sha)){
         return;
     }
-    if(move_to_refspec(ref, conv_move, is_victim)){
+    if(move_to_refspec_by_state(ref, conv_move, is_victim)){
         return;
     }
-    if(move_to_refspec(ref, victim_move, is_victim)){
+    if(move_to_refspec_by_state(ref, victim_move, is_victim)){
         return;
     }
-    if(victim_move_to_refspec(ref, remote_sha, track_sha)){
+    if(victim_move_to_refspec(ref, remote_sha, track_sha, is_victim)){
+        return;
+    }
+    if(move_to_refspec_by_remote(ref, remote_sha, track_sha, is_victim)){
         return;
     }
 
@@ -140,7 +143,7 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
         return 1;
     }
 }
-function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, cmd, parent_sha, parent_side, child_side, action_key, moving_back, owner_action, force_key){
+function move_to_refspec_by_state(ref, source_refs, is_victim,    ref_item, action_sha, cmd, parent_sha, parent_side, child_side, action_key, moving_back, owner_action, force_key){
     for(ref_item in source_refs){
         if(ref_item != ref){
             continue;
@@ -153,7 +156,9 @@ function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, c
         return;
     }
 
+
     cmd = "git merge-base " refs[ref][side_a][track][ref_key] " " refs[ref][side_b][track][ref_key];
+
     
     cmd | getline parent_sha;
     close(cmd);
@@ -169,13 +174,14 @@ function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, c
         
         exit 99;
     } else {
-        trace(ref " rejected-move; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
+        # We didn't covered Git multy root cases by this logic yet.
+        trace(ref " rejected-move-by-state; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
 
         return;
     }
 
     child_side = asides[parent_side];
-    action_key = "action-fast-forward";
+    action_key = "action-fast-forward-by-state";
 
     moving_back = parent_sha == action_sha;
     if(moving_back){
@@ -189,9 +195,9 @@ function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, c
         parent_side = child_side;
         child_side = asides[parent_side];
         force_key = "+";
-        action_key = "action-moving-back";
+        action_key = "action-moving-back-by-state";
 
-        append_by_val(out_notify_solving, "moving-back | " parent_side " | " ref " | out-of " refs[ref][parent_side][track][sha_key] " to " refs[ref][child_side][track][sha_key]);
+        append_by_val(out_notify_solving, "moving-back-by-state | " parent_side " | " ref " | out-of " refs[ref][parent_side][track][sha_key] " to " refs[ref][child_side][track][sha_key]);
     }
     
     trace(ref " " action_key "; from " origin[parent_side] " to " origin[child_side]);
@@ -200,7 +206,10 @@ function move_to_refspec(ref, source_refs, is_victim,    ref_item, action_sha, c
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
 }
-function victim_move_to_refspec(ref, remote_sha, track_sha,    ref_item, action_sha, source_side, target_side){
+function victim_move_to_refspec(ref, remote_sha, track_sha, is_victim,    ref_item, action_sha, source_side, target_side){
+    if(!is_victim)
+        return;
+    
     for(ref_item in victim_move){
         if(ref_item != ref){
             continue;
@@ -214,7 +223,7 @@ function victim_move_to_refspec(ref, remote_sha, track_sha,    ref_item, action_
     }
 
     # The idea below is to ignore a candidate ref if sha was changed since last check.
-    # E.g. obey ra==la & rb==lb & ra!=rb
+    # E.g. process with ra==ta & rb==tb & ra!=rb
 
     if(remote_sha[equal])
         return;
@@ -241,6 +250,70 @@ function victim_move_to_refspec(ref, remote_sha, track_sha,    ref_item, action_
 
     trace(ref " action-non-fast-forward to " action_sha);
     out_push[target_side] = out_push[target_side] "  +" refs[ref][source_side][track][ref_key] ":" refs[ref][target_side][remote][ref_key];
+
+    # Let's inform a calling logic that we've processed the current ref.
+    return 1;
+}
+function move_to_refspec_by_remote(ref, remote_sha, track_sha, is_victim,    ref_item, action_sha, cmd, parent_sha, parent_side, child_side, action_key, moving_back, owner_action, force_key){
+    # Process when ra==ta & rb==tb & ra!=rb & all not empty.
+    if(remote_sha[empty_any])
+        return;
+    if(track_sha[empty_any])
+        return;
+    if(remote_sha[equal])
+        return;
+    if(track_sha[equal])
+        return;
+    if(remote_sha[side_a] != track_sha[side_a])
+        return;
+    if(remote_sha[side_b] != track_sha[side_b])
+        return;
+
+    cmd = "git merge-base " refs[ref][side_a][track][ref_key] " " refs[ref][side_b][track][ref_key];
+
+    
+    cmd | getline parent_sha;
+    close(cmd);
+
+    if(parent_sha == refs[ref][side_a][track][sha_key]){
+        parent_side = side_a;
+    } else if(parent_sha == refs[ref][side_b][track][sha_key]){
+        parent_side = side_b;
+    } else if(!parent_sha && ref == sync_enabling_branch){
+        write("\nYou are trying to sync unrelated Git-remote repositories. Syncing is blocked");
+        write("\"" ref "\" has different SHA and has no a parent commit");
+        write("\"" ref "\" located in " side_a ":" refs[ref][side_a][remote][sha_key] " vs " side_b ":" refs[ref][side_b][remote][sha_key]);
+        
+        exit 98;
+    } else {
+        # We didn't covered Git multy root cases by this logic yet.
+        trace(ref " rejected-move-by-remote; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
+
+        return;
+    }
+
+    child_side = asides[parent_side];
+    action_key = "action-fast-forward-by-remote";
+
+    moving_back = parent_sha == action_sha;
+    if(moving_back){
+        if(!is_victim){
+            owner_action = side_conv_ref(ref, parent_side);
+            if(!owner_action){
+                # Moving back from a non-owner side is forbidden.
+                return;
+            }
+        }
+        parent_side = child_side;
+        child_side = asides[parent_side];
+        force_key = "+";
+        action_key = "action-moving-back-by-remote";
+
+        append_by_val(out_notify_solving, "moving-back-by-remote | " parent_side " | " ref " | out-of " refs[ref][parent_side][track][sha_key] " to " refs[ref][child_side][track][sha_key]);
+    }
+    
+    trace(ref " " action_key "; from " origin[parent_side] " to " origin[child_side]);
+    out_push[parent_side] = out_push[parent_side] "  " force_key refs[ref][child_side][track][ref_key] ":" refs[ref][parent_side][remote][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
@@ -373,7 +446,7 @@ function operations_to_refspecs(    side, aside, ref){
     }
 }
 
-function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt, remote_sha_b, track_sha_b, track_sha_b_txt, cmd, newest_sha, side_winner, side_victim, victim_sha){
+function set_victim_refspec(    ref, remote_sha_a, track_sha_a, trace_action, track_sha_a_txt, remote_sha_b, track_sha_b, track_sha_b_txt, cmd, newest_sha, side_winner, side_victim, victim_sha){
     for(ref in a_victim_solve){
         # We expects that "no sha" cases will be processed by common NFF-solving actions.
         # But this approach with variables help to solve severe errors. Also it makes code more resilient.
@@ -409,10 +482,6 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt,
             continue;
         }
 
-        track_sha_a_txt = track_sha_a ? track_sha_a : "<no-sha>"
-        track_sha_b_txt = track_sha_b ? track_sha_b : "<no-sha>"
-        trace("victim-solving: " ref " on " origin[side_winner] " beat " origin[side_victim] " with " track_sha_a_txt " vs " track_sha_b_txt);
-
         out_push[side_victim] = out_push[side_victim] "  +" refs[ref][side_winner][track][ref_key] ":" refs[ref][side_victim][remote][ref_key];
 
         victim_sha = refs[ref][side_victim][remote][sha_key];
@@ -420,6 +489,12 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, track_sha_a_txt,
         if(victim_sha){
             append_by_val(out_notify_solving, "victim-solving | " side_victim " | " ref " | out-of " victim_sha " to " refs[ref][side_winner][remote][sha_key]);
         }
+
+        trace_action = victim_sha ? "victim-solving" : "victim-empty-solving";
+
+        track_sha_a_txt = track_sha_a ? track_sha_a : "<no-sha>";
+        track_sha_b_txt = track_sha_b ? track_sha_b : "<no-sha>";
+        trace(trace_action ": " ref " on " origin[side_winner] " beat " origin[side_victim] " with " track_sha_a_txt " vs " track_sha_b_txt);
     }
 }
 

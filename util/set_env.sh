@@ -123,7 +123,7 @@
             exit 105;
         fi;
         
-        # TODO.it3xl: Delete
+        # TODO.it3xl: Delete.
         # if [[ ! "$pref_a_conv" && ! "$pref_b_conv" && ! "$pref_victim" ]]; then
         #     echo "Error! Exit! You have to configure victim or any conventional ref prefixes. $prefixes_trace_values"
 
