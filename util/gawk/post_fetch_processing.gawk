@@ -85,7 +85,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
     if(victim_move_to_refspec(ref, remote_sha, track_sha, is_victim)){
         return;
     }
-    if(move_to_refspec_by_remote(ref, remote_sha, track_sha, is_victim)){
+    if(ff_move_by_remote(ref, remote_sha, track_sha)){
         return;
     }
 
@@ -189,6 +189,8 @@ function move_to_refspec_by_state(ref, source_refs, is_victim,    ref_item, acti
             owner_action = side_conv_ref(ref, parent_side);
             if(!owner_action){
                 # Moving back from a non-owner side is forbidden.
+                trace(ref " forbidden-moving-back-by-state; non-owner side cannot move conventional ref back");
+
                 return;
             }
         }
@@ -254,7 +256,7 @@ function victim_move_to_refspec(ref, remote_sha, track_sha, is_victim,    ref_it
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
 }
-function move_to_refspec_by_remote(ref, remote_sha, track_sha, is_victim,    ref_item, action_sha, cmd, parent_sha, parent_side, child_side, action_key, moving_back, owner_action, force_key){
+function ff_move_by_remote(ref, remote_sha, track_sha,    cmd, parent_sha, parent_side, child_side){
     # Process when ra==ta & rb==tb & ra!=rb & all not empty.
     if(remote_sha[empty_any])
         return;
@@ -287,33 +289,15 @@ function move_to_refspec_by_remote(ref, remote_sha, track_sha, is_victim,    ref
         exit 98;
     } else {
         # We didn't covered Git multy root cases by this logic yet.
-        trace(ref " rejected-move-by-remote; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
+        trace(ref " rejected-fast-forward-by-remote; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
 
         return;
     }
 
     child_side = asides[parent_side];
-    action_key = "action-fast-forward-by-remote";
-
-    moving_back = parent_sha == action_sha;
-    if(moving_back){
-        if(!is_victim){
-            owner_action = side_conv_ref(ref, parent_side);
-            if(!owner_action){
-                # Moving back from a non-owner side is forbidden.
-                return;
-            }
-        }
-        parent_side = child_side;
-        child_side = asides[parent_side];
-        force_key = "+";
-        action_key = "action-moving-back-by-remote";
-
-        append_by_val(out_notify_solving, "moving-back-by-remote | " parent_side " | " ref " | out-of " refs[ref][parent_side][track][sha_key] " to " refs[ref][child_side][track][sha_key]);
-    }
     
-    trace(ref " " action_key "; from " origin[parent_side] " to " origin[child_side]);
-    out_push[parent_side] = out_push[parent_side] "  " force_key refs[ref][child_side][track][ref_key] ":" refs[ref][parent_side][remote][ref_key];
+    trace(ref " action-fast-forward-by-remote; from " origin[parent_side] " to " origin[child_side]);
+    out_push[parent_side] = out_push[parent_side] "  " refs[ref][child_side][track][ref_key] ":" refs[ref][parent_side][remote][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
@@ -498,7 +482,7 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, trace_action, tr
     }
 }
 
-function refspecs_to_stream(){
+function refspecs_to_stream(    ){
     print out_remove_tracking;
     print out_notify_del[val];
 
