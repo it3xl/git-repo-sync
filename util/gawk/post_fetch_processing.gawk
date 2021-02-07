@@ -168,7 +168,7 @@ function move_to_refspec_by_state(ref, source_refs, is_victim,    ref_item, acti
     } else if(parent_sha == refs[ref][side_b][track][sha_key]){
         parent_side = side_b;
     } else if(!parent_sha && ref == sync_enabling_branch){
-        write("\nSyncing is blocked as you are trying to sync unrelated Git-remote repositories");
+        write("\nSyncing is blocked. You are trying to sync unrelated Git-remote repositories");
         write("\"" ref "\" has different SHA and has no a parent commit");
         write("\"" ref "\" located in " side_a ":" refs[ref][side_a][remote][sha_key] " vs " side_b ":" refs[ref][side_b][remote][sha_key]);
         
