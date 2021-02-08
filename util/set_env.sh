@@ -8,7 +8,7 @@
 
         local file_name_repo_settings="${1-}"
 
-        [[ $# -eq 0 ]] && {
+        [[ ! "$file_name_repo_settings" ]] && {
             file_name_repo_settings="default_sync_project.sh"
 
             echo "Info. No configuration file in the first parameter. $file_name_repo_settings file will be used."
@@ -74,11 +74,11 @@
         export AWKPATH="$path_git_sync_util/gawk"
 
         if [[ ${git_sync_project_folder:+1} ]]; then
-            echo 'Info. Configuration will be taken from the current shell environment because git_sync_project_folder variable is defined'
+            echo 'Info. Taking configuration from parent environment as git_sync_project_folder is defined'
 
             env_project_folder=$git_sync_project_folder
         else
-            echo 'Info. Configuration will be taken from the first parameter because git_sync_project_folder variable is not defined'
+            echo 'Info. Seeking a configuration file provided in the first parameter as git_sync_project_folder isn''t defined'
 
             git_sync_env_run_settings_script "$@"
         fi

@@ -30,25 +30,24 @@
 
 ## This Configuration File
 #
-# All variables in this file configure the synchronization of two remote Git-repositories.
-# You can define them in a parent process environment.
-# Use the following options to configure.
+# Variables mentioned in this file configure synchronization of two remote Git-repositories.
+# Use the following options to configure your synchronization.
 #
-# * Uncomment and modify required variables in this file.
+## Uncomment and modify required variables in this file.
 #
-## Create a copy of this file.
-# * Pass the name of your copied file to git-sync.sh at the first parameter for every run.
-# * In this case your config-file could be located in the following folders:
-# ** git-repo-sync/repo_settings
-# ** git-repo-sync/../git-repo-sync.repo_settings
-# * Use a full path or relative path to "git-repo-sync" if you want to locate you config file in an arbitrary location.
-# * Invocation example: $ ./git-sync.sh  my-sync-project.sh
+## Create a copy of this file in one of the following locations
+# * git-repo-sync/repo_settings
+# * git-repo-sync/../git-repo-sync.repo_settings
+# Pass the name of your copied file to git-sync.sh as the first parameter for every run.
+# Invocation example: $ ./git-sync.sh  my-sync-project.sh
 #
-## Declare config variables in your script and add git-sync.sh invocation.
-# * The git_sync_project_folder variable is mandatory in this case.
+## Create a copy of this file in an arbitrary location.
+# Pass its full path to git-sync.sh as the first parameter for every run.
+# Or use a relative to "git-repo-sync" path.
 #
-# * Declare the variables in your environment and call git-sync.sh.
-# * The git_sync_project_folder variable is mandatory in this case.
+## Declare the variables in your script or environment.
+# Warning! Your configuration file will be ignored if your parent environment
+#  or calling script have the git_sync_project_folder variable.
 
 ## url_a
 ## url_b
@@ -88,9 +87,11 @@
 # Examples: @test, client-prod, vendor-master, it3xl-git_repo_sync-enabled
 
 ## git_sync_project_folder
-# This variable is a mandatory if you are configuring your sync project through a parent environment or script without a configuration file.
-# Otherwise, this value is taken from the name of the configuration file, if specified.
-# The git_sync_project_folder defines a folder in which your sync project artifacts will be stored inside of the "git-repo-sync/sync-projects/" folder.
+# It defines a folder in which your sync-project artifacts will be stored inside of "git-repo-sync/sync-projects/".
+# In the absence of git_sync_project_folder, its value will be taken from the name of a provided configuration file.
+# Warning! Your configuration file will be ignored if your parent environment
+#  or calling script have the git_sync_project_folder variable.
+
 
 
 
