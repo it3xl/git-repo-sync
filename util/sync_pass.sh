@@ -1,3 +1,4 @@
+# it3xl.ru git-repo-sync https://github.com/it3xl/git-repo-sync
 
 function sync_pass(){
     ((++git_sync_pass_num))

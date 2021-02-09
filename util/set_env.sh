@@ -1,6 +1,6 @@
-# echo
-# echo Start `basename "$BASH_SOURCE"`
+# it3xl.ru git-repo-sync https://github.com/it3xl/git-repo-sync
 
+# echo;echo Start `basename "$BASH_SOURCE"`
 
 [[ ${git_sync_env_initialized:+var_is_not_empty} ]] || {
 

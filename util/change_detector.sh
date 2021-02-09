@@ -1,3 +1,4 @@
+# it3xl.ru git-repo-sync https://github.com/it3xl/git-repo-sync
 
 if [[ $env_allow_async == 1 ]]; then
     echo '! Async (async remote refs checks are used)'

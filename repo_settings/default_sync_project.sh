@@ -1,4 +1,6 @@
-# All variables a described below.
+# it3xl.ru git-repo-sync https://github.com/it3xl/git-repo-sync
+
+## All variables are described below.
 ## Post your questions on https://github.com/it3xl/git-repo-sync/issues
 ## I will be glad to explain the ambiguities and to improve this instruction for others.
 

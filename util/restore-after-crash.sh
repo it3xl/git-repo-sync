@@ -1,3 +1,4 @@
+# it3xl.ru git-repo-sync https://github.com/it3xl/git-repo-sync
 
 # Puts only error output to a variable. Prevents useless execution by "--count=1".
 # Looks inside "refs/remotes" only.
