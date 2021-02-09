@@ -29,7 +29,7 @@ function main_processing(    ref){
     refspecs_to_stream();
 }
 function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_type){
-    if(remote_empty[side_any])
+    if(remote_empty[side_both])
         return;
 
     for(side in sides){
@@ -445,6 +445,7 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, trace_action, tr
         # d_trace("b " ref "; track_sha_b:" track_sha_b "; remote_sha_b:" remote_sha_b);
 
         if(track_sha_a && track_sha_b){
+            # Have both tracks.
             cmd = "git rev-list " refs[ref][side_a][track][ref_key] " " refs[ref][side_b][track][ref_key] " --max-count=1"
             cmd | getline newest_sha;
             close(cmd);

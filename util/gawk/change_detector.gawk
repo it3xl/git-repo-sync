@@ -55,7 +55,7 @@ END {
 
         if(!a_remote || !a_track || !b_remote || !b_track){
             changed = 1;
-            trace(ref " has empty sha")
+            trace(ref " has empty sha; On" (a_track?"":" a_track") (b_track?"":" b_track") (a_remote?"":" a_remote") (b_remote?"":" b_remote"))
             continue;
         }
 
