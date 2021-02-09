@@ -52,8 +52,10 @@
 ## url_a
 ## url_b
 # Let's call your two synchronized remote Git repositories as sides A and B.
-# Then url_a and url_b point to git remote repository of the A side and B side accordingly.
-# It could be an URL or a path. SSH addresses wasn't tested yet.
+# Then url_a and url_b variables point to git remote repositories of the A and B sides accordingly.
+# It could be an URL or a file path (SSH addresses wasn't tested yet).
+# For paths on Windows use the following notation
+# url_a="/c/my-folder/my-git-local-repo-folder"
 
 ## victim_branches_prefix
 # Git-branches with a prefix from this variable will be updated under a Victim Syncing strategy.
