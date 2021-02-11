@@ -22,7 +22,8 @@ function create_sync_repo(){
     mkdir -p "$path_sync_repo"
     cd "$path_sync_repo"
 
-    git init
+    # Using --quiet to prevent "hint: Using 'master' as the name for the initial branch..."
+    git init --quiet
 
     git config --local advice.pushUpdateRejected false
     #git config --local core.logAllRefUpdates
