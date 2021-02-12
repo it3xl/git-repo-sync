@@ -19,7 +19,7 @@ function sync_pass(){
             echo '@' RESULT: Refs are the same.
             
             if [[ $env_process_if_refs_are_the_same != 1 ]]; then
-                echo '@' Sync-pass $git_sync_pass_num was interrupted as refs are equal
+                echo '@@' Sync-pass $git_sync_pass_num was interrupted as refs are equal
                 return;
             fi;
         fi
