@@ -74,7 +74,7 @@
         export AWKPATH="$path_git_sync_util/gawk"
 
         if [[ ${git_sync_project_folder:+1} ]]; then
-            echo 'Info. Taking configuration from parent environment as git_sync_project_folder is defined'
+            echo 'Info. Taking configuration from a parent environment as git_sync_project_folder is defined'
 
             env_project_folder=$git_sync_project_folder
         else
