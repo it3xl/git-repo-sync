@@ -31,8 +31,10 @@ function main_processing(    ref){
     refspecs_to_stream();
 }
 function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_type){
-    if(remote_empty[side_both])
+    if(attach_mode)
         return;
+    # if(remote_empty[side_any])
+    #     return;
 
     for(side in sides){
         remote_sha[side] = refs[ref][side][remote][sha_key];
@@ -304,29 +306,32 @@ function ff_move_by_remote(ref, remote_sha, track_sha,    cmd, parent_sha, paren
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
 }
-function actions_to_operations(    side, aside, ref, restore_both, track_sha, another_track_sha, remote_sha, ref_owner){
-    restore_both = remote_empty[side_both];
-    for(side in sides){
-        if(!remote_empty[side]){
-            continue
-        }
-        for(ref in refs){
-            track_sha = refs[ref][side][track][sha_key];
-            if(!track_sha){
-                continue;
+function actions_to_operations(    side, aside, ref, attach_both, track_sha, another_track_sha, remote_sha, ref_owner){
+    if(attach_mode){
+        attach_both = remote_empty[side_both];
+        for(side in sides){
+            if(!remote_empty[side]){
+                continue
             }
-            if(restore_both){
-                op_push_restore_from_track[side][ref];
-                append_by_val(out_notify_solving, "restore-both-sides | " side " | " ref " | restoring-to:" track_sha);
-            }else{
-                # aside = asides[side];
-                # another_track_sha = refs[ref][aside][track][sha_key];
+            for(ref in refs){
+                track_sha = refs[ref][side][track][sha_key];
+                if(!track_sha){
+                    continue;
+                }
+                if(attach_both){
+                    op_push_attach_from_track[side][ref];
+                    append_by_val(out_notify_solving, "attach-both-empty-sides | " side " | " ref " | restoring-to:" track_sha);
+                }else{
+                    aside = asides[side];
+                    another_track_sha = refs[ref][aside][track][sha_key];
 
-                # op_push_restore_from_another[side][ref];
-                # append_by_val(out_notify_solving, "restore-side-from-another | " side " | " ref " | restoring-to:" another_track_sha);
+                    op_push_attach_from_another[side][ref];
+                    append_by_val(out_notify_solving, "attach-empty-side | " side " | " ref " | restoring-to:" another_track_sha);
+                }
             }
         }
     }
+    
     for(ref in a_remove_tracking_both){
         for(side in sides){
             track_sha = refs[ref][side][track][sha_key];
@@ -385,6 +390,19 @@ function operations_to_refspecs(    side, aside, ref){
             if(refs[ref][side][track][sha_key]){
                 out_remove_tracking = out_remove_tracking "  " origin[side] "/" ref;
             }
+        }
+    }
+
+    for(side in op_push_attach_from_track){
+        for(ref in op_push_attach_from_track[side]){
+            out_push[side] = out_push[side] "  +" refs[ref][side][track][ref_key] ":" refs[ref][side][remote][ref_key];
+        }
+    }
+
+    for(side in op_push_attach_from_another){
+        aside = asides[side];
+        for(ref in op_push_attach_from_another[side]){
+            out_push[side] = out_push[side] "  +" refs[ref][aside][track][ref_key] ":" refs[ref][side][remote][ref_key];
         }
     }
 

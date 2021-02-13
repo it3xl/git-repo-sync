@@ -5,15 +5,15 @@
 
 function unlock_deletion(){
     if(remote_empty[side_both]){
-        deletion_blocked_by = "Deletion blocked as all sides need to be restored"
+        deletion_blocked_by = "deletion-blocked:remotes-empty"
         return;
     }
     if(remote_empty[side_a]){
-        deletion_blocked_by = "Deletion blocked as side A needs to be restored"
+        deletion_blocked_by = "deletion-blocked:a-remote-empty"
         return;
     }
     if(remote_empty[side_b]){
-        deletion_blocked_by = "Deletion blocked as side B needs to be restored"
+        deletion_blocked_by = "deletion-blocked:b-remote-empty"
         return;
     }
     

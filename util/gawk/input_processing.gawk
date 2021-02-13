@@ -37,32 +37,14 @@ function initial_states_processing(    side, split_arr, split_val, ind, ref, val
     origin_b = ""
 
     pref_a_conv = ENVIRON["pref_a_conv"];
-    # Do not mask conf prefix any more as emptiness checking was added.
-    # if(!pref_a_conv){
-    #     d_trace("The conventional B prefix isn't defined. Conventional branches sync functionality is disabled.")
-    #     # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
-    #     pref_a_conv = ":~ .. .^{pref_a_conv var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names.}";
-    # }
     prefix[side_a] = pref_a_conv;
     pref_a_conv = ""
     
     pref_b_conv = ENVIRON["pref_b_conv"];
-    # Do not mask conf prefix any more as emptiness checking was added.
-    # if(!pref_b_conv){
-    #     d_trace("The conventional B prefix isn't defined. Conventional branches sync functionality is disabled.")
-    #     # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
-    #     pref_b_conv = ":~ .. .^{pref_b_conv var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names.}";
-    # }
     prefix[side_b] = pref_b_conv;
     pref_b_conv = ""
 
     pref_victim = ENVIRON["pref_victim"];
-    # Do not mask conf prefix any more as emptiness checking was added.
-    # if(!pref_victim){
-    #     d_trace("The victim prefix isn't defined. Victim branches sync functionality is disabled.")
-    #     # Let's prevent emptiness checking all around as pref_victim var allowed to be empty.
-    #     pref_victim = ":~ .. .^{pref_victim var is empty at the input. We use here some forbidden branch name characters to prevent messing with real branch names.}";
-    # }
 
     newline_substitution = ENVIRON["env_awk_newline_substitution"];
     if(!newline_substitution){
@@ -162,24 +144,5 @@ function prefix_name_key() { # Generates a common key for all 4 locations of eve
     $3 = split_refs[2];
 }
 END {
-    process_remote_empty();
+    process_emptiness();
 }
-
-function process_remote_empty(    not_empty, remote_sha){
-    for (side in sides) {
-        for (ref in refs) {
-            remote_sha = refs[ref][side][remote][sha_key];
-            if(!remote_sha)
-                continue;
-
-            not_empty[side] = 1;
-            break;
-        }
-    }
-
-    remote_empty[side_a] = !not_empty[side_a]
-    remote_empty[side_b] = !not_empty[side_b]
-    remote_empty[side_any] = remote_empty[side_a] || remote_empty[side_b];
-    remote_empty[side_both] = remote_empty[side_a] && remote_empty[side_b];
-}
-

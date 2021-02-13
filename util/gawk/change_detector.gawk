@@ -38,22 +38,22 @@ function parse_refs(env_var, dest_key, side,    split_arr, ind, val, split_val, 
             continue;
         }
         
-        refs[ref][side][dest_key] = sha;
+        refs[ref][side][dest_key][sha_key] = sha;
     }
 }
 END {
-    set_side_emptiness();
+    process_emptiness();
 
     block_sync();
 
     changed = 0;
 
     for (ref in refs) {
-        a_remote = refs[ref][side_a][remote]
-        a_track = refs[ref][side_a][track]
+        a_remote = refs[ref][side_a][remote][sha_key]
+        a_track = refs[ref][side_a][track][sha_key]
 
-        b_remote = refs[ref][side_b][remote]
-        b_track = refs[ref][side_b][track]
+        b_remote = refs[ref][side_b][remote][sha_key]
+        b_track = refs[ref][side_b][track][sha_key]
 
         if(!a_remote || !a_track || !b_remote || !b_track){
             changed = 1;
@@ -75,30 +75,13 @@ END {
     write("> change detecting end");
 }
 
-function set_side_emptiness(    has){
-    for (side in sides) {
-        for (ref in refs) {
-            if(!refs[ref][side][remote])
-                continue;
-
-            has[side][remote] = 1;
-            break;
-        }
-    }
-
-    emptiness[side_a][remote] = !has[side_a][remote]
-    emptiness[side_b][remote] = !has[side_b][remote]
-    emptiness[side_any][remote] = emptiness[side_a][remote] || emptiness[side_b][remote];
-    emptiness[side_both][remote] = emptiness[side_a][remote] && emptiness[side_b][remote];
-}
-
 function block_sync(    ref){
     ref = sync_enabling_branch;
 
-    if(emptiness[side_both][remote]){
+    if(remote_empty[side_both]){
 
-        if(!refs[ref][side_a][track] &&
-            !refs[ref][side_b][track]){
+        if(!refs[ref][side_a][track][sha_key] &&
+            !refs[ref][side_b][track][sha_key]){
 
             write("Syncing is blocked as all remote repos have no \"" ref "\" branch");
             
@@ -108,14 +91,14 @@ function block_sync(    ref){
         return;
     }
 
-    _block_sync_by_side(refs[ref][side_a][remote], side_a);
-    _block_sync_by_side(refs[ref][side_b][remote], side_b);
+    _block_sync_by_side(refs[ref][side_a][remote][sha_key], side_a);
+    _block_sync_by_side(refs[ref][side_b][remote][sha_key], side_b);
 }
 function _block_sync_by_side(remote_sha, side,    ref){
     if(remote_sha){
         return;
     }
-    if(emptiness[side][remote]){
+    if(remote_empty[side]){
         return;
     }
 
