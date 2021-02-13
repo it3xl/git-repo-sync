@@ -76,20 +76,13 @@ END {
 }
 
 function block_sync(    ref){
-    ref = sync_enabling_branch;
-
-    if(remote_empty[side_both]){
-
-        if(!refs[ref][side_a][track][sha_key] &&
-            !refs[ref][side_b][track][sha_key]){
-
-            write("Syncing is blocked as all remote repos have no \"" ref "\" branch");
-            
-            exit 91;
-        }
+    if(side_empty[side_both]){
+        write("both-repos-are-empty")
 
         return;
     }
+
+    ref = sync_enabling_branch;
 
     _block_sync_by_side(refs[ref][side_a][remote][sha_key], side_a);
     _block_sync_by_side(refs[ref][side_b][remote][sha_key], side_b);
