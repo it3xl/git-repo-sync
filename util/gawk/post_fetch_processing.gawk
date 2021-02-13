@@ -117,7 +117,7 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
                 trace(ref ": action-del-victim on " origin[aside] "; it is disappeared from " origin[side]);
                 a_del[aside][ref];
             }else{
-                trace(ref "; action-blocked-del-victim-restore on " origin[aside] "; disappeared from " origin[side]);
+                trace(ref "; action-del-blocked-victim-restore on " origin[aside] "; disappeared from " origin[side]);
                 a_restore_del[ref];
             }
 
@@ -127,14 +127,14 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
         unowned_ref = side_conv_ref(ref, aside);
 
         if(!deletion_allowed || unowned_ref){
-            action_key = "action-blocked-del-conv";
+            action_key = "action-del-blocked-conv";
             if(unowned_ref){
                 action_key = action_key "&unowned-ref";
             }
 
             trace(ref "; " action_key " on " origin[aside] "; disappeared from " origin[side]);
             a_conv_solve[ref];
-            append_by_val(out_notify_solving, "blocked-del-conventional-ref | " side " | " ref " | " action_key " | restoring-to:" refs[ref][side][track][sha_key]);
+            append_by_val(out_notify_solving, "conventional-restore-as-del-blocked | " side " | " ref " | " action_key " | restoring-to:" refs[ref][side][track][sha_key]);
 
             return 1;
         }
@@ -319,11 +319,11 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
                 op_push_restore_from_track[side][ref];
                 append_by_val(out_notify_solving, "restore-both-sides | " side " | " ref " | restoring-to:" track_sha);
             }else{
-                aside = asides[side];
-                another_track_sha = refs[ref][aside][track][sha_key];
+                # aside = asides[side];
+                # another_track_sha = refs[ref][aside][track][sha_key];
 
-                op_push_restore_from_another[side][ref];
-                append_by_val(out_notify_solving, "restore-side-from-another | " side " | " ref " | restoring-to:" another_track_sha);
+                # op_push_restore_from_another[side][ref];
+                # append_by_val(out_notify_solving, "restore-side-from-another | " side " | " ref " | restoring-to:" another_track_sha);
             }
         }
     }
@@ -345,7 +345,7 @@ function actions_to_operations(    side, aside, ref, restore_both, track_sha, an
                 continue;
             }
             op_push_restore_from_track[side][ref];
-            append_by_val(out_notify_solving, "blocked-del-victim-restore | " side " | " ref " | restoring-to:" sha);
+            append_by_val(out_notify_solving, "victim-restore-as-del-blocked | " side " | " ref " | restoring-to:" sha);
         }
     }
 

@@ -111,7 +111,7 @@ function sync_pass(){
 
 
     if [[ $env_allow_async == 1 && -n "$fetch_spec_a" && -n "$fetch_spec_b" ]]; then
-        echo $'\n>' Fetch Async
+        echo;echo "> Fetch (async)"
 
         git fetch --no-tags $origin_a $fetch_spec_a > "$path_async_output/fetch_a.txt" &
         pid_fetch_a=$!
@@ -132,12 +132,12 @@ function sync_pass(){
         cat < "$path_async_output/fetch_b.txt"
     else
         if [[ -n "$fetch_spec_a" ]]; then
-            echo $'\n>' Fetch $origin_a
+            echo;echo "> Fetch $origin_a (sync)"
             echo $fetch_spec_a
             git fetch --no-tags $origin_a $fetch_spec_a
         fi;
         if [[ -n "$fetch_spec_b" ]]; then
-            echo $'\n>' Fetch $origin_b
+            echo;echo "> Fetch $origin_b (sync)"
             echo $fetch_spec_b
             git fetch --no-tags $origin_b $fetch_spec_b
         fi;
@@ -225,12 +225,12 @@ function sync_pass(){
     mkdir -p "$path_async_output"
 
     if [[ -n "$remove_tracking_spec" ]]; then
-        echo $'\n>' Delete branches
+        echo;echo "> Delete branches"
         git branch --delete --force --remotes $remove_tracking_spec
     fi;
 
     if [[ -n "$notify_del" ]]; then
-        echo $'\n>' Notify Deletion
+        echo;echo "> Notify Deletion"
 
         install -D /dev/null "$env_notify_del_file"
         
@@ -240,16 +240,16 @@ function sync_pass(){
 
 
     if [[ $env_allow_async == 1 && -n "$push_spec_a" && -n "$push_spec_b" ]]; then
-        echo $'\n>' Push Async
+        echo;echo "> Push (async)"
 
-        { git push $origin_a $push_spec_a || true; } > "$path_async_output/push_a.txt" &
+        { git push $origin_a $push_spec_a || git_fail push $origin_a $?; } > "$path_async_output/push_a.txt" &
         pid_push_a=$!
-        { git push $origin_b $push_spec_b || true; } > "$path_async_output/push_b.txt" &
+        { git push $origin_b $push_spec_b || git_fail push $origin_b $?; } > "$path_async_output/push_b.txt" &
         pid_push_b=$!
         
-        push_report_a="> Push $origin_a "
+        push_report_a="> Push $origin_a (async) "
         wait $pid_push_a && push_report_a+="(async success)" || push_report_a+="(async failure)"
-        push_report_b+="> Push $origin_b "
+        push_report_b+="> Push $origin_b (async) "
         wait $pid_push_b && push_report_b+="(async success)" || push_report_b+="(async failure)"
         
         echo $push_report_a
@@ -261,19 +261,19 @@ function sync_pass(){
         cat < "$path_async_output/push_b.txt"
     else
         if [[ -n "$push_spec_a" ]]; then
-            echo $'\n>' Push $origin_a
+            echo;echo "> Push $origin_a (sync)"
             echo $push_spec_a
-            git push $origin_a $push_spec_a || true
+            git push $origin_a $push_spec_a || git_fail push $origin_a $?
         fi;
         if [[ -n "$push_spec_b" ]]; then
-            echo $'\n>' Push $origin_b
+            echo;echo "> Push $origin_b (sync)"
             echo $push_spec_b
-            git push $origin_b $push_spec_b || true
+            git push $origin_b $push_spec_b || git_fail push $origin_b $?
         fi;
     fi;
 
     if [[ -n "$notify_solving" ]]; then
-        echo $'\n>' Notify Solving
+        echo;echo "> Notify Solving"
 
         install -D /dev/null "$env_notify_solving_file"
         
@@ -283,7 +283,7 @@ function sync_pass(){
 
 
     if [[ $env_allow_async == 1 && -n "$post_fetch_spec_a" && -n "$post_fetch_spec_b" ]]; then
-        echo $'\n>' Post-fetch Async
+        echo;echo "> Post-fetch (async)"
 
         git fetch --no-tags $origin_a $post_fetch_spec_a > "$path_async_output/post_fetch_a.txt" &
         pid_post_fetch_a=$!
@@ -304,12 +304,12 @@ function sync_pass(){
         cat < "$path_async_output/post_fetch_b.txt"
     else
         if [[ -n "$post_fetch_spec_a" ]]; then
-            echo $'\n>' Post-fetch $origin_a
+            echo;echo "> Post-fetch $origin_a (sync)"
             echo $post_fetch_spec_a
             git fetch --no-tags $origin_a $post_fetch_spec_a
         fi;
         if [[ -n "$post_fetch_spec_b" ]]; then
-            echo $'\n>' Post-fetch $origin_b
+            echo;echo "> Post-fetch $origin_b (sync)"
             echo $post_fetch_spec_b
             git fetch --no-tags $origin_b $post_fetch_spec_b
         fi;

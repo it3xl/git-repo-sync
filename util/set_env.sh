@@ -4,6 +4,20 @@
 
 [[ ${git_sync_env_initialized:+var_is_not_empty} ]] || {
 
+    function git_fail(){
+        operation=$1
+        origin=$2
+        exit_code=$3
+        info=${4:-}
+
+        func=process_git_fail
+        [[ "$(type -t $func)" == 'function' ]] && {
+            $func $operation $origin $exit_code $info
+        } || {
+            echo "@@ git-operation-failed: git $operation $origin; with $exit_code exit code; $info"
+        }
+    }; export git_fail
+
     function git_sync_env_run_settings_script(){
 
         local file_name_repo_settings="${1-}"
