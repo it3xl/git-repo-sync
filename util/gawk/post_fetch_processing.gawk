@@ -433,7 +433,7 @@ function operations_to_refspecs(    side, aside, ref){
             out_push[side] = out_push[side] "  +" refs[ref][aside][track][ref_key] ":" refs[ref][side][remote][ref_key];
 
             if(refs[ref][side][remote][sha_key]){
-                append_by_val(out_notify_solving, "conflict-solving | " side " | " ref " | out-of " refs[ref][side][remote][sha_key] " to " refs[ref][aside][remote][sha_key]);
+                append_by_val(out_notify_solving, "conventional-conflict-solving | " side " | " ref " | out-of " refs[ref][side][remote][sha_key] " to " refs[ref][aside][remote][sha_key]);
             }
         }
     }
@@ -492,10 +492,10 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, trace_action, tr
         victim_sha = refs[ref][side_victim][remote][sha_key];
         # Do not show solving for new branch creation.
         if(victim_sha){
-            append_by_val(out_notify_solving, "victim-solving | " side_victim " | " ref " | out-of " victim_sha " to " refs[ref][side_winner][remote][sha_key]);
+            append_by_val(out_notify_solving, "victim-conflict-solving | " side_victim " | " ref " | out-of " victim_sha " to " refs[ref][side_winner][remote][sha_key]);
         }
 
-        trace_action = victim_sha ? "victim-solving" : "victim-empty-solving";
+        trace_action = victim_sha ? "victim-conflict-solving" : "victim-empty-solving";
 
         track_sha_a_txt = track_sha_a ? track_sha_a : "<no-sha>";
         track_sha_b_txt = track_sha_b ? track_sha_b : "<no-sha>";
