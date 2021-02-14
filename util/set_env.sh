@@ -16,7 +16,7 @@
         } || {
             echo "@@ git-operation-failed: git $operation $origin; with $exit_code exit code; $info"
         }
-    }; export git_fail
+    }; export -f git_fail
 
     function git_sync_env_run_settings_script(){
 
