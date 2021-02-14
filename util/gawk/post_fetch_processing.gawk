@@ -258,7 +258,15 @@ function victim_move_to_refspec(ref, remote_sha, track_sha, is_victim,    ref_it
         write("\nError! The victim_move_to_refspec sync logic brocken.");
         write("\"" action_sha "\" must be " refs[ref][source_side][remote][sha_key]);
         
-        # exit 97;
+        cmd = "need_interrupt_app"        
+        while (0 < (cmd | getline fail_text)){
+            write(fail_text)
+        }
+        close(cmd);
+
+        if(fail_text == "need-interrupt-app"){
+            exit 97;
+        }
     }
     trace(ref ": action-victim-nff-move; out-of " target_side ":" refs[ref][target_side][remote][sha_key] " to " source_side ":" refs[ref][source_side][remote][sha_key]);
     out_push[target_side] = out_push[target_side] "  +" refs[ref][source_side][track][ref_key] ":" refs[ref][target_side][remote][ref_key];

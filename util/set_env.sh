@@ -4,6 +4,16 @@
 
 [[ ${git_sync_env_initialized:+var_is_not_empty} ]] || {
 
+    function need_interrupt_app(){
+        func=process_need_interrupt_app
+        [[ "$(type -t $func)" == 'function' ]] && {
+            $func
+        } || {
+            echo "@@ Error! Application interruption wasn't processed."
+            echo "@@ Be aware of the above error."
+        }
+    }; export -f need_interrupt_app
+
     function git_fail(){
         operation=$1
         origin=$2
