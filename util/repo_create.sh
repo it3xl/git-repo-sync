@@ -20,16 +20,15 @@ function create_sync_repo(){
     echo @ `basename "$BASH_SOURCE"` started
 
     mkdir -p "$path_sync_repo"
-    cd "$path_sync_repo"
 
     # Using --quiet to prevent "hint: Using 'master' as the name for the initial branch..."
-    git init --quiet
+    git -C "$path_sync_repo" init --quiet
 
-    git config --local advice.pushUpdateRejected false
-    #git config --local core.logAllRefUpdates
+    git -C "$path_sync_repo" config --local advice.pushUpdateRejected false
+    #git -C "$path_sync_repo" config --local core.logAllRefUpdates
 
-    git remote add $origin_a "$url_a"
-    git remote add $origin_b "$url_b"
+    git -C "$path_sync_repo" remote add $origin_a "$url_a"
+    git -C "$path_sync_repo" remote add $origin_b "$url_b"
 
 
     [[ "$use_bash_git_credential_helper" == "1" ]] && {
