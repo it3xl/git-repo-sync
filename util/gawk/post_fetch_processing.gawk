@@ -94,7 +94,7 @@ function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_typ
     }
 
     ref_type = is_victim ? "victim" : "conv";
-    trace(ref "; " ref_type ":action-solve-all-others; it has different track or/and remote branch commits");
+    trace(ref ": action-solve-all-others." ref_type "; it has different track or/and remote branch commits");
     if(is_victim){
         a_victim_solve[ref];
     }else{
@@ -116,10 +116,10 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
 
         if(is_victim){
             if(deletion_allowed){
-                trace(ref ": action-del-victim on " origin[aside] "; it is disappeared from " origin[side]);
+                trace(ref ": action-del-victim on " aside "; it is disappeared from " side);
                 a_del[aside][ref];
             }else{
-                trace(ref "; action-del-blocked-victim-restore on " origin[aside] "; disappeared from " origin[side]);
+                trace(ref ": action-del-blocked-victim-restore on " aside "; disappeared from " side);
                 a_restore_del[ref];
             }
 
@@ -134,14 +134,14 @@ function del_to_action(ref, is_victim, remote_sha, track_sha,    side, aside, de
                 action_key = action_key "&unowned-ref";
             }
 
-            trace(ref "; " action_key " on " origin[aside] "; disappeared from " origin[side]);
+            trace(ref ": " action_key " on " aside "; disappeared from " side);
             a_conv_solve[ref];
-            append_by_val(out_notify_solving, "conventional-restore-as-del-blocked | " side " | " ref " | " action_key " | restoring-to:" refs[ref][side][track][sha_key]);
+            append_by_val(out_notify_solving, "conventional-restore-as-del-blocked | " side " | " ref " | " action_key " | restoring-to:" side " " refs[ref][side][track][sha_key]);
 
             return 1;
         }
         
-        trace(ref ": action-del-conv on " origin[aside] "; it is disappeared from " origin[side]);
+        trace(ref ": action-del-conv on " aside "; it is disappeared from " side);
         a_del[aside][ref];
 
         return 1;
@@ -179,7 +179,7 @@ function move_to_refspec_by_state(ref, source_refs, is_victim,    ref_item, acti
         exit 99;
     } else {
         # We didn't covered Git multy root cases by this logic yet.
-        trace(ref " rejected-move-by-state; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
+        trace(ref ":~ rejected-move-by-state; " side_a " & " side_b " lost ff-inheritance at " parent_sha);
 
         return;
     }
@@ -193,7 +193,7 @@ function move_to_refspec_by_state(ref, source_refs, is_victim,    ref_item, acti
             owner_action = side_conv_ref(ref, parent_side);
             if(!owner_action){
                 # Moving back from a non-owner side is forbidden.
-                trace(ref " forbidden-moving-back-by-state; non-owner side cannot move conventional ref back");
+                trace(ref ":~ forbidden-moving-back-by-state; non-owner side cannot move conventional ref back");
 
                 return;
             }
@@ -203,10 +203,10 @@ function move_to_refspec_by_state(ref, source_refs, is_victim,    ref_item, acti
         force_key = "+";
         action_key = "action-moving-back-by-state";
 
-        append_by_val(out_notify_solving, "moving-back-by-state | " parent_side " | " ref " | out-of " refs[ref][parent_side][track][sha_key] " to " refs[ref][child_side][track][sha_key]);
+        append_by_val(out_notify_solving, "moving-back-by-state | " parent_side " | " ref " | out-of " parent_side " " refs[ref][parent_side][track][sha_key] " to " child_side " " refs[ref][child_side][track][sha_key]);
     }
     
-    trace(ref " " action_key "; from " origin[parent_side] " to " origin[child_side]);
+    trace(ref ": " action_key "; out-of " parent_side " " refs[ref][parent_side][track][sha_key] " to " child_side " " refs[ref][child_side][track][sha_key]);
     out_push[parent_side] = out_push[parent_side] "  " force_key refs[ref][child_side][track][ref_key] ":" refs[ref][parent_side][remote][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
@@ -254,8 +254,16 @@ function victim_move_to_refspec(ref, remote_sha, track_sha, is_victim,    ref_it
 
     target_side = asides[source_side];
 
-    trace(ref " action-non-fast-forward to " action_sha);
+    if(action_sha != refs[ref][source_side][remote][sha_key]){
+        write("\nError! The victim_move_to_refspec sync logic brocken.");
+        write("\"" action_sha "\" must be " refs[ref][source_side][remote][sha_key]);
+        
+        exit 97;
+    }
+    trace(ref ": action-victim-nff-move; out-of " target_side " " refs[ref][target_side][remote][sha_key] " to " source_side " " refs[ref][source_side][remote][sha_key]);
     out_push[target_side] = out_push[target_side] "  +" refs[ref][source_side][track][ref_key] ":" refs[ref][target_side][remote][ref_key];
+
+    append_by_val(out_notify_solving, "victim-non-fast-forward-move | " target_side " | " ref " | out-of " target_side " " refs[ref][target_side][remote][sha_key] " to " source_side " " refs[ref][source_side][remote][sha_key]);
 
     # Let's inform a calling logic that we've processed the current ref.
     return 1;
@@ -293,14 +301,14 @@ function ff_move_by_remote(ref, remote_sha, track_sha,    cmd, parent_sha, paren
         exit 98;
     } else {
         # We didn't covered Git multy root cases by this logic yet.
-        trace(ref " rejected-fast-forward-by-remote; " origin[side_a] " & " origin[side_b] " lost direct inheritance at " parent_sha);
+        trace(ref ":~ rejected-fast-forward-by-remote; " side_a " & " side_b " lost ff-inheritance at " parent_sha);
 
         return;
     }
 
     child_side = asides[parent_side];
     
-    trace(ref " action-fast-forward-by-remote; from " origin[parent_side] " to " origin[child_side]);
+    trace(ref ": action-fast-forward-by-remote; out-of " parent_side " " refs[ref][parent_side][remote][ref_key] " to " child_side " " refs[ref][child_side][track][ref_key]);
     out_push[parent_side] = out_push[parent_side] "  " refs[ref][child_side][track][ref_key] ":" refs[ref][parent_side][remote][ref_key];
 
     # Let's inform a calling logic that we've processed the current ref.
@@ -320,13 +328,13 @@ function actions_to_operations(    side, aside, ref, attach_both, track_sha, ano
                 }
                 if(attach_both){
                     op_push_attach_from_track[side][ref];
-                    append_by_val(out_notify_solving, "attach-both-empty-sides | " side " | " ref " | restoring-to:" track_sha);
+                    append_by_val(out_notify_solving, "attach-both-empty-sides | " side " | " ref " | restoring-to:" side " " track_sha);
                 }else{
                     aside = asides[side];
                     another_track_sha = refs[ref][aside][track][sha_key];
 
                     op_push_attach_from_another[side][ref];
-                    append_by_val(out_notify_solving, "attach-empty-side | " side " | " ref " | restoring-to:" another_track_sha);
+                    append_by_val(out_notify_solving, "attach-empty-side | " side " | " ref " | restoring-to:" aside " " another_track_sha);
                 }
             }
         }
@@ -339,18 +347,19 @@ function actions_to_operations(    side, aside, ref, attach_both, track_sha, ano
                 continue;
             }
             op_remove_both_tracking[side][ref];
-            append_by_val(out_notify_solving, "tracking-removed | " side " | " ref " | " track_sha);
+            append_by_val(out_notify_solving, "tracking-removed | " side " | " ref " | " side " " track_sha);
         }
     }
     for(ref in a_restore_del){
         for(side in sides){
-            track_sha = refs[ref][side][track][sha_key];
             remote_sha = refs[ref][side][remote][sha_key]
             if(remote_sha){
                 continue;
             }
             op_push_restore_from_track[side][ref];
-            append_by_val(out_notify_solving, "victim-restore-as-del-blocked | " side " | " ref " | restoring-to:" sha);
+            
+            track_sha = refs[ref][side][track][sha_key];
+            append_by_val(out_notify_solving, "victim-restore-as-del-blocked | " side " | " ref " | restoring-to:" side " " track_sha);
         }
     }
 
@@ -433,7 +442,7 @@ function operations_to_refspecs(    side, aside, ref){
             out_push[side] = out_push[side] "  +" refs[ref][aside][track][ref_key] ":" refs[ref][side][remote][ref_key];
 
             if(refs[ref][side][remote][sha_key]){
-                append_by_val(out_notify_solving, "conventional-conflict-solving | " side " | " ref " | out-of " refs[ref][side][remote][sha_key] " to " refs[ref][aside][remote][sha_key]);
+                append_by_val(out_notify_solving, "conventional-conflict-solving | " side " | " ref " | out-of " side " " refs[ref][side][remote][sha_key] " to " aside " " refs[ref][aside][remote][sha_key]);
             }
         }
     }
@@ -492,14 +501,14 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, trace_action, tr
         victim_sha = refs[ref][side_victim][remote][sha_key];
         # Do not show solving for new branch creation.
         if(victim_sha){
-            append_by_val(out_notify_solving, "victim-conflict-solving | " side_victim " | " ref " | out-of " victim_sha " to " refs[ref][side_winner][remote][sha_key]);
+            append_by_val(out_notify_solving, "victim-conflict-solving | " side_victim " | " ref " | out-of " victim_sha " to " side_winner " " refs[ref][side_winner][remote][sha_key]);
         }
 
         trace_action = victim_sha ? "victim-conflict-solving" : "victim-empty-solving";
 
         track_sha_a_txt = track_sha_a ? track_sha_a : "<no-sha>";
         track_sha_b_txt = track_sha_b ? track_sha_b : "<no-sha>";
-        trace(trace_action ": " ref " on " origin[side_winner] " beat " origin[side_victim] " with " track_sha_a_txt " vs " track_sha_b_txt);
+        trace(trace_action ": " ref " on " side_winner " beat " side_victim " with " track_sha_a_txt " vs " track_sha_b_txt);
     }
 }
 

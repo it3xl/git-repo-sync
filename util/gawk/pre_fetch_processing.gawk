@@ -81,7 +81,7 @@ function request_update_tracking(ref, remote_sha, track_sha){
         # Or this ref was moved back.
         # But the default scenario is that the remote ref was modified.
         # Let's update the tracking ref.
-        trace(ref " action-fetch from " origin[side] "; " ((track_sha[side]) ? "track ref is outdated" : "track ref is unknown"));
+        trace(ref ": action-fetch from " side "; " ((track_sha[side]) ? "track ref is outdated" : "track ref is unknown"));
         a_fetch[side][ref];
     }
 }
@@ -113,7 +113,7 @@ function request_conv_move(ref, remote_sha, track_sha, is_victim,    side, aside
         }
 
         # Let's allow updating of the another side conventional refs. Remember fast-forward updating candidates.
-        trace(ref " check-conventional-move; outdated on " origin[side]);
+        trace(ref ": action-check-conventional-move; outdated on " side);
         a_conv_move[ref][remote_sha[side]];
     }
 }
@@ -148,7 +148,7 @@ function request_victim_move(ref, remote_sha, track_sha, is_victim,    side, asi
         }
 
         # Let's allow updating of the another side conventional refs. Remember fast-forward updating candidates.
-        trace(ref " request-non-fast-forward; ref changed only on " origin[side]);
+        trace(ref ": action-request-non-fast-forward; ref changed only on " side);
         a_victim_move[ref][remote_sha[side]];
     }
 }
