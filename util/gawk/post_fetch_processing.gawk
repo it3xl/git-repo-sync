@@ -28,6 +28,7 @@ function main_processing(    ref){
     }
     actions_to_operations();
     operations_to_refspecs();
+    process_excluded_tracks();
     refspecs_to_stream();
 }
 function state_to_action(ref,    remote_sha, track_sha, side, is_victim, ref_type){
@@ -517,6 +518,46 @@ function set_victim_refspec(    ref, remote_sha_a, track_sha_a, trace_action, tr
         track_sha_a_txt = track_sha_a ? track_sha_a : "<no-sha>";
         track_sha_b_txt = track_sha_b ? track_sha_b : "<no-sha>";
         trace(trace_action ": " ref " on " side_winner " beat " side_victim " with " track_sha_a_txt " vs " track_sha_b_txt);
+    }
+}
+
+function process_excluded_tracks(    side, ref){
+    parse_excluded_tracks("all_track_refs_a", side_a);
+    parse_excluded_tracks("all_track_refs_b", side_b);
+
+    for(ref in excluded_track_state){
+        for(side in sides){
+            trace(ref ": action-remove-excluded-track;" side ":" excluded_track_state[ref][side][sha_key] "; not under sync any more")
+        }
+    }
+
+}
+function parse_excluded_tracks(track_env_var, side,    split_arr, ind, val, split_val, sha, refspec, refspec_split, track_ref_path, ref){
+    split(ENVIRON[track_env_var], split_arr, "\n");
+    for(ind in split_arr){
+        val = split_arr[ind];
+
+        split(val, split_val, " ");
+
+        sha = split_val[1];
+        refspec = split_val[2];
+        if(!sha || !refspec){
+            continue;
+        }
+
+        # refs/remotes/origin_x/
+        track_ref_path = track_refs_path origin[side] "/"
+
+        split(refspec, refspec_split, track_ref_path);
+        ref = refspec_split[2];
+
+        if(sync_refs[ref]){
+            continue;
+        }
+
+        excluded_track_state[ref][side][sha_key] = sha;
+
+        out_remove_tracking = out_remove_tracking "  " origin[side] "/" ref;
     }
 }
 

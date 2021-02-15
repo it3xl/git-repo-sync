@@ -235,7 +235,7 @@ function sync_pass(){
     mkdir -p "$path_async_output"
 
     if [[ -n "$remove_tracking_spec" ]]; then
-        echo;echo "> Delete branches"
+        echo;echo "> Delete track branches"
         git branch --delete --force --remotes $remove_tracking_spec
     fi;
 
