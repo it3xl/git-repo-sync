@@ -40,8 +40,12 @@ function sync_pass(){
     ((++git_sync_pass_num_required))
     echo "! Running $git_sync_pass_num_required sync pass"
 
-    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_a)
-    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_b)
+    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $track_refspecs_a)
+    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $track_refspecs_b)
+
+    export all_track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $all_tracks_refspec_a)
+    export all_track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $all_tracks_refspec_b)
+
 
     if [[ $env_trace_refs == 1 ]]; then
         echo
@@ -144,8 +148,8 @@ function sync_pass(){
     fi;
 
 
-    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_a)
-    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $track_ref_specs_b)
+    track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $track_refspecs_a)
+    track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $track_refspecs_b)
 
     if [[ $env_trace_refs == 1 ]]; then
         echo

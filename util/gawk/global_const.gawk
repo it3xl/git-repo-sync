@@ -6,6 +6,7 @@ BEGIN { # Constants.
 
     remote = "remote"
     track = "track"
+    all_track = "all-track"
 
     sha_key = "sha";
     ref_key = "ref";
