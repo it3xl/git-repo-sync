@@ -46,7 +46,7 @@ function append_by_side(side, host, addition){
     host[side] = host[side] (host[side] ? newline_substitution : "") addition;
 }
 function append_by_val(host, addition){
-    host[val] = host[val] (host[val] ? newline_substitution : "") addition;
+    host[val_key] = host[val_key] (host[val_key] ? newline_substitution : "") addition;
 }
 
 function use_victim_sync(ref){

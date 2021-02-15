@@ -23,7 +23,7 @@ BEGIN { # Constants.
     asides[side_a] = sides[side_b]
     asides[side_b] = sides[side_a]
 
-    val = "a-value-key";
+    val_key = "a-value-key";
     common = "common-key";
     equal = "equal-key";
     empty_both = "empty-both-key";

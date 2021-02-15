@@ -177,8 +177,8 @@ function refspecs_to_stream(){
     print out_fetch[side_a];
     print out_fetch[side_b];
 
-    print out_conv_move[val];
-    print out_victim_move[val];
+    print out_conv_move[val_key];
+    print out_victim_move[val_key];
 
     # Must print finishing line otherwise previous empty lines will be ignored by mapfile command in bash.
     print "{[end-of-results]}"

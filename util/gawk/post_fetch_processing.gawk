@@ -528,11 +528,11 @@ function refspecs_to_stream(    out_processing_requested){
     print out_processing_requested;
 
     print out_remove_tracking;
-    print out_notify_del[val];
+    print out_notify_del[val_key];
 
     print out_push[side_a];
     print out_push[side_b];
-    print out_notify_solving[val];
+    print out_notify_solving[val_key];
 
     print out_post_fetch[side_a];
     print out_post_fetch[side_b];

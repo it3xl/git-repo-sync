@@ -43,10 +43,6 @@ function sync_pass(){
     track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $track_refspecs_a)
     track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $track_refspecs_b)
 
-    export all_track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $all_tracks_refspec_a)
-    export all_track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $all_tracks_refspec_b)
-
-
     if [[ $env_trace_refs == 1 ]]; then
         echo
         echo remote_refs_a=
@@ -150,6 +146,16 @@ function sync_pass(){
 
     track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $track_refspecs_a)
     track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $track_refspecs_b)
+
+    export all_track_refs_a=$(git for-each-ref --format="%(objectname) %(refname)" $all_tracks_refspec_a)
+    export all_track_refs_b=$(git for-each-ref --format="%(objectname) %(refname)" $all_tracks_refspec_b)
+
+    # Prevents cleaning processing of tracking refs which are excluded from sync.
+    # It is when the unprefixed ignored if the victim prefix set.
+    # TODO.it3xl: Uncomment two rows below.
+    # [[ "$all_track_refs_a" == "$track_refs_a" ]] && all_track_refs_a=;
+    # [[ "$all_track_refs_b" == "$track_refs_b" ]] && all_track_refs_b=;
+
 
     if [[ $env_trace_refs == 1 ]]; then
         echo

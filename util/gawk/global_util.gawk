@@ -42,7 +42,7 @@ function d_trace(msg){ # Development trace.
     if(0)
         return;
 
-    trace("~" msg)
+    trace("|~" msg)
 }
 
 END{ # Disposing.

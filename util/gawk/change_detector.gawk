@@ -41,6 +41,8 @@ function parse_refs(env_var, dest_key, side,    split_arr, ind, val, split_val, 
         refs[ref][side][dest_key][sha_key] = sha;
     }
 }
+
+
 END {
     process_emptiness();
 
