@@ -210,6 +210,8 @@
         env_trace_refs=${env_trace_refs:-0}
         # env_trace_refs=1
         export env_trace_refs
+
+        env_allow_multiple_sync_passes=${env_allow_multiple_sync_passes:-0}
         
         # These vars can be used for debugging and testing purposes.
         export env_awk_trace_on=1

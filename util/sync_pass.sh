@@ -3,6 +3,8 @@
 function sync_pass(){
     ((++git_sync_pass_num))
 
+    (( 1 < git_sync_pass_num )) && [[ "$env_allow_multiple_sync_passes" = '0' ]] && return;
+
     if (( ${changes_detected:-1} != 1 )); then
         # echo '@' Previous sync-pass din not find any changes.
         
