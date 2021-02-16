@@ -5,15 +5,15 @@
 
 function unlock_deletion(){
     if(remote_empty[side_both]){
-        deletion_blocked_by = "deletion-blocked:remotes-empty"
+        deletion_blocked_by = "deletion-blocked:remotes-are-empty"
         return;
     }
     if(remote_empty[side_a]){
-        deletion_blocked_by = "deletion-blocked:a-remote-empty"
+        deletion_blocked_by = "deletion-blocked:a-remote-is-empty"
         return;
     }
     if(remote_empty[side_b]){
-        deletion_blocked_by = "deletion-blocked:b-remote-empty"
+        deletion_blocked_by = "deletion-blocked:b-remote-is-empty"
         return;
     }
     

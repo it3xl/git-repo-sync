@@ -248,6 +248,14 @@ function sync_pass(){
         echo "$notify_del" >> "$env_notify_del_file"
     fi;
 
+    if [[ -n "$notify_solving" ]]; then
+        echo;echo "> Notify Solving"
+
+        install -D /dev/null "$env_notify_solving_file"
+        
+        echo > "$env_notify_solving_file"
+        echo "$notify_solving" >> "$env_notify_solving_file"
+    fi;
 
     if [[ $env_allow_async == 1 && -n "$push_spec_a" && -n "$push_spec_b" ]]; then
         echo;echo "> Push (async)"
@@ -280,15 +288,6 @@ function sync_pass(){
             echo $push_spec_b
             git push $origin_b $push_spec_b || git_fail push $origin_b $?
         fi;
-    fi;
-
-    if [[ -n "$notify_solving" ]]; then
-        echo;echo "> Notify Solving"
-
-        install -D /dev/null "$env_notify_solving_file"
-        
-        echo > "$env_notify_solving_file"
-        echo "$notify_solving" >> "$env_notify_solving_file"
     fi;
 
 

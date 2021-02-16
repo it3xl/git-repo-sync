@@ -16,7 +16,7 @@
 
 # sync_enabling_branch=${victim_branches_prefix}test
 # sync_enabling_branch=${side_a_conventional_branches_prefix}prod
-# sync_enabling_branch=it3xl-git_repo_sync-enabled
+# sync_enabling_branch=it3xl_git_repo_sync_enabled
 
 # git_sync_project_folder=my-sync-project
 
@@ -87,8 +87,8 @@
 # Exception, if you're starting to synchronize an empty Git-repository with a repository that already has this branch.
 # Existence of this branch protects you from synchronizing of unrelated Git-repositories, i.e. different projects.
 # By default this branch will be updating under Victim Sync strategy. But you can add a conventional prefix to it.
-# The default value is "it3xl-git_repo_sync-enabled".
-# Examples: @test, client-prod, vendor-master, it3xl-git_repo_sync-enabled
+# The default value is "it3xl_git_repo_sync_enabled".
+# Examples: @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
 
 ## git_sync_project_folder
 # It defines a folder in which your sync-project artifacts will be stored inside of "git-repo-sync/sync-projects/".

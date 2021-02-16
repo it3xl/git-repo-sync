@@ -117,7 +117,9 @@
         fi
 
 
-        sync_enabling_branch=${sync_enabling_branch:-it3xl-git_repo_sync-enabled}
+        # TODO.it3xl: Delete commented rows below.
+        # sync_enabling_branch=${sync_enabling_branch:-it3xl_git_repo_sync_enabled}
+        sync_enabling_branch=${sync_enabling_branch:-}
 
         pref_a_conv=${side_a_conventional_branches_prefix:-}
         pref_b_conv=${side_b_conventional_branches_prefix:-}
@@ -166,12 +168,12 @@
             track_refspecs_a="${pref_a_conv:+refs/remotes/$origin_a/${pref_a_conv}*  }`
                             `${pref_b_conv:+refs/remotes/$origin_a/${pref_b_conv}*  }`
                             `${pref_victim:+refs/remotes/$origin_a/${pref_victim}*  }`
-                            `refs/remotes/$origin_a/$sync_enabling_branch"
+                            `${sync_enabling_branch:+refs/remotes/$origin_a/$sync_enabling_branch}"
 
             track_refspecs_b="${pref_a_conv:+refs/remotes/$origin_b/${pref_a_conv}*  }`
                             `${pref_b_conv:+refs/remotes/$origin_b/${pref_b_conv}*  }`
                             `${pref_victim:+refs/remotes/$origin_b/${pref_victim}*  }`
-                            `refs/remotes/$origin_b/$sync_enabling_branch"
+                            `${sync_enabling_branch:+refs/remotes/$origin_b/$sync_enabling_branch}"
         else
             echo 'Info. *All-branches-sync mode! Use "..._prefix" configuration parameters to limit synced branches.'
 
@@ -209,6 +211,7 @@
         # env_trace_refs=1
         export env_trace_refs
         
+        # These vars can be used for debugging and testing purposes.
         export env_awk_trace_on=1
         export env_process_if_refs_are_the_same=0
 

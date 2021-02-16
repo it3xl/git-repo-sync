@@ -7,10 +7,11 @@ BEGIN {
     write_after_line("> change detecting");
 
     sync_enabling_branch = ENVIRON["sync_enabling_branch"];
-    if(!sync_enabling_branch){
-        write("Synchronization is blocked as the sync_enabling_branch variable is empty");
-        exit 81;
-    }
+    # TODO.it3xl: Delete commented rows below.
+    # if(!sync_enabling_branch){
+    #     write("Synchronization is blocked as the sync_enabling_branch variable is empty");
+    #     exit 81;
+    # }
 
     parse_refs("remote_refs_a", remote, side_a);
     parse_refs("remote_refs_b", remote, side_b);
@@ -46,6 +47,9 @@ function parse_refs(env_var, dest_key, side,    split_arr, ind, val, split_val, 
 END {
     process_emptiness();
 
+    if(side_empty[side_both]){
+        write("both-repos-are-empty")
+    }
     block_sync();
 
     changed = 0;
@@ -79,17 +83,20 @@ END {
 
 function block_sync(    ref){
     if(side_empty[side_both]){
-        write("both-repos-are-empty")
-
         return;
     }
 
     ref = sync_enabling_branch;
 
+    if(!ref){
+        return;
+    }
+
     _block_sync_by_side(refs[ref][side_a][remote][sha_key], side_a);
     _block_sync_by_side(refs[ref][side_b][remote][sha_key], side_b);
 }
-function _block_sync_by_side(remote_sha, side,    ref){
+
+function _block_sync_by_side(remote_sha, side){
     if(remote_sha){
         return;
     }

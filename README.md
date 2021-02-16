@@ -42,7 +42,7 @@ With this tool, your two remote repositories will be behaving as a single remote
 ## How To Start
 
 * You should configure 4 or more environment variables of **git-repo-sync** as described in this [default synchronization project](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) file.
-* Let's protect your repositories from occasional deletion and other problems. Assignee an existing branch name to the **sync_enabling_branch** variable. Otherwise you have to create **it3xl-git_repo_sync-enabled** branch in your non empty remote repositories.
+* Let's protect your repositories from occasional deletion and other problems. Assignee an existing branch name to the **sync_enabling_branch** variable. Otherwise you have to create **it3xl_git_repo_sync_enabled** branch in your non empty remote repositories.
 * Run [git-sync.sh](https://github.com/it3xl/git-repo-sync/blob/master/git-sync.sh) periodically.
 * Intervals of synchronization from one minute to several hours will be enough. This is not a problem if you run it once a week or even a month.  
 But the more often you sync, the less often automatic conflict solving is used.
