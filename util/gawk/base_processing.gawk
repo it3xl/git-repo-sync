@@ -51,20 +51,6 @@ function append_by_val(host, addition){
 
 function use_victim_sync(ref){
     return !use_conv_sync(ref);
-
-    # TODO.it3xl: Delete.
-    # if(use_conv_sync(ref)){
-    #     # sync_enabling_branch may be a conventional branch.
-    #     return 0;
-    # }
-
-    # if(force_victim_sync())
-    #     return 1;
-    # if(explicit_victim_ref(ref))
-    #     return 1;
-
-    # # by default sync_enabling_branch uses the victim syncing strategy.
-    # return ref == sync_enabling_branch;
 }
 
 function use_conv_sync(ref) {
@@ -95,11 +81,6 @@ function explicit_victim_ref(ref){
 
     return index(ref, pref_victim) == 1;
 }
-
-# TODO.it3xl: Delete.
-# function force_victim_sync(){
-#     return !pref_victim;
-# }
 
 function sync_all_refs(){
     return !pref_victim;

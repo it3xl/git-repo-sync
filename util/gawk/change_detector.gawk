@@ -7,11 +7,6 @@ BEGIN {
     write_after_line("> change detecting");
 
     sync_enabling_branch = ENVIRON["sync_enabling_branch"];
-    # TODO.it3xl: Delete commented rows below.
-    # if(!sync_enabling_branch){
-    #     write("Synchronization is blocked as the sync_enabling_branch variable is empty");
-    #     exit 81;
-    # }
 
     parse_refs("remote_refs_a", remote, side_a);
     parse_refs("remote_refs_b", remote, side_b);

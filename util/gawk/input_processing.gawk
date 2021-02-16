@@ -10,11 +10,6 @@ BEGIN { # Parameters.
 }
 function initial_states_processing(    side, split_arr, split_val, ind, ref, val, sha){
     sync_enabling_branch = ENVIRON["sync_enabling_branch"];
-    # TODO.it3xl: Delete commented rows below.
-    # if(!sync_enabling_branch){
-    #     write("Synchronization is blocked as the sync_enabling_branch variable is empty");
-    #     exit 81;
-    # }
         
     origin_a = ENVIRON["origin_a"];
     if(!origin_a){

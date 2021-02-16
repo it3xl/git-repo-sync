@@ -117,8 +117,6 @@
         fi
 
 
-        # TODO.it3xl: Delete commented rows below.
-        # sync_enabling_branch=${sync_enabling_branch:-it3xl_git_repo_sync_enabled}
         sync_enabling_branch=${sync_enabling_branch:-}
 
         pref_a_conv=${side_a_conventional_branches_prefix:-}
@@ -149,13 +147,6 @@
             exit 105;
         fi;
         
-        # TODO.it3xl: Delete.
-        # if [[ ! "$pref_a_conv" && ! "$pref_b_conv" && ! "$pref_victim" ]]; then
-        #     echo "Error! Exit! You have to configure victim or any conventional ref prefixes. $prefixes_trace_values"
-
-        #     exit 106;
-        # fi;
-
         export origin_a=origin_a
         export origin_b=origin_b
 
