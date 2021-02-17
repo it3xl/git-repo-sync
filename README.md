@@ -3,23 +3,21 @@
 ## Synchronization of Remote Git-repositories
 
 The **git-repo-sync** synchronizes all or filtered Git-branches between two remote Git-repositories.<br/>
-The main idea of it is install, run periodically and forget.
+The main idea of this tool is to install, run periodically and forget.
 
-With this tool, your two remote repositories will be behaving as a single remote Git-repository for conventional branches.
+With **git-repo-sync**, your two remote Git-repositories will be behaving as a single remote Git-repository.<br/>
+It is like you have two entry points to a single repository.
 
-Please, reed the **Notes** before investing your time with this tool.
+Please, reed the **Notes** before investing your time with this tool.<br/>
+The **git-repo-sync** has some limitatins and different approaches to automatic conflict resolution. 
 
 ### This page is under updating now.
 
-I've just implemented some features and this page is under updating now.<br/>
-For actual information see [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
+I've just added some features and this page is under ative updating.<br/>
+Please, for the actual information see [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
 
 ### Notes
-* This tool intentionally only syncs Git-branches with a prefix. I call it conventional prefixes.
-* You agree which prefixes to use, and only such prefixed-branches will be synced.
-  * For example @abc, dev-abc, client-hotfix where we use **\@**, **dev-**, **client-** as prefixes.
 * It is important to understand two automated conflict solving strategies which are described below.
-* Each prefix relates to its own conflict solving strategy.
 * You should configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
   * **victim_branches_prefix** variable for the Victim strategy.
   * **side_a_conventional_branches_prefix** variable for the Conventional strategy.
@@ -36,6 +34,14 @@ For actual information see [default_sync_project.sh](https://github.com/it3xl/gi
 * With a single installation of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
 * It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * I've dropped unprefixed branches support and configuring for simplicity.
+
+### Installation
+
+(It is under writing since 2021.02.18)
+
+### Configuring
+
+(It is under writing since 2021.02.18)
 
 ### Automation Servers Support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
