@@ -32,19 +32,22 @@ function create_sync_repo(){
 
 
     [[ "$use_bash_git_credential_helper" == "1" ]] && {
-        echo Initializing git-cred as use_bash_git_credential_helper is set to $use_bash_git_credential_helper
+        echo "Initializing git-cred as use_bash_git_credential_helper is set to $use_bash_git_credential_helper"
 
         if [[ ! -f "$git_cred" ]]; then
             echo
             echo Error! Exit! You have to update/download Git-SubModules of git-repo-sync project to use $git_cred
             echo Run '"'git submodule init\; git submodule update --recursive'"' in the root folder of git-repo-sync.
-            echo Or comment out '"'use_bash_git_credential_helper=1'"' in your sync project settings file.
+            echo Or comment out '"'use_bash_git_credential_helper=1'"' line in your sync project settings file.
             echo
             
             delete_project_repo_and_exit
         fi
         
         GIT_CRED_DO_NOT_EXIT=1
+
+        # The it3xl/bash-git-credential-helper requires the working directory to be set to our Git-repository.
+        cd "$path_sync_repo"
         
         source "$git_cred"  init  repo_a  $url_a
         [[ $GIT_CRED_FAILED != 0 ]] && delete_project_repo_and_exit
