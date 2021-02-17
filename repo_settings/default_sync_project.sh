@@ -1,31 +1,41 @@
 # it3xl.ru git-repo-sync https://github.com/it3xl/git-repo-sync
-
-## All variables are described below.
+#
 ## Post your questions on https://github.com/it3xl/git-repo-sync/issues
 ## I will be glad to explain the ambiguities and to improve this instruction for others.
 
 
-# url_a=https://your-repo1-url.org/git/my_repo.git
-# url_b=https://git.your-repo2-url.org/my_repo.git
+# Configure location of your remote Git repositories.
+#
+url_a=https://example.com/git/my_repo.git
+#
+url_b='/c/my-folder/my-local-git-repo-folder'
 
+# Don't sync all branches. Synchronize branches with the following prefix.
+#
 # victim_branches_prefix=@
 
-# side_a_conventional_branches_prefix=a-
-# side_b_conventional_branches_prefix=b-
-
-
-# sync_enabling_branch=${victim_branches_prefix}test
-# sync_enabling_branch=${side_a_conventional_branches_prefix}prod
+# Prevent catastrophe!
+# Don't sync repositories without the specified branch in the same Git-tree (same or related commits).
+# 
 # sync_enabling_branch=it3xl_git_repo_sync_enabled
 
-# git_sync_project_folder=my-sync-project
+# Limit branch manipulations for another repository side.
+# See "Conventional Syncing strategy" below.
+#
+# side_a_conventional_branches_prefix=client-
+# side_b_conventional_branches_prefix=vendor-
 
+
+# Automation integration. See details below
+#
+# git_sync_project_folder=my-sync-project
+#
 # use_bash_git_credential_helper=1
 
 
 #
 ##
-### Descriptions
+### Descriptions & Explanations
 ##
 #
 
@@ -60,60 +70,70 @@
 # url_a="/c/my-folder/my-git-local-repo-folder"
 
 ## victim_branches_prefix
-# Git-branches with a prefix from this variable will be updated under a Victim Syncing strategy.
-# This means everybody can do whatever they want with such branches.
-# And any last action will win in case of a conflict.
-# You can relocate it to any position, move it back, delete, etc.
-# The default value is empty that means this syncing strategy will be disabled.
+# Limit branches which will be synchronized under a Victim Syncing strategy.
+# If undefined or empty then all branches will be synced.
+# (except conventionally prefixed branches described below)
+#
+## The Victim Syncing strategy.
+# You can do whatever you want with such branches from both remote sides (repositories).
+# In case of a conflict, any last action will win.
+# You can relocate it to any position or delete, etc.
+# You can move a branch back in history if you sync your repos regularly.
+#
 # The most common value is "@".
 # Examples: @dev, @dev-staging, @test, @test-staging
 
+## sync_enabling_branch
+# Represents any branch name.
+# The git-repo-sync will check that such a branch exist in both remote repositories
+# and that it has the same or related commits, i.e. located in the same Git-tree).
+# This will protect you from occasional adhesion of unrelated git-repositories.
+# Git may store many independent projects in the same repository and this is uncommon behavior for many users.
+#
+# We advise to use it3xl_git_repo_sync_enabled to make it explicit to others that their Git-repo is syncing with another remote repo.
+# Examples: master, @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
+
 ## side_a_conventional_branches_prefix
-# Git-branches with a prefix from this variable will be owned by the A side.
+# Branches with a prefix from this variable will be owned by the repo from "url_a". Let's call it A side.
 #
 ## side_b_conventional_branches_prefix
-# Git-branches with a prefix from this variable will be owned by the B side.
+# Branches with a prefix from this variable will be owned by the repo from "url_b". Let's call it B side.
 #
-# Such branches will be updated under a Conventional Syncing strategy.
-# You can do whatever you want with these branches from an owning side repository.
-# And you can only do forward updating commits and merges from a non-owning side repository.
-# There is no default value. The most common value is an abbreviation of a client or vendor companies.
-# Omitted or empty values will disable Conventional Syncing strategy.
-# Examples: client-uat, client-uat-staging; vendor-uat, vendor-uat-staging
+# Branches with such prefixes will be updated under the Conventional Syncing strategy.
+# You can define both or one variable.
+#
+## The Conventional Syncing strategy
+# On repo of the owning side: You can do whatever you want with such branches.
+# On repo of another side: You can do fast-forward updates and merges.
+# You can move such a branch back in Git-history from an non-owning side if you run git-repo-sync regularly.
+# All conflicts will be solved in favor of the owning side.
+#
+# Example of prefix pairs: client-, vendor-; a-, b-; microsoft/, google/
 
-## sync_enabling_branch
-# This variable represents a special branch name.
-# Your syncing remote Git-repositories must have such the branch to allow synchronization by git-repo-sync.
-# Exception, if you're starting to synchronize an empty Git-repository with a repository that already has this branch.
-# Existence of this branch protects you from synchronizing of unrelated Git-repositories, i.e. different projects.
-# By default this branch will be updating under Victim Sync strategy. But you can add a conventional prefix to it.
-# The default value is "it3xl_git_repo_sync_enabled".
-# Examples: @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
 
 ## git_sync_project_folder
 # It defines a folder in which your sync-project artifacts will be stored inside of "git-repo-sync/sync-projects/".
 # In the absence of git_sync_project_folder, its value will be taken from the name of a provided configuration file.
+#
 # Warning! Your configuration file will be ignored if your parent environment
-#  or calling script have the git_sync_project_folder variable.
+#  or calling script have this variable. In this case, all required variables must be configured in the parent environment.
 
 
-
-
-## use_bash_git_credential_helper
-# This variables enables using of git-cred, the "bash Git Credential Helper" from https://github.com/it3xl/bash-git-credential-helper
+## use_bash_git_credential_helper=1
+# This variables enables using of the "git-cred", the "bash Git Credential Helper" from https://github.com/it3xl/bash-git-credential-helper
 # 
 # Git-cred allows you to use Git-credential values from environment variables
-#  which are defined automatically by any Continues Integration (CI) tool.
+#  which are defined automatically by any Continues Integration (CI/CD) tool.
 #
-# You can use git-cred as an external tool and tune everything manually.
+# You can use "git-cred" as an external tool and tune everything manually.
 # But configuring it here allows you to initialize git-cred only once.
-# BTW, git-cred allows free relocation of an installation git-repo-sync folder.
+# BTW, "git-cred" allows a free relocation of your installation "git-repo-sync" folder.
 #
 # * Before using git-cred you must complete the following steps.
 #
-# ** Load Git sub-modules of git-repo-sync (https://github.com/it3xl/git-repo-sync)
+# ** Load Git sub-modules inside of your "git-repo-sync" folder (https://github.com/it3xl/git-repo-sync)
 #
-# ** Before any call to git-sync.sh or request-git-sync.sh, define the following environment variables in your CI-server (tool)
+# ** Before any call to "git-sync.sh" or to "request-git-sync.sh", define the following environment variables in your CI/CD automation server or tool
 #   For the repo in $url_a
 # git_cred_username_repo_a=some-login
 # git_cred_password_repo_a=some-password
