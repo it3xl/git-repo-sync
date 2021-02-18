@@ -135,7 +135,7 @@ Probably this is not a good idea to use the `master` branch name as such branche
 * **git-repo-sync** is resilient for HTTP fails and interruptions.
 * It has protections from an occasional deletion of your entire remote repository.
 * Arbitrary Git-history rewriting is supported.
-* With a single installation of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every sinc pair is a sync project for **git-repo-sync**.
+* Within a single installation, **git-repo-sync** can synchronize as many pairs of Git-repositories as you want. Every sinc pair is a sync project for **git-repo-sync**.
 * **git-repo-sync** doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * **git-repo-sync** is developed within the TDD approach. Therefore, its CI/CD has a huge amount of auto tests.
 
