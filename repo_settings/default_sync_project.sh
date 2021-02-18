@@ -91,7 +91,7 @@ url_b='/c/my-folder/my-local-git-repo-folder'
 # Git may store many independent projects in the same repository and this is uncommon behavior for many users.
 #
 # We advise to use it3xl_git_repo_sync_enabled name to make it explicit to others that their Git-repo is syncing with another remote repo.
-# Examples: master, @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
+# Examples: @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
 
 ## side_a_conventional_branches_prefix
 # Branches with a prefix from this variable will be owned by the repo from "url_a". Let's call it A side.
@@ -103,8 +103,8 @@ url_b='/c/my-folder/my-local-git-repo-folder'
 # You can define both or one variable.
 #
 ## The Conventional Sync strategy
-# On repo of the owning side: You can do whatever you want with such branches.
-# On repo of another side: You can do fast-forward updates and merges.
+# On a repo of the owning side: You can do whatever you want with such branches.
+# On a repo of another side: You can do fast-forward updates and merges.
 #   You can move such a branch back in Git-history from an non-owning side if you run git-repo-sync regularly.
 # All commit conflicts will be solved in favor of the owning side.
 #
