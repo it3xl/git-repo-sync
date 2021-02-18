@@ -29,19 +29,20 @@ The **git-repo-sync** will decide who wins and who loses in this conflict.<br/>
 Let's say if you run **git-repo-sync** once in 2 minutes.<br/>
 Then update your local Git-repository ater 2 minutes and check your last commit.<br/>
 The losing commit will be deleted from both your remote repositories and will only remain in your local repository.<br/>
-Nothing wrong with it. Just repeat your commite above the winning commit of your teammate.
+Nothing wrong with it. Just repeat your commite above the winning commit of your teammate.<br/>
+*This is a quite rare situation in the Agile World and more related to the Waterfall development, but you have to know.*
 
 ### I'm the Windows guy
 
-Ha! You're lucky guy. Despite of Linux guys, you have to do nothing and have three options to run **git-repo-sync**.
+Ha! You're lucky. Despite of Linux guys, you have to do nothing and have five options to run **git-repo-sync**.
 
-Open CMD in **git-repo-sync** folder and run one of three.
+Open PowerShell or CMD in the **git-repo-sync** folder and run one of three.
 
     "C:\Program Files\Git\bin\bash.exe" git-sync.sh
     "C:\Program Files\Git\usr\bin\bash.exe" git-sync.sh
     "C:\Program Files\Git\git-bash.exe" git-sync.sh
 
-Or you can reinstall Git and integrate the bash to CMD during installation.
+Or you can reinstall Git and integrate the bash into your Windows during installation.
 
 Or you can try to update the PATH environment variable. Try to add the following (that wasn't tested by me)
 
