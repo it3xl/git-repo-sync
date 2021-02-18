@@ -64,7 +64,7 @@ Despite that there are [fair cases](https://github.com/it3xl/git-repo-sync/issue
 Some well know Git-servers block some branches in different ways. Some of them create trash branches that you do not want to see synchronized.<br/>
 Also, this mode is new and there hasn't been much feedback yet.
 
-So, you can synchronize only branches that have special prefixes.<br/>
+So, you can synchronize branches that have special prefixes only.<br/>
 You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file.<br/>
 What's important, these prefixes are related to correspondent *synchronization strategies*.
 
