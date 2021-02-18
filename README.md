@@ -58,7 +58,7 @@ Or you can try to update the PATH environment variable. Try to add the following
 
 ### Do not synchronize all branches
 
-Despite that there are [fare cases](https://github.com/it3xl/git-repo-sync/issues/3#issuecomment-771494886) when it is useful to sync all branches, this is not always a good idea.<br/>
+Despite that there are [fair cases](https://github.com/it3xl/git-repo-sync/issues/3#issuecomment-771494886) when it is useful to sync all branches, this is not always a good idea.<br/>
 Some well know Git-servers block some branches in different ways. Some of them create trash branches that you don not want to see synchronized.<br/>
 Also, this mode is new and there hasn't been much feedback yet.
 
