@@ -119,15 +119,16 @@ Define *sync_enabling_branch* variable
 
 Its value may represent any branch name.<br/>
 Examples: `@test`, `client-prod`, `vendor-master`, `it3xl_git_repo_sync_enabled`.<br/>
-Be aware that such a branch will be synchronized by **git-repo-sync** despite branch prefix filtering that is described above.<br/>
-Probably this is not a good idea to use the `master` branch for this as such branches are synced under the Victim strategy. But you can specify a branch with a conveintiona prefix for the Conventional syncing.
 
 The **git-repo-sync** will check if such a branch exist in both remote repositories and that it has the same or related commits, i.e. its commits are located in the same Git-tree.<br/>
 This will protect you from occasional adhesion of unrelated git-repositories and deletion of branches that have the same names.<br/>
 Git may store many independent projects (trees) in the same repository and this is uncommon behavior for many users.
 
-I advise to use it3xl_git_repo_sync_enabled name to make it explicit for others that their Git-repo is synchronized with another remote repo.<br/>
-They could search in the Internet by the word *it3xl_git_repo_sync_enabled* and understand the applied solution.
+I advise to use it3xl_git_repo_sync_enabled branch name to make it explicit for others that their remote Git-repo is synchronized with another remote repo.<br/>
+They could search for the word *it3xl_git_repo_sync_enabled* in the Internet and understand the applied sync solution.
+
+Be aware that mentioned in the sync_enabling_branch variable branch will be synchronized by **git-repo-sync** despite branch prefix filtering that is described above.<br/>
+Probably this is not a good idea to use the `master` branch name as such branches are synced under the Victim strategy. But you can specify a branch with a conveintiona prefix for the Conventional syncing of it.
 
 ### Notes
 * Usage of SSH wasn't tested.
