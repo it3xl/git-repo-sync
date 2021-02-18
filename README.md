@@ -33,9 +33,9 @@ The losing commit will be deleted from both your remote repositories and will on
 Nothing wrong with this. Just repeat your commit above the winning commit of your teammate.<br/>
 *This is a quite rare situation in the Agile World and more related to the Waterfall development, but you have to know.*
 
-### Linux
+### On Linux
 
-Run `git-sync.sh` and it will tell you what it needs.<br/>
+Run `git-sync.sh` and it will tell you what **git-repo-sync** needs.<br/>
 In most cases you have to install gAWK. This applies to Ubuntu.<br/>
 Docker Alpine Linux images require *bash* and *gAWK* to be installed.<br/>
 You have to update the *bash* if you use an extra old Linux distro.
