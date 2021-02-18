@@ -21,7 +21,7 @@ You can use URL-s and file paths.
     #
     url_b='/c/my-folder/my-local-git-repo-folder'
 
-Run periodically `git-sync.sh` which is located in the root of **git-repo-sync**.<br/>
+Run periodically the `git-sync.sh` file, which is located in the root of **git-repo-sync**.<br/>
 The `git-sync.sh` will tell you if there are any troubles. The main among them is you need to update awk to gAWK on Ubuntu.
 
 What if you're working on the same branch with another teammate who is working through the other side repository.<br/>
@@ -102,51 +102,41 @@ You can move such branches back in Git-history if you run git-repo-sync regularl
 
 All commit conflicts will be solved in favor of the owning side.<br/>
 
+### Disaster Protection
+
+sync_enabling_branch
+
+Represents any branch name.
+The git-repo-sync will check that such a branch exist in both remote repositories
+and that it has the same or related commits, i.e. located in the same Git-tree).
+This will protect you from occasional adhesion of unrelated git-repositories.
+Git may store many independent projects in the same repository and this is uncommon behavior for many users.
+
+We advise to use it3xl_git_repo_sync_enabled to make it explicit to others that their Git-repo is syncing with another remote repo.
+Examples: master, @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
+
+
 ### Notes
 * Usage of SSH wasn't tested.
 * **git-repo-sinc** is resilient for HTTP fails and interruptions.
-* It has protections from an occasional deletion of your entire repository.
-* There is a protections from deletion or replacing of Git-branches by occasional synchronization of unrelated remote Git-repositories.
-* Arbitrary rewriting of history is supported.
-* You even may move branches back in history.
+* It has protections from an occasional deletion of your entire remote repository.
+* Arbitrary Git-history rewriting is supported.
 * With a single installation of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
-* It doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
-* I've dropped unprefixed branches support and configuring for simplicity.
+* **git-repo-sinc** doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 
-### Installation
-
-(It is under writing since 2021.02.18)
-
-### Configuring
-
-(It is under writing since 2021.02.18)
-
-### Automation Servers Support
+### CI/CD on Automation Servers support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
-* it works faster under \*nix OS-es because bash on Windows could be slower.
-* A single synchronization pass will be enough in all circumstances.
-* For greater readability, you can separate verification and synchronization phases across different projects.
-* Multiple configuration capabilities are supported.
-* **git-repo-sync** has integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)**
+* It works faster under \*nix OS-es because bash on Windows could be slower. But compare to network latency, this is nothing.
+* You can separate change detection and synchronization phases of **git-repo-sync** for readability.
+* Multiple configuration capabilities are supported. Environment, configuration files, combination of them.
+* Integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)** to obtain credentials from shell environment.
 * You shouldn't do anything in case of connectivity fails. Continue to run **git-repo-sync** and everything will be restored automatically.
 
-## How To Start
 
-* You should configure 4 or more environment variables of **git-repo-sync** as described in this [default synchronization project](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) file.
-* Let's protect your repositories from occasional deletion and other problems. Assignee an existing branch name to the **sync_enabling_branch** variable. Otherwise you have to create **it3xl_git_repo_sync_enabled** branch in your non empty remote repositories.
-* Run [git-sync.sh](https://github.com/it3xl/git-repo-sync/blob/master/git-sync.sh) periodically.
-* Intervals of synchronization from one minute to several hours will be enough. This is not a problem if you run it once a week or even a month.  
-But the more often you sync, the less often automatic conflict solving is used.
+---
+(some old content)
 
-## I do everything manually
 
-In this case, take the following steps.
-
-* Push changes to your remote Git-repository
-* Sync your two repositories by running [git-sync.sh](https://github.com/it3xl/git-repo-sync/blob/master/git-sync.sh)
-* Check what conflicts were during your last sync. See **notify_solving** file at 
-`git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
-* Ask your team members to repeat these conflicting (rejected) commits or merges after updating of their local repos.
 
 ## How To - Automation servers
 * After every synchronization, analyze notification files to send notifications about branch deletions or conflict solving.  
@@ -155,14 +145,6 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
   * `notify_del` - for deletions
 * See [instructions](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) on how to configure synchronization for another pair of remote Git repositories.
 * Number of pairs is unlimited. Every pair is a separate project.
-
-## Prefixes Examples
-
-* `@`dev
-* `company-A-`prod
-* `vendor/`master
-* `@`test-stand
-* `client-`uat-stand
 
 ## Auto Conflicts Solving Strategies
 
@@ -200,10 +182,6 @@ But you can only do "forward updating commits" and merges for non-owned branches
   * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
 * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc.  
 Or run it yourself.
-
-## Thoughts
-
-You are welcomed to share your thoughts, for example in [issues](https://github.com/it3xl/git-repo-sync/issues)
 
 ## Contacts
 
