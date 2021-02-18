@@ -34,7 +34,7 @@ Nothing wrong with it. Just repeat your commite above the winning commit of your
 
 ### I'm the Windows guy
 
-Ha! You're lucky. Despite of Linux guys, you have to do nothing and have five options to run **git-repo-sync**.
+Ha! You're lucky. Unlike Linux guys, you have to do nothing and have five options to run **git-repo-sync**.
 
 Open PowerShell or CMD in the **git-repo-sync** folder and run one of three.
 
@@ -48,14 +48,32 @@ Or you can try to update the PATH environment variable. Try to add the following
 
     ;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin
 
+### Do not synchronize all branches
+
+Despite that there are [fare cases](https://github.com/it3xl/git-repo-sync/issues/3#issuecomment-771494886) when it is useful to sync all branches, this is not always a good idea.<br/>
+Some well know Git-servers block some branches in different ways. Some of them create trash branches that you don not want to see synchronized.<br/>
+Also, this mode is new and there hasn't been much feedback yet.
+
+You can syncronize only branches that have special prefixes.<br/>
+You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file
+  * **victim_branches_prefix** - it holds branch prefix for the Victim sync strategy.
+
+and
+
+  * **side_a_conventional_branches_prefix** - it holds branch prefix for the Conventional sync strategy.
+  * **side_b_conventional_branches_prefix** - it holds branch prefix for the Conventional sync strategy.
+
+### Victim Sync Strategy
+
+By deafult all branches are synced unde the Victim Conflict Solving Strategy.<br/>
+You can do whatever you want with such branches from both remote sides (repositories).<br/>
+In case of a conflict, any the newest commit will win.<br/>
+You can relocate it to any position or delete, etc.<br/>
+You can move a branch back in history if you sync your repos regularly.<br/>
 
 ### Notes
 * It is important to understand two automated conflict solving strategies which are described below.
-* You should configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
-  * **victim_branches_prefix** variable for the Victim strategy.
-  * **side_a_conventional_branches_prefix** variable for the Conventional strategy.
-  * **side_b_conventional_branches_prefix** variable for the Conventional strategy.
-* Developers can work on the same Git-branch simultaneously in different remote Git-repositories.
+* 
 * **git-repo-sync** requires Git, bash and gawk (GNU Awk) installed.
 * You can access your Git remote repos by URLs or by file paths.
   * Usage of SSH wasn't tested.
