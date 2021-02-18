@@ -119,7 +119,7 @@ Define *sync_enabling_branch* variable
 
 Its value may represent any branch name.<br/>
 Examples: `master`, `@test`, `client-prod`, `vendor-master`, `it3xl_git_repo_sync_enabled`.<br/>
-Be aware that such a branch will be synchronized by **git-repo-sync** despite the branch prefix filtering described above.
+Be aware that such a branch will be synchronized by **git-repo-sync** despite branch prefix filtering that is described above.
 
 The **git-repo-sync** will check that such a branch exist in both remote repositories and that it has the same or related commits, i.e. its commits are located in the same Git-tree.<br/>
 This will protect you from occasional adhesion of unrelated git-repositories and deletion of branches that have the same names.<br/>
