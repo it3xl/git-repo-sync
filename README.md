@@ -14,7 +14,8 @@ Copy **git-repo-sync** somewhere
     git clone https://github.com/it3xl/git-repo-sync.git
 
 Let **git-repo-sync** know location of your remote Git repositories.<br/>
-Modify `url_a` and `url_b` variables in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
+Modify `url_a` and `url_b` variables in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh).<br/>
+You can use URL-s and file paths.
 
     url_a=https://example.com/git/my_repo.git
     #
@@ -31,6 +32,13 @@ Then update your local Git-repository ater 2 minutes and check your last commit.
 The losing commit will be deleted from both your remote repositories and will only remain in your local repository.<br/>
 Nothing wrong with it. Just repeat your commite above the winning commit of your teammate.<br/>
 *This is a quite rare situation in the Agile World and more related to the Waterfall development, but you have to know.*
+
+### Linux
+
+Run `git-sync.sh` and it tell you what to do.<br/>
+In most cases you have to install gAWK. This applies to Ubuntu.<br/>
+Docker Alpine Linux images require *bash* and *gAWK* to be installed.<br/>
+You have to update the *bash* if you use an extra old Linux distro.
 
 ### I'm the Windows guy
 
@@ -54,31 +62,50 @@ Despite that there are [fare cases](https://github.com/it3xl/git-repo-sync/issue
 Some well know Git-servers block some branches in different ways. Some of them create trash branches that you don not want to see synchronized.<br/>
 Also, this mode is new and there hasn't been much feedback yet.
 
-You can syncronize only branches that have special prefixes.<br/>
-You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file
-  * **victim_branches_prefix** - it holds branch prefix for the Victim sync strategy.
+So, you can syncronize only branches that have special prefixes.<br/>
+You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file<br/>
+And this prefixes are related to correspondent *synchronization strategies*.
 
-and
+### The Victim Sync Strategy
 
-  * **side_a_conventional_branches_prefix** - it holds branch prefix for the Conventional sync strategy.
-  * **side_b_conventional_branches_prefix** - it holds branch prefix for the Conventional sync strategy.
-
-### Victim Sync Strategy
-
-By deafult all branches are synced unde the Victim Conflict Solving Strategy.<br/>
+By deafult all branches are synced unde the Victim Synchronization Strategy.<br/>
 You can do whatever you want with such branches from both remote sides (repositories).<br/>
-In case of a conflict, any the newest commit will win.<br/>
-You can relocate it to any position or delete, etc.<br/>
-You can move a branch back in history if you sync your repos regularly.<br/>
+In case of commit conflicts, any newest commit will win.<br/>
+You can relocate branches to any position, delete and move them back in history if you run **git-repo-sync** regularly.<br/>
+Use the following variable to limit synced branches.
+
+    victim_branches_prefix=@
+
+The most common value is "@".
+Examples: @dev, @dev-staging, @test, @test-staging
+
+
+### The Conventional Sync Strategy
+
+By this strategy you limit what your teammates may do from another side repository.
+
+Branches with the following prefix will be owned by the repo from [url_a](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) variable. Let's call it *A side*.
+
+    side_a_conventional_branches_prefix=client-
+
+Branches with the following prefix will be owned by the repo from [url_b](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) variable. Let's call it *B side*.
+
+    side_b_conventional_branches_prefix=vendor-
+
+Other examples of prefix pairs: `a-`, `b-`; `microsoft/`, `google/`;
+
+On the owning side repo: You can do whatever you want with such branches.
+
+On repo of another side:<br/>
+You can do fast-forward updates and merges.<br/>
+You can move such branches back in Git-history if you run git-repo-sync regularly.
+
+All commit conflicts will be solved in favor of the owning side.<br/>
 
 ### Notes
-* It is important to understand two automated conflict solving strategies which are described below.
-* 
-* **git-repo-sync** requires Git, bash and gawk (GNU Awk) installed.
-* You can access your Git remote repos by URLs or by file paths.
-  * Usage of SSH wasn't tested.
-* It is resilient for HTTP fails and interruptions.
-* It has protections from an occasional deletion of an entire repository.
+* Usage of SSH wasn't tested.
+* **git-repo-sinc** is resilient for HTTP fails and interruptions.
+* It has protections from an occasional deletion of your entire repository.
 * There is a protections from deletion or replacing of Git-branches by occasional synchronization of unrelated remote Git-repositories.
 * Arbitrary rewriting of history is supported.
 * You even may move branches back in history.
