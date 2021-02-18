@@ -102,30 +102,27 @@ You can move such branches back in Git-history if you run git-repo-sync regularl
 
 All commit conflicts will be solved in favor of the owning side.<br/>
 
+### Other Sync Strategies
+
+There are other interesting sync and conflict solving aproaches. But the Victim and Conventional approaches cover the most important cases fairly well.
+
 ### Disaster Protection
 
-(under editing)
+People should make mistakes to became better. This is normal. But let's protect our clients from such the mistakes.<br/>
+Define *sync_enabling_branch* variable
 
+    sync_enabling_branch=it3xl_git_repo_sync_enabled
 
+Its value may represent any branch name.<br/>
+Examples: `master`, `@test`, `client-prod`, `vendor-master`, `it3xl_git_repo_sync_enabled`.<br/>
+Be aware that such a branch will be syncronized by **git-repo-sync** despite the branch prefix filtering described above.
 
+The **git-repo-sync** will check that such a branch exist in both remote repositories and that it has the same or related commits, i.e. its commits are located in the same Git-tree.<br/>
+This will protect you from occasional adhesion of unrelated git-repositories and deletion of branches that have the same names.<br/>
+Git may store many independent projects (trees) in the same repository and this is uncommon behavior for many users.
 
-
-sync_enabling_branch
-
-Represents any branch name.
-The git-repo-sync will check that such a branch exist in both remote repositories
-and that it has the same or related commits, i.e. located in the same Git-tree).
-This will protect you from occasional adhesion of unrelated git-repositories.
-Git may store many independent projects in the same repository and this is uncommon behavior for many users.
-
-We advise to use it3xl_git_repo_sync_enabled to make it explicit to others that their Git-repo is syncing with another remote repo.
-Examples: master, @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
-
-
-
-
-
-
+I advise to use it3xl_git_repo_sync_enabled name to make it explicit for others that their Git-repo is synchronized with another remote repo.<br/>
+They could search in the Internet by the word *it3xl_git_repo_sync_enabled* and understand the applied soulution.
 
 ### Notes
 * Usage of SSH wasn't tested.
