@@ -78,8 +78,8 @@ Use the following variable to limit synced branches.
 
     victim_branches_prefix=@
 
-The most common value is "@".
-Examples: @dev, @dev-staging, @test, @test-staging
+The most common value of victim_branches_prefix is "@".<br/>
+In this case the following branches will be syncronized: @dev, @dev-staging, @test, @test-staging
 
 
 ### The Conventional Sync Strategy
