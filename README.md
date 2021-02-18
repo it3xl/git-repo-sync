@@ -18,7 +18,7 @@ Modify `url_a` and `url_b` variables in [default_sync_project.sh](https://github
 You can use URL-s and file paths.
 
     url_a=https://example.com/git/my_repo.git
-    #
+    
     url_b='/c/my-folder/my-local-git-repo-folder'
 
 Run periodically the `git-sync.sh` file, which is located in the root of **git-repo-sync**.<br/>
