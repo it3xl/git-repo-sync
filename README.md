@@ -28,9 +28,9 @@ What if you're working on the same branch with another teammate who is working t
 What if you both commit at the same time.<br/>
 The **git-repo-sync** will decide who wins and who loses in this conflict.<br/>
 Let's say if you run **git-repo-sync** once in 2 minutes.<br/>
-Then update your local Git-repository ater 2 minutes and check your last commit.<br/>
+Then update your local Git-repository after 2 minutes and check your last commit.<br/>
 The losing commit will be deleted from both your remote repositories and will only remain in your local repository.<br/>
-Nothing wrong with it. Just repeat your commite above the winning commit of your teammate.<br/>
+Nothing wrong with it. Just repeat your commit above the winning commit of your teammate.<br/>
 *This is a quite rare situation in the Agile World and more related to the Waterfall development, but you have to know.*
 
 ### Linux
@@ -62,13 +62,13 @@ Despite that there are [fare cases](https://github.com/it3xl/git-repo-sync/issue
 Some well know Git-servers block some branches in different ways. Some of them create trash branches that you don not want to see synchronized.<br/>
 Also, this mode is new and there hasn't been much feedback yet.
 
-So, you can syncronize only branches that have special prefixes.<br/>
+So, you can synchronize only branches that have special prefixes.<br/>
 You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file<br/>
 And this prefixes are related to correspondent *synchronization strategies*.
 
 ### The Victim Sync Strategy
 
-By deafult all branches are synced unde the Victim Synchronization Strategy.<br/>
+By default all branches are synced under the Victim Synchronization Strategy.<br/>
 You can do whatever you want with such branches from both remote sides (repositories).<br/>
 In case of commit conflicts, any newest commit will win.<br/>
 You can relocate branches to any position, delete and move them back in history if you run **git-repo-sync** regularly.<br/>
@@ -104,7 +104,7 @@ All commit conflicts will be solved in favor of the owning side.<br/>
 
 ### Other Sync Strategies
 
-There are other interesting sync and conflict solving aproaches. But the Victim and Conventional approaches cover the most important cases fairly well.
+There are other interesting sync and conflict solving approaches. But the Victim and Conventional approaches cover the most important cases fairly well.
 
 ### Disaster Protection
 
@@ -115,22 +115,22 @@ Define *sync_enabling_branch* variable
 
 Its value may represent any branch name.<br/>
 Examples: `master`, `@test`, `client-prod`, `vendor-master`, `it3xl_git_repo_sync_enabled`.<br/>
-Be aware that such a branch will be syncronized by **git-repo-sync** despite the branch prefix filtering described above.
+Be aware that such a branch will be synchronized by **git-repo-sync** despite the branch prefix filtering described above.
 
 The **git-repo-sync** will check that such a branch exist in both remote repositories and that it has the same or related commits, i.e. its commits are located in the same Git-tree.<br/>
 This will protect you from occasional adhesion of unrelated git-repositories and deletion of branches that have the same names.<br/>
 Git may store many independent projects (trees) in the same repository and this is uncommon behavior for many users.
 
 I advise to use it3xl_git_repo_sync_enabled name to make it explicit for others that their Git-repo is synchronized with another remote repo.<br/>
-They could search in the Internet by the word *it3xl_git_repo_sync_enabled* and understand the applied soulution.
+They could search in the Internet by the word *it3xl_git_repo_sync_enabled* and understand the applied solution.
 
 ### Notes
 * Usage of SSH wasn't tested.
-* **git-repo-sinc** is resilient for HTTP fails and interruptions.
+* **git-repo-sync** is resilient for HTTP fails and interruptions.
 * It has protections from an occasional deletion of your entire remote repository.
 * Arbitrary Git-history rewriting is supported.
 * With a single installation of **git-repo-sync** you can synchronize as many pairs of Git-repositories as you want. Every pair is a sync project.
-* **git-repo-sinc** doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
+* **git-repo-sync** doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 
 ### CI/CD on Automation Servers support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
@@ -153,7 +153,7 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
 * Use any \*nix or Window machine.
 * Install Git.
 * For \*nix users
-  * update *bash* on old Linux distors.
+  * update *bash* on old Linux distros.
   * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
 * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it yourself.
 
