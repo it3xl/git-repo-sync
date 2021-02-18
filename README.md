@@ -139,16 +139,14 @@ Probably this is not a good idea to use the `master` branch name as such branche
 * **git-repo-sync** doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * **git-repo-sync** is developed within the TDD approach. Therefore, its CI/CD has a huge amount of auto tests.
 
-### CI/CD on Automation Servers support
+### Automation support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
-* It works faster under \*nix OS-es because bash on Windows could be slower. But compare to network latency, this is nothing.
+* It works faster under \*nix OS-es because Git-bash on Windows is slower. But compare to network latency, this is nothing.
 * You can separate change detection and synchronization phases of **git-repo-sync** for readability.
 * Multiple configuration capabilities are supported. Environment, configuration files, combination of them.
-* Integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)** to obtain credentials from shell environment.
-* You shouldn't do anything in case of connectivity fails. Continue to run **git-repo-sync** and everything will be restored automatically.
-
-### Automation servers How-To
-* After every synchronization, analyze notification files to send notifications about branch deletions or conflict solving.  
+* Integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)** to obtain credentials from a parent shell environment.
+* You shouldn't do anything in case of connectivity fails. Continue to run **git-repo-sync** periodically and everything will be restored automatically.
+* After every synchronization, analyze notification files to send notifications about branch deletions or commit conflict solving.  
 See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
   * `notify_solving` - for conflict solving
   * `notify_del` - for deletions
