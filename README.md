@@ -20,15 +20,32 @@ Modify `url_a` and `url_b` variables in [default_sync_project.sh](https://github
     #
     url_b='/c/my-folder/my-local-git-repo-folder'
 
-Run periodically `git-sync.sh` which is located in the root of **git-repo-sync**.
+Run periodically `git-sync.sh` which is located in the root of **git-repo-sync**.<br/>
+The `git-sync.sh` will tell you if there are any troubles. The main among them is you need to update awk to gAWK on Ubuntu.
 
 What if you're working on the same branch with another teammate who is working through the other side repository.<br/>
 What if you both commit at the same time.<br/>
 The **git-repo-sync** will decide who wins and who loses in this conflict.<br/>
 Let's say if you run **git-repo-sync** once in 2 minutes.<br/>
 Then update your local Git-repository ater 2 minutes and check your last commit.<br/>
-The losing commit will be deleted from remote repositories and will only remain in your local repository.<br/>
+The losing commit will be deleted from both your remote repositories and will only remain in your local repository.<br/>
 Nothing wrong with it. Just repeat your commite above the winning commit of your teammate.
+
+### I'm the Windows guy
+
+Ha! You're lucky guy. Despite of Linux guys, you have to do nothing and have three options to run **git-repo-sync**.
+
+Open CMD in **git-repo-sync** folder and run one of three.
+
+    "C:\Program Files\Git\bin\bash.exe" git-sync.sh
+    "C:\Program Files\Git\usr\bin\bash.exe" git-sync.sh
+    "C:\Program Files\Git\git-bash.exe" git-sync.sh
+
+Or you can reinstall Git and integrate the bash to CMD during installation.
+
+Or you can try to update the PATH environment variable. Try to add the following (that wasn't tested by me)
+
+    ;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin
 
 
 ### Notes
