@@ -92,7 +92,7 @@ Branches with the following prefix will be owned by the repo from [url_b](https:
 
     side_b_conventional_branches_prefix=vendor-
 
-Other examples of prefix pairs: `a-`, `b-`; `microsoft/`, `google/`;
+Other examples of prefix pairs: `a-`, `b-`; `microsoft/`, `google/`; `foo-`, `bar-`;
 
 On the owning side repo: You can do whatever you want with such branches.
 
