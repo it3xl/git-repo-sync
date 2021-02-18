@@ -70,14 +70,14 @@ url_b='/c/my-folder/my-local-git-repo-folder'
 # url_a="/c/my-folder/my-git-local-repo-folder"
 
 ## victim_branches_prefix
-# Limit branches which will be synchronized under a Victim Syncing strategy.
+# Limit branches which will be synchronized under a Victim Sync strategy.
 # If undefined or empty then all branches will be synced.
 # (except conventionally prefixed branches described below)
 #
-## The Victim Syncing strategy.
+## The Victim Sync strategy.
 # You can do whatever you want with such branches from both remote sides (repositories).
-# In case of a conflict, any last action will win.
-# You can relocate it to any position or delete, etc.
+# In case of commit conflicts, any newest commit will win.
+# You can relocate branches to any position or delete them, etc.
 # You can move a branch back in history if you sync your repos regularly.
 #
 # The most common value is "@".
@@ -86,11 +86,11 @@ url_b='/c/my-folder/my-local-git-repo-folder'
 ## sync_enabling_branch
 # Represents any branch name.
 # The git-repo-sync will check that such a branch exist in both remote repositories
-# and that it has the same or related commits, i.e. located in the same Git-tree).
+# and that it has the same or related commits, i.e. located in the same Git-tree.
 # This will protect you from occasional adhesion of unrelated git-repositories.
 # Git may store many independent projects in the same repository and this is uncommon behavior for many users.
 #
-# We advise to use it3xl_git_repo_sync_enabled to make it explicit to others that their Git-repo is syncing with another remote repo.
+# We advise to use it3xl_git_repo_sync_enabled name to make it explicit to others that their Git-repo is syncing with another remote repo.
 # Examples: master, @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
 
 ## side_a_conventional_branches_prefix
@@ -99,14 +99,14 @@ url_b='/c/my-folder/my-local-git-repo-folder'
 ## side_b_conventional_branches_prefix
 # Branches with a prefix from this variable will be owned by the repo from "url_b". Let's call it B side.
 #
-# Branches with such prefixes will be updated under the Conventional Syncing strategy.
+# Branches with such prefixes will be updated under the Conventional Sync strategy.
 # You can define both or one variable.
 #
-## The Conventional Syncing strategy
+## The Conventional Sync strategy
 # On repo of the owning side: You can do whatever you want with such branches.
 # On repo of another side: You can do fast-forward updates and merges.
-# You can move such a branch back in Git-history from an non-owning side if you run git-repo-sync regularly.
-# All conflicts will be solved in favor of the owning side.
+#   You can move such a branch back in Git-history from an non-owning side if you run git-repo-sync regularly.
+# All commit conflicts will be solved in favor of the owning side.
 #
 # Example of prefix pairs: client-, vendor-; a-, b-; microsoft/, google/
 
