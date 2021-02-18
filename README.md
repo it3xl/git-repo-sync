@@ -30,7 +30,7 @@ The **git-repo-sync** will decide who wins and who loses in this conflict.<br/>
 Let's say if you run **git-repo-sync** once in 2 minutes.<br/>
 Then update your local Git-repository after 2 minutes and check your last commit.<br/>
 The losing commit will be deleted from both your remote repositories and will only remain in your local repository.<br/>
-Nothing wrong with it. Just repeat your commit above the winning commit of your teammate.<br/>
+Nothing wrong with this. Just repeat your commit above the winning commit of your teammate.<br/>
 *This is a quite rare situation in the Agile World and more related to the Waterfall development, but you have to know.*
 
 ### Linux
