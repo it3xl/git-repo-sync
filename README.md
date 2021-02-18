@@ -143,7 +143,7 @@ Examples: master, @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
 * Integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)** to obtain credentials from shell environment.
 * You shouldn't do anything in case of connectivity fails. Continue to run **git-repo-sync** and everything will be restored automatically.
 
-## Automation servers How-To
+### Automation servers How-To
 * After every synchronization, analyze notification files to send notifications about branch deletions or conflict solving.  
 See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
   * `notify_solving` - for conflict solving
@@ -151,7 +151,7 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
 * See [instructions](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) on how to configure more synchronization pairs of remote Git repositories.
 * Number of pairs is unlimited. Every pair is a separate sync project.
 
-## Required Specification
+### Required Specification
 
 * Use any \*nix or Window machine.
 * Install Git.
@@ -160,6 +160,6 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
   * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
 * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it yourself.
 
-## Contacts
+### Contacts
 
 [it3xl.ru](http://it3xl.ru)
