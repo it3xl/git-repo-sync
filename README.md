@@ -104,6 +104,12 @@ All commit conflicts will be solved in favor of the owning side.<br/>
 
 ### Disaster Protection
 
+(under editing)
+
+
+
+
+
 sync_enabling_branch
 
 Represents any branch name.
@@ -114,6 +120,11 @@ Git may store many independent projects in the same repository and this is uncom
 
 We advise to use it3xl_git_repo_sync_enabled to make it explicit to others that their Git-repo is syncing with another remote repo.
 Examples: master, @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
+
+
+
+
+
 
 
 ### Notes
@@ -132,56 +143,22 @@ Examples: master, @test, client-prod, vendor-master, it3xl_git_repo_sync_enabled
 * Integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)** to obtain credentials from shell environment.
 * You shouldn't do anything in case of connectivity fails. Continue to run **git-repo-sync** and everything will be restored automatically.
 
-
----
-(some old content)
-
-
-
-## How To - Automation servers
+## Automation servers How-To
 * After every synchronization, analyze notification files to send notifications about branch deletions or conflict solving.  
 See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
   * `notify_solving` - for conflict solving
   * `notify_del` - for deletions
-* See [instructions](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) on how to configure synchronization for another pair of remote Git repositories.
-* Number of pairs is unlimited. Every pair is a separate project.
-
-## Auto Conflicts Solving Strategies
-
-A conflict solving strategy will be applied based on prefixes of your branches. See how to configure these [prefixes](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh).  
-This approach is called **Convention-Over-Git**.
-
-### Victim Strategy
-
-For a Git-branch, the most recent action will win in case of a conflict. Even moving of a Git-branch back in a history.  
-
-This means that everyone can do whatever they want with such branches.  
-You can relocate it to any position, move it back, delete, etc.
-
-**Warning** for your branch assigned to **sync_enabling_branch** variable.  
-If this branch name doesn't have a prefix from the mentioned prefixes, it will be synchronized according to the Victim strategy.
-
-### Conventional Strategy
-
-Conventional strategy solves conflicting Git-commits in your favor.  
-And it limits number of possible operations on your Git-branches for your partner from his remote Git-repository.  
-And vice versa.
-
-Let's call some two synchronized remote Git-repositories as sides.  
-Let's agree that every side owns its own prefix for Git-branches.  
-
-You can do whatever you want with branches that your side owns.  
-But you can only do "forward updating commits" and merges for non-owned branches of another side.
+* See [instructions](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) on how to configure more synchronization pairs of remote Git repositories.
+* Number of pairs is unlimited. Every pair is a separate sync project.
 
 ## Required Specification
 
 * Use any \*nix or Window machine.
-* Install Git (for Windows, include bash during Git installation).
+* Install Git.
 * For \*nix users
-  * do not use outdated versions of bash.
+  * update *bash* on old Linux distors.
   * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
-* Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc.  
-Or run it yourself.
+* Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it yourself.
 
 ## Contacts
 
