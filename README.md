@@ -2,19 +2,34 @@
 
 ## Synchronization of Remote Git-repositories
 
-The **git-repo-sync** synchronizes all or filtered Git-branches between two remote Git-repositories.<br/>
-The main idea of this tool is to install, run periodically and forget.
+The **git-repo-sync** synchronizes branches between two remote Git-repositories.<br/>
+It is like you have two entry points to a single repository and your two remote Git-repositories will be behaving as a single repository.<br/>
 
-With **git-repo-sync**, your two remote Git-repositories will be behaving as a single remote Git-repository.<br/>
-It is like you have two entry points to a single repository.
+The main idea of this tool is to install, auto-run periodically and forget.
 
-Please, reed the **Notes** before investing your time with this tool.<br/>
-The **git-repo-sync** has some limitatins and different approaches to automatic conflict resolution. 
+## How it works (short version)
 
-### This page is under updating now.
+Copy **git-repo-sync** somewhere
 
-I've just added some features and this page is under ative updating.<br/>
-Please, for the actual information see [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
+    git clone https://github.com/it3xl/git-repo-sync.git
+
+Let **git-repo-sync** know location of your remote Git repositories.<br/>
+Modify `url_a` and `url_b` variables in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh)
+
+    url_a=https://example.com/git/my_repo.git
+    #
+    url_b='/c/my-folder/my-local-git-repo-folder'
+
+Run periodically `git-sync.sh` which is located in the root of **git-repo-sync**.
+
+What if you're working on the same branch with another teammate who is working through the other side repository.<br/>
+What if you both commit at the same time.<br/>
+The **git-repo-sync** will decide who wins and who loses in this conflict.<br/>
+Let's say if you run **git-repo-sync** once in 2 minutes.<br/>
+Then update your local Git-repository ater 2 minutes and check your last commit.<br/>
+The losing commit will be deleted from remote repositories and will only remain in your local repository.<br/>
+Nothing wrong with it. Just repeat your commite above the winning commit of your teammate.
+
 
 ### Notes
 * It is important to understand two automated conflict solving strategies which are described below.
