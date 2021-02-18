@@ -83,7 +83,7 @@ In this case the following branches will be syncronized: `@dev`, `@dev-staging`,
 
 ### The Conventional Sync Strategy
 
-By this strategy you limit what your teammates may do from another side repository.
+By using this strategy you limit what your teammates may do from another side repository with branches on your side remote repository.
 
 Branches with the following prefix will be owned by the repo from [url_a](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) variable. Let's call it *A side*.
 
