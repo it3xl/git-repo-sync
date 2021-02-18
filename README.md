@@ -97,9 +97,9 @@ Other examples of prefix pairs: `a-`, `b-`; `microsoft/`, `google/`; `foo-`, `ba
 
 On the owning side repo: You can do whatever you want with such branches.
 
-On repo of another side:<br/>
+On a repo of another side:<br/>
 You can do fast-forward updates and merges.<br/>
-You can move such branches back in Git-history if you run git-repo-sync regularly.
+You can move such branches back in Git-history if you run **git-repo-sync** periodically.
 
 All commit conflicts will be solved in favor of the owning side.<br/>
 
