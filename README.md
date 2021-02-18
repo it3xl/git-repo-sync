@@ -52,7 +52,7 @@ Open PowerShell or CMD in the **git-repo-sync** folder and run one of three.
 
 Or you can reinstall Git and integrate the bash into your Windows during installation. Then run
 
-    bash.exe git-sync.sh
+    bash  git-sync.sh
 
 Or you can try to update the PATH environment variable. Try to add the following (that wasn't tested by me)
 
