@@ -35,7 +35,7 @@ Nothing wrong with it. Just repeat your commit above the winning commit of your 
 
 ### Linux
 
-Run `git-sync.sh` and it tell you what to do.<br/>
+Run `git-sync.sh` and it will tell you what it needs.<br/>
 In most cases you have to install gAWK. This applies to Ubuntu.<br/>
 Docker Alpine Linux images require *bash* and *gAWK* to be installed.<br/>
 You have to update the *bash* if you use an extra old Linux distro.
