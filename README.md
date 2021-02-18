@@ -63,8 +63,8 @@ Some well know Git-servers block some branches in different ways. Some of them c
 Also, this mode is new and there hasn't been much feedback yet.
 
 So, you can synchronize only branches that have special prefixes.<br/>
-You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file<br/>
-And this prefixes are related to correspondent *synchronization strategies*.
+You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file.<br/>
+What's important, these prefixes are related to correspondent *synchronization strategies*.
 
 ### The Victim Sync Strategy
 
