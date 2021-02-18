@@ -7,7 +7,7 @@ It is like you have two entry points to a single repository and your two remote 
 
 The main idea of this tool is to install, auto-run periodically and forget.
 
-## How it works (short version)
+## How it works
 
 Copy **git-repo-sync** somewhere
 
