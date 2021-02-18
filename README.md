@@ -112,7 +112,7 @@ But the Victim and Conventional approaches cover the most important cases fairly
 
 ### Disaster Protection
 
-People should make mistakes to became better. This is normal. But let's protect our clients from such the mistakes.<br/>
+People should make mistakes to become better. This is normal. But let's protect our clients from such the mistakes.<br/>
 Define *sync_enabling_branch* variable
 
     sync_enabling_branch=it3xl_git_repo_sync_enabled
