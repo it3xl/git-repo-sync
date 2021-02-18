@@ -118,10 +118,11 @@ Define *sync_enabling_branch* variable
     sync_enabling_branch=it3xl_git_repo_sync_enabled
 
 Its value may represent any branch name.<br/>
-Examples: `master`, `@test`, `client-prod`, `vendor-master`, `it3xl_git_repo_sync_enabled`.<br/>
-Be aware that such a branch will be synchronized by **git-repo-sync** despite branch prefix filtering that is described above.
+Examples: `@test`, `client-prod`, `vendor-master`, `it3xl_git_repo_sync_enabled`.<br/>
+Be aware that such a branch will be synchronized by **git-repo-sync** despite branch prefix filtering that is described above.<br/>
+Probably this is not a good idea to use the `master` branch for this as such branches are synced under the Victim strategy. But you can specify a branch with a conveintiona prefix for the Conventional syncing.
 
-The **git-repo-sync** will check that such a branch exist in both remote repositories and that it has the same or related commits, i.e. its commits are located in the same Git-tree.<br/>
+The **git-repo-sync** will check if such a branch exist in both remote repositories and that it has the same or related commits, i.e. its commits are located in the same Git-tree.<br/>
 This will protect you from occasional adhesion of unrelated git-repositories and deletion of branches that have the same names.<br/>
 Git may store many independent projects (trees) in the same repository and this is uncommon behavior for many users.
 
