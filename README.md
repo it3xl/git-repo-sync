@@ -79,7 +79,7 @@ Use the following variable to limit synced branches.
     victim_branches_prefix=@
 
 The most common value of victim_branches_prefix is "@".<br/>
-In this case the following branches will be syncronized: `@dev`, `@dev-staging`, `@test`, `@test-staging`, `@my-feature`.
+In this case the following branches will be synchronized: `@dev`, `@dev-staging`, `@test`, `@test-staging`, `@my-feature`.
 
 ### The Conventional Sync Strategy
 
@@ -128,14 +128,14 @@ I advise to use it3xl_git_repo_sync_enabled branch name to make it explicit for 
 They could search for the word *it3xl_git_repo_sync_enabled* in the Internet and understand the applied sync solution.
 
 Be aware that mentioned in the sync_enabling_branch variable branch will be synchronized by **git-repo-sync** despite branch prefix filtering that is described above.<br/>
-Probably this is not a good idea to use the `master` branch name as such branches are synced under the Victim strategy. But you can specify a branch with a conveintiona prefix for the Conventional syncing of it.
+Probably this is not a good idea to use the `master` branch name as such branches are synced under the Victim strategy. But you can specify a branch with a conventional prefix for the Conventional syncing of it.
 
 ### Notes
 * Usage of SSH wasn't tested.
 * **git-repo-sync** is resilient for HTTP fails and interruptions.
 * It has protections from an occasional deletion of your entire remote repository.
 * Arbitrary Git-history rewriting is supported.
-* Within a single installation, **git-repo-sync** can synchronize as many pairs of Git-repositories as you want. Every sinc pair is a sync project for **git-repo-sync**.
+* Within a single installation, **git-repo-sync** can synchronize as many pairs of Git-repositories as you want. Every sync pair is a sync project for **git-repo-sync**.
 * **git-repo-sync** doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * **git-repo-sync** is developed within the TDD approach. Therefore, its CI/CD has a huge amount of auto tests.
 
