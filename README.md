@@ -5,6 +5,8 @@
 The **git-repo-sync** synchronizes branches between two remote Git-repositories.<br/>
 It is like you have two entry points to a single repository and your two remote Git-repositories will be behaving as a single repository.<br/>
 
+**git-repo-sync** implemented as a bash script.
+
 The main idea of this tool is to install, auto-run periodically and forget.
 
 ## How it works
