@@ -130,7 +130,7 @@ I advise to use it3xl_git_repo_sync_enabled branch name to make it explicit for 
 They could search for the word *it3xl_git_repo_sync_enabled* in the Internet and understand the applied sync solution.
 
 Be aware that mentioned in the sync_enabling_branch variable branch will be synchronized by **git-repo-sync** despite branch prefix filtering that is described above.<br/>
-Probably this is not a good idea to use the `master` branch name as such branches are synced under the Victim strategy. But you can specify a branch with a conventional prefix for the Conventional syncing of it.
+Probably this is not a good idea to specify the `master` branch name because a branch mentioned in `sync_enabling_branch` will be synced under the Victim strategy. But you can specify a branch with one of your conventional prefixes for the Conventional syncing of it. For example `client-master`.
 
 ### Notes
 * Usage of SSH wasn't tested.
