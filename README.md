@@ -166,4 +166,6 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
 
 ### Contacts
 
+It would be great if you could help me improve the above documentation in response to your setup experience.<br/>
+In any case, ask any questions.<br/>
 [it3xl.ru](http://it3xl.ru)
