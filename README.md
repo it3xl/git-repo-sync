@@ -159,15 +159,14 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
 
 ### Required Specification
 
-* Use any \*nix or Window machine.
+* Use any Linux, Windows or Mac machine.
 * Install Git.
-* For \*nix users
+* For users of \*nix OS-es.
   * update *bash* on old Linux distros.
   * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
-* Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it yourself.
+* Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it yourself periodically.
 
 ### Contacts
 
-It would be great if you could help me improve the above documentation in response to your setup experience.<br/>
-In any case, ask any questions.<br/>
-[it3xl.ru](http://it3xl.ru)
+It would be great if you could help me to improve the above documentation in response to your setup experience.<br/>
+In any case, ask any questions. My contacts is here - [it3xl.ru](http://it3xl.ru)
