@@ -107,11 +107,11 @@ You can move such branches back in Git-history if you run **git-repo-sync** peri
 
 All commit conflicts will be solved in favor of the owning side.<br/>
 
-### Other Sync Strategies
+### Other Unimplemented Sync Strategies
 
 There are other interesting sync and conflict solving approaches.<br/>
 For example when you don't lose your conflicting commits in your remote repositories and other teammates can resolve your conflicts after/for you.<br/>
-Also it is useful if you have a stubborn Git-server that blocks updating commits in different ways.
+Also it is useful if you have a stubborn Git-server that blocks updating commits in different ways.<br/>
 But the Victim and Conventional approaches cover the most important cases fairly well.
 
 ### Disaster Protection
