@@ -26,7 +26,7 @@ You can use URL-s and file paths.
 Run periodically the `git-sync.sh` file, which is located in the root of **git-repo-sync**.<br/>
 The `git-sync.sh` will tell you if there are any troubles. The main among them is you need to update awk to gAWK on Ubuntu.
 
-## Trade off. Redo a Git-commit in case of a conflict
+### Trade off. Redo a Git-commit in case of a conflict
 
 What if you're working on the same branch with another teammate who is working through the other side repository?<br/>
 What if you both commit at the same time at the same branch?<br/>
