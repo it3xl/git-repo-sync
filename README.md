@@ -146,7 +146,7 @@ Probably this is not a good idea to specify the `master` branch name because a b
 ### Automation support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
 * It works faster under \*nix OS-es because Git-bash on Windows is slower. But compare to network latency, this is nothing.
-* You can separate change detection and synchronization phases of **git-repo-sync** for readability.
+* You can separate change detection and synchronization phases of **git-repo-sync** for readability of build logs.
 * Multiple configuration capabilities are supported. Environment, configuration files, combination of them.
 * Integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)** to obtain credentials from a parent shell environment.
 * You shouldn't do anything in case of connectivity fails. Continue to run **git-repo-sync** periodically and everything will be restored automatically.
