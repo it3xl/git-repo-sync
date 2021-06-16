@@ -26,13 +26,16 @@ You can use URL-s and file paths.
 Run periodically the `git-sync.sh` file, which is located in the root of **git-repo-sync**.<br/>
 The `git-sync.sh` will tell you if there are any troubles. The main among them is you need to update awk to gAWK on Ubuntu.
 
+## Trade off. Redo a Git-commit in case of a conflict
+
 What if you're working on the same branch with another teammate who is working through the other side repository?<br/>
-What if you both commit at the same time?<br/>
+What if you both commit at the same time at the same branch?<br/>
 The **git-repo-sync** will decide who wins and who loses in this conflict.<br/>
 Let's say if you run **git-repo-sync** once in 2 minutes.<br/>
 Then update your local Git-repository after 2 minutes and check your last commit.<br/>
 The losing commit will be deleted from both your remote repositories and will only remain in your local repository.<br/>
-Nothing wrong with this. Just repeat your commit above the winning commit of your teammate.<br/>
+Nothing wrong with that. Just repeat your commit above the winning commit of your teammate.<br/>
+Use Git-merge, rebase or cherry-pick and do a Git-push of your changes again.<br/>
 *This is a quite rare situation in the Agile World and more related to the Waterfall development, but you have to know.*
 
 ### On Linux
@@ -63,8 +66,7 @@ Or you can try to update the PATH environment variable. Try to add the following
 ### Do not synchronize all branches
 
 Despite that there are [fair cases](https://github.com/it3xl/git-repo-sync/issues/3#issuecomment-771494886) when it is useful to sync all branches, this is not always a good idea.<br/>
-Some well know Git-servers block some branches in different ways. Some of them create trash branches that you do not want to see synchronized.<br/>
-Also, this mode is new and there hasn't been much feedback yet.
+Some well know Git-servers block some branches in different ways. Some of them create "trash"-branches which you do not want to see synchronized.<br/>
 
 So, you can synchronize branches that have special prefixes only.<br/>
 You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file.<br/>
