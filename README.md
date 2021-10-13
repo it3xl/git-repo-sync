@@ -9,6 +9,13 @@ It is like you have two entry points to a single repository and your two remote 
 
 The main idea of this tool is to install, auto-run periodically and forget.
 
+## Use cases
+
+* Adhesion of Git-repositories of a client and a software/support supplier.
+** Access to your Git remote repository is restricted by your local network.
+* Provides a separation from your base remote Git repository if it is slow and could be out of service time after time.
+* You software teams have independent Git remote repositories.
+
 ## How it works
 
 Copy **git-repo-sync** somewhere
