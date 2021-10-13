@@ -12,7 +12,8 @@ The main idea of this tool is to install, auto-run periodically and forget.
 ## Use cases
 
 * Adhesion of Git-repositories of a client and a software/support supplier.
-** Access to your Git remote repository is restricted by your local network.
+    * Access to your Git remote repository is restricted by your local network.
+    * After completing of some work, remote access to your Git repository should be terminated.
 * Provides a separation from your base remote Git repository if it is slow and could be out of service time after time.
 * You software teams have independent Git remote repositories.
 
