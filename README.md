@@ -82,7 +82,7 @@ What's important, these prefixes are related to correspondent *synchronization s
 
 ### The Victim Sync Strategy
 
-By default all branches are synced under the Victim Synchronization Strategy.<br/>
+By default all branches are synced under a Victim Synchronization Strategy.<br/>
 You can do whatever you want with such branches from both remote sides (repositories).<br/>
 In case of commit conflicts, any newest commit will win.<br/>
 You can relocate branches to any position, delete and move them back in history if you run **git-repo-sync** regularly.<br/>
@@ -124,7 +124,7 @@ But the Victim and Conventional approaches cover the most important cases fairly
 
 ### Disaster Protection
 
-People should make mistakes to become better. This is normal. But let's protect our clients from such the mistakes.<br/>
+People have to make mistakes to become better. This is normal. But let's protect our clients from such the mistakes.<br/>
 Define *sync_enabling_branch* variable
 
     sync_enabling_branch=it3xl_git_repo_sync_enabled
@@ -136,11 +136,11 @@ The **git-repo-sync** will check if such a branch exist in both remote repositor
 This will protect you from occasional adhesion of unrelated git-repositories and deletion of branches that have the same names.<br/>
 Git may store many independent projects (trees) in the same repository and this is uncommon behavior for many users.
 
-I advise to use it3xl_git_repo_sync_enabled branch name to make it explicit for others that their remote Git-repo is synchronized with another remote repo.<br/>
+I advise to use `it3xl_git_repo_sync_enabled` branch name to make this explicit for others that their remote Git-repo is synchronized with another remote repo.<br/>
 They could search for the word *it3xl_git_repo_sync_enabled* in the Internet and understand the applied sync solution.
 
-Be aware that branch mentioned in the sync_enabling_branch variable will be synchronized by **git-repo-sync** despite branch prefix filtering which is described above (victim, conventional).<br/>
-Probably this is not a good idea to specify the `master` branch name because a branch mentioned in `sync_enabling_branch` will be synced under the Victim strategy. But you can specify a branch with one of your conventional prefixes for the Conventional syncing of it. For example `client-master`.
+Be aware that a branch mentioned in the `sync_enabling_branch` variable will be alwasy synchronized by **git-repo-sync**.<br/>
+Probably this is not a good idea to specify here the `master` branch name because a branch mentioned in `sync_enabling_branch` will be synchronized under the Victim strategy. But you can specify there a branch with one of your conventional prefixes for the Conventional syncing of it. For example `client-master`.
 
 ### Notes
 * Usage of SSH wasn't tested.
