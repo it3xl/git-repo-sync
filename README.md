@@ -34,7 +34,7 @@ You can use URL-s and file paths.
 Run periodically the `git-sync.sh` file, which is located in the root of **git-repo-sync**.<br/>
 The `git-sync.sh` will tell you if there are any troubles. The main among them is you need to update awk to gAWK on Ubuntu.
 
-### Trade off. Redo a Git-commit in case of a conflict
+### Trade off = Redo Git-merge-commit in case of a conflict
 
 What if you're working on the same branch with another teammate who is working through the other side repository?<br/>
 What if you both commit at the same time at the same branch?<br/>
@@ -143,13 +143,30 @@ Be aware that a branch mentioned in the `sync_enabling_branch` variable will be 
 Probably this is not a good idea to specify here the `master` branch name because a branch mentioned in `sync_enabling_branch` will be synchronized under the Victim strategy. But you can specify there a branch with one of your conventional prefixes for the Conventional syncing of it. For example `client-master`.
 
 ### Notes
-* Usage of SSH wasn't tested.
+* Usage with SSH isn't tested.
 * **git-repo-sync** is resilient for HTTP fails and interruptions.
 * It has protections from an occasional deletion of your entire remote repository.
 * Arbitrary Git-history rewriting is supported.
 * Within a single installation, **git-repo-sync** can synchronize as many pairs of Git-repositories as you want. Every sync pair is a sync project for **git-repo-sync**.
 * **git-repo-sync** doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
 * **git-repo-sync** is developed within the TDD approach. Therefore, its CI/CD has a huge amount of auto tests.
+
+### Support Operations
+
+#### Remote Repo Replacing Support
+
+Real case of my customer. You want to synchronize your existing Git-repo with a Git-repo of your new software parnter.
+
+Option 1.<br/>
+Create a new git-repo-sync project and use it (project description file or environment variables).
+
+Option 2.<br/>
+Modify your existing project. Update its description file or environment variables.<br/>
+Delete `git-repo-sync/sync-projects/<your-sync-project-name>` directory.<br/>
+Start synchronization as usual.
+
+Option 3.<br/>
+Your Git-repository is extra huge and you can't recreate it. It is a TL;DR. Ask a Git-professional for a help. 
 
 ### Automation support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
@@ -176,5 +193,4 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
 
 ### Contacts
 
-It would be great if you could help me to improve the above documentation in response to your setup experience.<br/>
-In any case, ask any questions. My contacts is here - [it3xl.ru](http://it3xl.ru)
+[it3xl.ru](http://it3xl.ru)
