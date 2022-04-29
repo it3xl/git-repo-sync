@@ -87,7 +87,7 @@ What's important, these prefixes are related to correspondent *synchronization s
 
 ### The Victim Sync Strategy
 
-By default all branches are synced under a Victim Synchronization Strategy.<br/>
+By default all branches are synced under this strategy.<br/>
 You can do whatever you want with such branches from both remote sides (repositories).<br/>
 In case of commit conflicts, any newest commit will win.<br/>
 You can relocate branches to any position, delete and move them back in history if you run **git-repo-sync** regularly.<br/>
