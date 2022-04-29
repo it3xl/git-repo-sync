@@ -34,17 +34,21 @@ You can use URL-s and file paths.
 Run periodically the `git-sync.sh` file, which is located in the root of **git-repo-sync**.<br/>
 The `git-sync.sh` will tell you if there are any troubles. The main among them is you need to update awk to gAWK on Ubuntu.
 
-### Trade off = Redo Git-merge-commit in case of a conflict
+### Trade off. Redo your Git-commit in case of a Git-conflict
 
-What if you're working on the same branch with another teammate who is working through the other side repository?<br/>
-What if you both commit at the same time at the same branch?<br/>
-The **git-repo-sync** will decide who wins and who loses in this conflict.<br/>
-Let's say if you run **git-repo-sync** once in 2 minutes.<br/>
-Then update your local Git-repository after 2 minutes and check your last commit.<br/>
-The losing commit will be deleted from both your remote repositories and will only remain in your local repository.<br/>
-Nothing wrong with that. Just repeat your commit above the winning commit of your teammate.<br/>
-Use Git-merge, rebase or cherry-pick and do a Git-push of your changes again.<br/>
-*This is a quite rare situation in the Agile World and more related to the Waterfall development, but you have to know.*
+Only if you and your teammate are working on the same branch but through different remote repositories.<br/>
+Let's say you both created Git-commits or Git-merge-commits.<br/>
+Then **git-repo-sync** should decide whose changes will be accepted and whose will be deleted on both remote repositories.
+
+The **git-repo-sync** uses described below sync-strategies to decide.
+
+Let's imagine that exactly your commits were deleted by **git-repo-sync** in the remote Git-repositories in this case.<br/>
+Anyway, your commits will stay locally in your local Git-repository.<br/>
+Just update your local Git-repository. Make Git-rebase, merge, whatever. Do a Git-push again.
+
+*This is a quite rare situation but you should be aware of it.*<br/>
+Regular running of **git-repo-sync** decreases chances of it drastically.<br/>
+This is why I create CI/CD automations for **git-repo-sync** that are running every 2 or 5 minutes.
 
 ### On Linux
 
