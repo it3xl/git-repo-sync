@@ -39,7 +39,7 @@ The `git-sync.sh` will tell you if there are any troubles. The main among them i
 Only if you and your teammate are working on the same branch but through different remote repositories.<br/>
 And you run **git-repo-sync** rarely.<br/>
 Let's say you both created Git-commits or Git-merge-commits.<br/>
-Then **git-repo-sync** should decide whose changes will be accepted and whose will be deleted on both remote repositories.
+Then **git-repo-sync** should decide whose changes will be accepted and whose will be deleted on both remote repositories for this branch.
 
 The **git-repo-sync** uses described below sync-strategies to decide.
 
@@ -124,7 +124,7 @@ All commit conflicts will be solved in favor of the owning side.<br/>
 
 There are other interesting sync and conflict solving approaches.<br/>
 For example when you don't lose your conflicting commits in your remote repositories and other teammates can resolve your conflicts after/for you.<br/>
-Also it is useful if you have a stubborn Git-server that blocks updating commits in different ways.<br/>
+Also it will be useful if you have a stubborn Git-server that blocks updating commits in different ways.<br/>
 But the Victim and Conventional approaches cover the most important cases fairly well.
 
 ### Disaster Protection
@@ -148,13 +148,13 @@ Be aware that a branch mentioned in the `sync_enabling_branch` variable will be 
 Probably this is not a good idea to specify here the `master` branch name because a branch mentioned in `sync_enabling_branch` will be synchronized under the Victim strategy. But you can specify there a branch with one of your conventional prefixes for the Conventional syncing of it. For example `client-master`.
 
 ### Notes
-* Usage with SSH isn't tested.
+* Usage with SSH isn't tested but possible.
 * **git-repo-sync** is resilient for HTTP fails and interruptions.
 * It has protections from an occasional deletion of your entire remote repository.
 * Arbitrary Git-history rewriting is supported.
 * Within a single installation, **git-repo-sync** can synchronize as many pairs of Git-repositories as you want. Every sync pair is a sync project for **git-repo-sync**.
-* **git-repo-sync** doesn't synchronize Git-tags. (Some popular Git-servers block manipulations with Git-tags.)
-* **git-repo-sync** is developed within the TDD approach. Therefore, its CI/CD has a huge amount of auto tests.
+* **git-repo-sync** doesn't synchronize Git-tags because some popular Git-servers block manipulations with Git-tags.
+* **git-repo-sync** doesn't attempt to do Git-merge or rebase.
 
 ### Support Operations
 
