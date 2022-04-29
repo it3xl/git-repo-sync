@@ -97,7 +97,8 @@ Use the following variable to limit branches synchronized by this strategy.
     victim_branches_prefix=@
 
 The most common value of victim_branches_prefix is "@".<br/>
-In this case the following branches will be synchronized: `@dev`, `@dev-staging`, `@test`, `@test-staging`, `@my-feature`.
+In this case only branches that start with `@` will be synchronized.
+E.g. `@dev`, `@dev-staging`, `@test`, `@test-staging`, `@my-feature`, etc.
 
 ### The Conventional Sync Strategy
 
