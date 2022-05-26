@@ -34,6 +34,10 @@ You can use URL-s and file paths.
 Run periodically the `git-sync.sh` file, which is located in the root of **git-repo-sync**.<br/>
 The `git-sync.sh` will tell you if there are any troubles. The main among them is you need to update awk to gAWK on Ubuntu.
 
+    bash  git-sync.sh
+
+FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
+
 ### Trade off. Redo your Git-commit in case of a conflict
 
 Only if you and your teammate are working on the same branch but through different remote repositories.<br/>
