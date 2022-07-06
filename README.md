@@ -153,7 +153,8 @@ They could search for the word *it3xl_git_repo_sync_enabled* in the Internet and
 Be aware that a branch mentioned in the `sync_enabling_branch` variable will be alwasy synchronized by **git-repo-sync**.<br/>
 Probably this is not a good idea to specify here the `master` branch name because a branch mentioned in `sync_enabling_branch` will be synchronized under the Victim strategy. But you can specify there a branch with one of your conventional prefixes for the Conventional syncing of it. For example `client-master`.
 
-### Notes
+### Notes, Drawbacks & Limitations
+* Git Large File Storage (LFS) extension is not supported.
 * Usage with SSH isn't tested but possible.
 * **git-repo-sync** is resilient for HTTP fails and interruptions.
 * It has protections from an occasional deletion of your entire remote repository.
