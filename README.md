@@ -50,7 +50,7 @@ FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
 In this case **git-repo-sync** emulates Git-history rewrite behavior.
 
-#### Your behavior
+#### Your behavior to fix it
 
 - Run **git-repo-sync** to synchronize both Git-remote-repositories.
 - If your Git-commit was deleted from a Git-remote-repo due to a conflict with another commit.<br/>
