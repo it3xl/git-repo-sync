@@ -39,19 +39,18 @@ The `git-sync.sh` will tell you if there are any troubles. The main among them i
 
 FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
-### Trade off
-#### Re-push your Git-commit in case of a conflict
+### Trade off: Re-push your Git-commit in case of a conflict
 
-**Codition**:
+#### Codition
 
 - You run **git-repo-sync** rarely. I.e. there were no runs of it before pushing of your local commits to your remote Git-repository.
 - You and your teammate are pushing changes to the same Git-branch but through different remote repositories.
 
-**Behavior of git-repo-sync**
+#### Behavior of git-repo-sync
 
 In this case **git-repo-sync** emulates Git-history rewrite behavior.
 
-**Your behavior**
+#### Your behavior
 
 - Run **git-repo-sync** to synchronize both Git-remote-repositories.
 - If your Git-commit was deleted from a Git-remote-repo due to a conflict with another commit.<br/>
@@ -60,8 +59,7 @@ In this case **git-repo-sync** emulates Git-history rewrite behavior.
   - Performe pushing of your changes.
 - Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository.
 
-
-**Explanation**
+#### Explanation
 
 The **git-repo-sync** should decide whose changes will be accepted and whose will be deleted on both remote repositories in the explaned above condition.<br/>
 If conflict exist then **git-repo-sync** will emulate Git-history-rewrite behavior.
