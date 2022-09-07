@@ -12,7 +12,7 @@ But see the "Trade off" section below.
 
 ## Use cases
 
-* Adhesion of Git-repositories of a client and a software/support supplier.
+* Adhesion of Git-remote-repositories of a client and a software/support supplier.
     * Access to your Git remote repository is restricted by your local network.
     * After completing of some work, remote access to your Git repository could be terminated.
 * Provides an independence from your base remote Git repository if it is slow and could be out of service time after time.
