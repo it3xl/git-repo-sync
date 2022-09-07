@@ -8,7 +8,7 @@ It is like you have two entry points to a single repository and your two remote 
 **git-repo-sync** implemented as a bash script.
 
 The main idea of this tool is to install, auto-run periodically and forget.<br/>
-But see the Trade section below.
+But see the "Trade off" section below.
 
 ## Use cases
 
