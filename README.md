@@ -44,11 +44,11 @@ FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 #### Codition
 
 - You run **git-repo-sync** rarely. I.e. there were no runs of it before pushing of your local commits to your remote Git-repository.
-- You and your teammate are pushing changes to the same Git-branch but through different remote repositories.
+- You and your teammate have pushed changes to the same Git-branch but through different remote repositories.
 
 #### Behavior of git-repo-sync
 
-In this case **git-repo-sync** emulates Git-history rewrite behavior.
+The **git-repo-sync** emulates Git-history rewrite behavior in this case.
 
 #### Your behavior to fix it
 
@@ -58,6 +58,13 @@ In this case **git-repo-sync** emulates Git-history rewrite behavior.
   - Performe Git-merge of your changes with changes from remote repo.
   - Performe pushing of your changes.
 - Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository.
+
+#### How do I know that there were conflicts
+
+1. Check manually for conflicts.
+  - Run **git-repo-sync**.
+  - Upload changes to your locat git repository and recheck the branch you've pushed recently. If it has no remote Git-branch counterpart then a conflict was solved.
+1. The **git-repo-sync** has notifications over plain text files. Ask your DevOps to distribute it.
 
 #### Explanation
 
