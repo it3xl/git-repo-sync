@@ -55,9 +55,9 @@ In this case **git-repo-sync** emulates Git-history rewrite behavior.
 
 - Run **git-repo-sync** to synchronize both Git-remote-repositories.
 - If your Git-commit was deleted from a Git-remote-repo due to a conflict with another commit.<br/>
--- Upload changes from your remote Git-repository to your local Git repository.
--- Performe Git-merge of your changes with changes from remote repo.
--- Performe pushing of your changes.
+  - Upload changes from your remote Git-repository to your local Git repository.
+  - Performe Git-merge of your changes with changes from remote repo.
+  - Performe pushing of your changes.
 - Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository.
 
 
