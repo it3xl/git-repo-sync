@@ -48,7 +48,7 @@ FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
 #### Behavior of git-repo-sync
 
-The **git-repo-sync** emulates Git-history rewrite behavior in this case.
+The **git-repo-sync** will emulates Git-history rewrite behavior in case of the described condition.
 
 #### Your behavior to fix it
 
