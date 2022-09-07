@@ -7,7 +7,8 @@ It is like you have two entry points to a single repository and your two remote 
 
 **git-repo-sync** implemented as a bash script.
 
-The main idea of this tool is to install, auto-run periodically and forget.
+The main idea of this tool is to install, auto-run periodically and forget.<br/>
+But see the Trade section below.
 
 ## Use cases
 
@@ -38,16 +39,36 @@ The `git-sync.sh` will tell you if there are any troubles. The main among them i
 
 FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
-### Trade off. Redo your Git-commit in case of a conflict
+### Trade off
+#### Redo your Git-commit in case of a conflict
 
-Only if you and your teammate are working on the same branch but through different remote repositories.<br/>
-And you run **git-repo-sync** rarely.<br/>
-Let's say you both created Git-commits or Git-merge-commits.<br/>
-Then **git-repo-sync** should decide whose changes will be accepted and whose will be deleted on both remote repositories for this branch.
+**Codition**:
+
+- You run **git-repo-sync** rarely. I.e. there were no runs of it before pushing of your local commits to your remote Git-repository.
+- You and your teammate are pushing changes to the same Git-branch but through different remote repositories.
+
+**Behavior of git-repo-sync**
+
+In this case **git-repo-sync** emulates Git-history rewrite behavior.
+
+**Your behavior**
+
+- Run **git-repo-sync** to synchronize both Git-remote-repositories.
+- If your Git-commit was deleted from a Git-remote-repo due to a conflict with another commit.<br/>
+-- Upload changes from your remote Git-repository to your local Git repository.
+-- Performe Git-merge of your changes with changes from remote repo.
+-- Performe pushing of your changes.
+- Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository.
+
+
+**Explanation**
+
+The **git-repo-sync** should decide whose changes will be accepted and whose will be deleted on both remote repositories in the explaned above condition.<br/>
+If conflict exist then **git-repo-sync** will emulate Git-history-rewrite behavior.
 
 The **git-repo-sync** uses described below sync-strategies to decide.
 
-Let's imagine that exactly your commits were deleted by **git-repo-sync** in the remote Git-repositories in this case.<br/>
+Let's imagine that exactly your commits were deleted by **git-repo-sync** in your both remote Git-repositories in case of a conflict.<br/>
 Anyway, your commits will stay locally in your local Git-repository.<br/>
 Just update your local Git-repository. Make Git-rebase, merge, whatever. Do a Git-push again.
 
