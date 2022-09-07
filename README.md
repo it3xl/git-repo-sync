@@ -62,10 +62,10 @@ The **git-repo-sync** will emulates Git-history rewrite behavior in case of the 
 
 #### How do I know that there were conflicts
 
-1. Check manually for conflicts.
-  1.1 Run **git-repo-sync**.
-  1.1 Upload changes to your locat git repository and recheck the branch you've pushed recently. If it has no remote Git-branch counterpart then a conflict was solved.
-1. The **git-repo-sync** has notifications over plain text files. Ask your DevOps to distribute it.
+- Check manually for conflicts.
+  - Run **git-repo-sync**.
+  - Upload changes to your locat git repository and recheck the branch you've pushed recently. If it has no remote Git-branch counterpart then a conflict was solved.
+- The **git-repo-sync** has notifications over plain text files. Ask your DevOps to distribute it.
 
 #### Explanation
 
