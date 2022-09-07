@@ -48,7 +48,7 @@ FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
 #### Behavior of git-repo-sync
 
-The **git-repo-sync** will emulates Git-history rewrite behavior in case of the described condition.
+The **git-repo-sync** will emulates Git-history-rewrite behavior in case of the described condition on a branch with a conflict.
 
 #### Your behavior to fix it
 
@@ -69,14 +69,7 @@ The **git-repo-sync** will emulates Git-history rewrite behavior in case of the 
 
 #### Explanation
 
-The **git-repo-sync** should decide whose changes will be accepted and whose will be deleted on both remote repositories in the explaned above condition.<br/>
-If conflict exist then **git-repo-sync** will emulate Git-history-rewrite behavior.
-
-The **git-repo-sync** uses described below sync-strategies to decide.
-
-Let's imagine that exactly your commits were deleted by **git-repo-sync** in your both remote Git-repositories in case of a conflict.<br/>
-Anyway, your commits will stay locally in your local Git-repository.<br/>
-Just update your local Git-repository. Make Git-rebase, merge, whatever. Do a Git-push again.
+In case of the explained above condition the **git-repo-sync** should decide whose changes will be accepted and whose will be deleted remotely on both remote repositories.<br/>
 
 *This is a quite rare situation but you should be aware of it.*<br/>
 Regular running of **git-repo-sync** decreases chances of it drastically.<br/>
