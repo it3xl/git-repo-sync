@@ -75,16 +75,16 @@ In case of the explained above condition the **git-repo-sync** should decide who
 Regular running of **git-repo-sync** decreases chances of it drastically.<br/>
 This is why I create CI/CD-automations for **git-repo-sync** that are running every 2 or 5 minutes.
 
-### On Linux
+### Using On Linux
 
 Run `git-sync.sh` and it will tell you what **git-repo-sync** needs.<br/>
 In most cases you have to install gAWK. This applies to Ubuntu.<br/>
 Docker Alpine Linux images require *bash* and *gAWK* to be installed.<br/>
 You have to update the *bash* if you use an extra old Linux distro.
 
-### I'm the Windows guy
+### Using on Windows
 
-Ha! You're lucky. Unlike Linux guys, you have to do nothing and have five options to run **git-repo-sync**.
+Ha! You're lucky. You have to do nothing and have five options to run **git-repo-sync**.
 
 Open PowerShell or CMD in the **git-repo-sync** folder and run one of three.
 
