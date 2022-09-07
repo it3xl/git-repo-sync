@@ -53,9 +53,10 @@ The **git-repo-sync** will emulates Git-history rewrite behavior in case of the 
 #### Your behavior to fix it
 
 - Run **git-repo-sync** to synchronize both Git-remote-repositories.
-- If your Git-commit was deleted from a Git-remote-repo due to a conflict with another commit.<br/>
+- If your Git-commit was deleted from a Git-remote-repository due to a conflict with another commit.<br/>
+  - So, your commit wasn't deleted from your locat Git-repository!
   - Upload changes from your remote Git-repository to your local Git repository.
-  - Performe Git-merge of your changes with changes from remote repo.
+  - Performe Git-merge of your changes with changes from your remote-Git-repo.
   - Performe pushing of your changes.
 - Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository.
 
