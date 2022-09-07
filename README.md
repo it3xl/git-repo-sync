@@ -40,7 +40,7 @@ The `git-sync.sh` will tell you if there are any troubles. The main among them i
 FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
 ### Trade off
-#### Redo your Git-commit in case of a conflict
+#### Re-push your Git-commit in case of a conflict
 
 **Codition**:
 
