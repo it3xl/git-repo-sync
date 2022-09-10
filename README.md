@@ -39,28 +39,29 @@ The `git-sync.sh` will tell you if there are any troubles. The main among them i
 
 FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
-### The Trade-off
+## The Trade-off
 
-Even if you run **git-repo-sync** periodically and often you still have a chance to get a conflict.<br/>
+Even if you run **git-repo-sync** periodically and often, you still have a chance to get a conflict.<br/>
 But a small chance. So, you must know how to deal with The Trade-off.
 
-#### Minimize chances of The Trade-off
+### Minimize chances of The Trade-off
 
 Run **git-repo-sync** before Git-pushing. I.e. synchronize your both Git-remote-repos before pushing into any of them.<br/>
 In this case, Git will be responsible for conflict resolution, not **git-repo-sync**.
 
-#### Conflict is a reason for The Trade-off
+### Conflict is a reason for The Trade-off
 
 - You run **git-repo-sync** rarely. I.e. someone aready pushed commites exactly to your branch after last running of **git-repo-sync**.
 - And you and your teammate have pushed changes to the same Git-branch but through different remote repositories.
 
 You don't know about **git-repo-sync** until you are in this situation.
 
-#### Behavior of git-repo-sync
+### Behavior of git-repo-sync
 
-**git-repo-sync** sees the conflict and uses one of Conflict Solving strategies. As a result, you should provide the below steps to fix The Trade-off.
+**git-repo-sync** sees the conflict and uses one of Conflict Solving strategies described below.<br/>
+As a result, you should provide the below steps to fix The Trade-off.
 
-#### Your steps to fix The Trade-off
+### Your steps to fix The Trade-off
 
 The main idea is "Re-push your local Git-commit in case of a conflict".
 
@@ -73,23 +74,19 @@ The main idea is "Re-push your local Git-commit in case of a conflict".
 
 - Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository (if you have no periodical auto-runs).
 
-#### How do I know if there were conflicts
+### How do I know if there were conflicts
 
 - Check it manually. This is described in the above steps.
 - **git-repo-sync** has notifications over plain text files. Ask your DevOps to distribute it.
 
-#### Explanation
-
-In case of a conflict in a branch, **git-repo-sync** should decide whose changes will be accepted and whose will be deleted remotely on both remote repositories.<br/>
-
-### Using On Linux
+## Using On Linux
 
 Run `git-sync.sh` and it will tell you what **git-repo-sync** needs.<br/>
 In most cases you have to install gAWK. This applies to Ubuntu.<br/>
 Docker Alpine Linux images require *bash* and *gAWK* to be installed.<br/>
 You have to update the *bash* if you use an extra old Linux distro.
 
-### Using on Windows
+## Using on Windows
 
 Ha! You're lucky. You have to do nothing and have five options to run **git-repo-sync**.
 
@@ -107,7 +104,7 @@ Or you can try to update the PATH environment variable. Try to add the following
 
     ;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin
 
-### Do not synchronize all branches
+## Do not synchronize all branches
 
 Despite that there are [fair cases](https://github.com/it3xl/git-repo-sync/issues/3#issuecomment-771494886) when it is useful to sync all branches, this is not always a good idea.<br/>
 Some well know Git-servers block some branches in different ways. Some of them create "trash"-branches which you do not want to see synchronized.<br/>
@@ -116,7 +113,9 @@ So, you can synchronize branches that have special prefixes only.<br/>
 You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file.<br/>
 What's important, these prefixes are related to correspondent *synchronization strategies*.
 
-### The Victim Sync Strategy
+## Conflict Solving Strategies
+
+### The Victim Strategy
 
 By default all branches are synced under this strategy.<br/>
 You can do whatever you want with such branches from both remote sides (repositories).<br/>
@@ -131,7 +130,7 @@ The most common value of victim_branches_prefix is "@".<br/>
 In this case only branches that start with `@` will be synchronized.
 E.g. `@dev`, `@dev-staging`, `@test`, `@test-staging`, `@my-feature`, etc.
 
-### The Conventional Sync Strategy
+### The Conventional Strategy
 
 By using this strategy you limit what your teammates may do from another side repository with branches on your side remote repository.
 
@@ -153,14 +152,12 @@ You can move such branches back in Git-history if you run **git-repo-sync** peri
 
 All commit conflicts will be solved in favor of the owning side.<br/>
 
-### Other Unimplemented Sync Strategies
+### Other Unimplemented Strategies
 
-There are other interesting sync and conflict solving approaches.<br/>
-For example when you don't lose your conflicting commits in your remote repositories and other teammates can resolve your conflicts after/for you.<br/>
-Also it will be useful if you have a stubborn Git-server that blocks updating commits in different ways.<br/>
-But the Victim and Conventional approaches cover the most important cases fairly well.
+Just propouse something.<br/>
+BTW, the Victim and Conventional approaches cover 80% of cases you need (I beleive).
 
-### Disaster Protection
+## Disaster Protection
 
 People have to make mistakes to become better. This is normal. But let's protect our clients from such the mistakes.<br/>
 Define *sync_enabling_branch* variable
@@ -180,7 +177,7 @@ They could search for the word *it3xl_git_repo_sync_enabled* in the Internet and
 Be aware that a branch mentioned in the `sync_enabling_branch` variable will be alwasy synchronized by **git-repo-sync**.<br/>
 Probably this is not a good idea to specify here the `master` branch name because a branch mentioned in `sync_enabling_branch` will be synchronized under the Victim strategy. But you can specify there a branch with one of your conventional prefixes for the Conventional syncing of it. For example `client-master`.
 
-### Notes, Drawbacks & Limitations
+## Notes, Drawbacks & Limitations
 * Git Large File Storage (LFS) extension is not supported.
 * Usage with SSH isn't tested but possible.
 * **git-repo-sync** is resilient for HTTP fails and interruptions.
@@ -190,9 +187,9 @@ Probably this is not a good idea to specify here the `master` branch name becaus
 * **git-repo-sync** doesn't synchronize Git-tags because some popular Git-servers block manipulations with Git-tags.
 * **git-repo-sync** doesn't attempt to do Git-merge or rebase.
 
-### Support Operations
+## Support Operations
 
-#### Remote Repo Replacing Support
+### Remote Repo Replacing Support
 
 Real case of my customer. You want to synchronize your existing Git-repo with a Git-repo of your new software parnter.
 
@@ -207,7 +204,7 @@ Start synchronization as usual.
 Option 3.<br/>
 Your Git-repository is extra huge and you can't recreate it. It is a TL;DR. Ask a Git-professional for a help. 
 
-### Automation support
+## Automation support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
 * It works faster under \*nix OS-es because Git-bash on Windows is slower. But compare to network latency, this is nothing.
 * You can separate change detection and synchronization phases of **git-repo-sync** for readability of build logs.
@@ -221,15 +218,16 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
 * See [instructions](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) on how to configure more synchronization pairs of remote Git repositories.
 * Number of pairs is unlimited. Every pair is a separate sync project.
 
-### Required Specification
+## Required Specification
 
 * Use any Linux, Windows or Mac machine.
 * Install Git.
+* Use bash to run **git-repo-sync**.
 * For users of \*nix OS-es.
-  * update *bash* on old Linux distros.
+  * update *bash* in old Linux distros.
   * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
-* Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it yourself periodically.
+* Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it periodically yourself.
 
-### Contacts
+## Contacts
 
 [it3xl.ru](http://it3xl.ru)
