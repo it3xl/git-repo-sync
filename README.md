@@ -7,8 +7,8 @@ It is like you have two entry points to a single repository and your two remote 
 
 **git-repo-sync** implemented as a bash script.
 
-The main idea of this tool is to install, auto-run periodically and forget.<br/>
-But see the "Trade off" section below.
+The main idea of this tool is to install, auto-run every couple of minutes and forget.<br/>
+But know "The Trade-off" section below.
 
 ## Use cases
 
@@ -18,7 +18,7 @@ But see the "Trade off" section below.
 * Provides an independence from your base remote Git repository if it is slow and could be out of service time after time.
 * You software teams have independent Git remote repositories.
 
-## How it works
+## How to run it
 
 Copy **git-repo-sync** somewhere
 
@@ -39,39 +39,50 @@ The `git-sync.sh` will tell you if there are any troubles. The main among them i
 
 FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
-### Trade off: Re-push your Git-commit in case of a conflict
+### The Trade-off
 
-#### Codition
+Even if you run **git-repo-sync** periodically and often you still have a chance to get a conflict.<br/>
+But a small chance. So, you must know how to deal with The Trade-off.
 
-- You run **git-repo-sync** rarely. I.e. there were no runs of it before pushing of your local commits to your remote Git-repository.
-- You and your teammate have pushed changes to the same Git-branch but through different remote repositories.
+#### Minimize chances of The Trade-off
+
+Run **git-repo-sync** before Git-pushing. I.e. synchronize your both Git-remote-repos before pushing into any of them.<br/>
+In this case, Git will be responsible for conflict resolution, not **git-repo-sync**.
+
+#### Conflict is a reason for The Trade-off
+
+- You run **git-repo-sync** rarely. I.e. someone aready pushed commites exactly to your branch after last running of **git-repo-sync**.
+- And you and your teammate have pushed changes to the same Git-branch but through different remote repositories.
+
+You don't know about **git-repo-sync** until you are in this situation.
 
 #### Behavior of git-repo-sync
 
-The **git-repo-sync** will emulates Git-history-rewrite behavior in case of the described condition on a branch with a conflict.
+**git-repo-sync** sees the conflict and uses one of Conflict Solving strategies. As a result, you should provide the below steps to fix The Trade-off.
 
-#### Your behavior to fix it
+#### Your steps to fix The Trade-off
 
-- Run **git-repo-sync** to synchronize both Git-remote-repositories.
+The main idea is "Re-push your local Git-commit in case of a conflict".
+
+- Run **git-repo-sync** to synchronize both Git-remote-repositories (if you have no periodical auto-runs).
 - If your Git-commit was deleted from a Git-remote-repository due to a conflict with another commit.<br/>
-  - So, your commit wasn't deleted from your locat Git-repository!
+  - Well, your commit wasn't deleted from your locat Git-repository!
   - Upload changes from your remote Git-repository to your local Git repository.
-  - Performe Git-merge of your changes with changes from your remote-Git-repo.
+  - Performe Git-merge/rebase of your local commit.
   - Performe pushing of your changes.
-- Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository.
+- Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository (if you have no periodical auto-runs).
 
-#### How do I know that there were conflicts
+#### How do I know if there were conflicts
 
 - Check manually for conflicts.
-  - Run **git-repo-sync**.
-  - Upload changes to your locat git repository and recheck the branch you've pushed recently. If it has no remote Git-branch counterpart then a conflict was solved.
-- The **git-repo-sync** has notifications over plain text files. Ask your DevOps to distribute it.
+  - Run **git-repo-sync** (if you have no periodical auto-runs).
+  - Upload remote changes into your locat git repository and recheck the branch you've pushed recently. If it has no remote Git-branch counterpart then a conflict was solved by **git-repo-sync**.
+- **git-repo-sync** has notifications over plain text files. Ask your DevOps to distribute it.
 
 #### Explanation
 
-In case of the explained above condition the **git-repo-sync** should decide whose changes will be accepted and whose will be deleted remotely on both remote repositories.<br/>
+In case of a conflict, **git-repo-sync** should decide whose changes will be accepted and whose will be deleted remotely on both remote repositories.<br/>
 
-*This is a quite rare situation but you should be aware of it.*<br/>
 Regular running of **git-repo-sync** decreases chances of it drastically.<br/>
 This is why I create CI/CD-automations for **git-repo-sync** that are running every 2 or 5 minutes.
 
