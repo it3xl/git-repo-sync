@@ -65,26 +65,22 @@ You don't know about **git-repo-sync** until you are in this situation.
 The main idea is "Re-push your local Git-commit in case of a conflict".
 
 - Run **git-repo-sync** to synchronize both Git-remote-repositories (if you have no periodical auto-runs).
-- If your Git-commit was deleted from a Git-remote-repository due to a conflict with another commit.<br/>
-  - Well, your commit wasn't deleted from your locat Git-repository!
-  - Upload changes from your remote Git-repository to your local Git repository.
+
+- Upload changes from your remote Git-repository to your local repository.
+- Check if you local commit have lost its remote counterpart. I.e. the commit exist only in your local repository.
   - Performe Git-merge/rebase of your local commit.
-  - Performe pushing of your changes.
+  - Performe Git-push of your changes.
+
 - Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository (if you have no periodical auto-runs).
 
 #### How do I know if there were conflicts
 
-- Check manually for conflicts.
-  - Run **git-repo-sync** (if you have no periodical auto-runs).
-  - Upload remote changes into your locat git repository and recheck the branch you've pushed recently. If it has no remote Git-branch counterpart then a conflict was solved by **git-repo-sync**.
+- Check it manually. This is described in the above steps.
 - **git-repo-sync** has notifications over plain text files. Ask your DevOps to distribute it.
 
 #### Explanation
 
-In case of a conflict, **git-repo-sync** should decide whose changes will be accepted and whose will be deleted remotely on both remote repositories.<br/>
-
-Regular running of **git-repo-sync** decreases chances of it drastically.<br/>
-This is why I create CI/CD-automations for **git-repo-sync** that are running every 2 or 5 minutes.
+In case of a conflict in a branch, **git-repo-sync** should decide whose changes will be accepted and whose will be deleted remotely on both remote repositories.<br/>
 
 ### Using On Linux
 
