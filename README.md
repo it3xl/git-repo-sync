@@ -111,14 +111,14 @@ Some well know Git-servers block some branches in different ways. Some of them c
 
 So, you can synchronize branches that have special prefixes only.<br/>
 You could configure these prefixes in [default_sync_project.sh](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) configuration file.<br/>
-What's important, these prefixes are related to correspondent *synchronization strategies*.
+What's important, these prefixes are related to correspondent *conflict solving strategies*.
 
 ## Conflict Solving Strategies
 
 ### The Victim Strategy
 
 By default all branches are synced under this strategy.<br/>
-You can do whatever you want with such branches from both remote sides (repositories).<br/>
+You can do whatever you want with such branches from both sides (repositories).<br/>
 In case of commit conflicts, any newest commit will win.<br/>
 You can relocate branches to any position, delete and move them back in history if you run **git-repo-sync** regularly.<br/>
 
@@ -126,7 +126,7 @@ Use the following variable to limit branches synchronized by this strategy.
 
     victim_branches_prefix=@
 
-The most common value of victim_branches_prefix is "@".<br/>
+The most common value for victim_branches_prefix is "@".<br/>
 In this case only branches that start with `@` will be synchronized.
 E.g. `@dev`, `@dev-staging`, `@test`, `@test-staging`, `@my-feature`, etc.
 
@@ -154,7 +154,7 @@ All commit conflicts will be solved in favor of the owning side.<br/>
 
 ### Other Unimplemented Strategies
 
-Just propouse something.<br/>
+Just propouse something interesting.<br/>
 BTW, the Victim and Conventional approaches cover 80% of cases you need (I beleive).
 
 ## Disaster Protection
@@ -178,20 +178,19 @@ Be aware that a branch mentioned in the `sync_enabling_branch` variable will be 
 Probably this is not a good idea to specify here the `master` branch name because a branch mentioned in `sync_enabling_branch` will be synchronized under the Victim strategy. But you can specify there a branch with one of your conventional prefixes for the Conventional syncing of it. For example `client-master`.
 
 ## Notes, Drawbacks & Limitations
-* Git Large File Storage (LFS) extension is not supported.
 * Usage with SSH isn't tested but possible.
 * **git-repo-sync** is resilient for HTTP fails and interruptions.
 * It has protections from an occasional deletion of your entire remote repository.
 * Arbitrary Git-history rewriting is supported.
 * Within a single installation, **git-repo-sync** can synchronize as many pairs of Git-repositories as you want. Every sync pair is a sync project for **git-repo-sync**.
-* **git-repo-sync** doesn't synchronize Git-tags because some popular Git-servers block manipulations with Git-tags.
-* **git-repo-sync** doesn't attempt to do Git-merge or rebase.
+* **git-repo-sync** doesn't synchronize Git-tags because some popular Git-servers block manipulations with Git-tags. (I do not want to research and cover all cases by tests for it).
+* **git-repo-sync** doesn't attempt to do Git-merge or rebase. Just FYI.
 
 ## Support Operations
 
 ### Remote Repo Replacing Support
 
-Real case of my customer. You want to synchronize your existing Git-repo with a Git-repo of your new software parnter.
+This is a real case of my customer. You may want to synchronize your existing Git-repo with a Git-repo of your new software parnter.
 
 Option 1.<br/>
 Create a new git-repo-sync project and use it (project description file or environment variables).
@@ -202,12 +201,12 @@ Delete `git-repo-sync/sync-projects/<your-sync-project-name>` directory.<br/>
 Start synchronization as usual.
 
 Option 3.<br/>
-Your Git-repository is extra huge and you can't recreate it. It is a TL;DR. Ask a Git-professional for a help. 
+Your Git-repository is extra huge and you can't recreate it. This is a TL;DR. Ask a Git-professional for a help. 
 
 ## Automation support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
-* It works faster under \*nix OS-es because Git-bash on Windows is slower. But compare to network latency, this is nothing.
-* You can separate change detection and synchronization phases of **git-repo-sync** for readability of build logs.
+* It works much faster under \*nix OS-es because Git-bash on Windows is slower. But compare to network latency, this is nothing.
+* You can separate change detection and synchronization phases of **git-repo-sync** for readability of CI/CD logs.
 * Multiple configuration capabilities are supported. Environment, configuration files, combination of them.
 * Integration with **bash Git Credential Helper - [git-cred](https://github.com/it3xl/bash-git-credential-helper)** to obtain credentials from a parent shell environment.
 * You shouldn't do anything in case of connectivity fails. Continue to run **git-repo-sync** periodically and everything will be restored automatically.
