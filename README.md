@@ -56,7 +56,7 @@ In this case, Git will be responsible for conflict resolution, not **git-repo-sy
 You should have the both
 
 - You run **git-repo-sync** rarely. I.e. someone aready pushed commites exactly to your branch after last running of **git-repo-sync**.
-- And you and your teammate have pushed changes to the same Git-branch but through different remote repositories.
+- And you and your teammate have pushed changes to the same Git-branch but through different remote repositories and your remote repositories are no synchronized between your Git-pushes.
 
 Basically, you don't know about **git-repo-sync** until you are in this situation.
 
