@@ -41,24 +41,28 @@ FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
 ## The Trade-off
 
-Even if you run **git-repo-sync** periodically and often, you still have a chance to get a conflict.<br/>
-But a small chance. So, you must know how to deal with The Trade-off.
+_The Trade-off_ is an automated Git-conflict solving logic of git-repo-sync.
+
+Even if you run **git-repo-sync** periodically and often, you still have a chance to get a Git-conflict. But a small chance.<br/>
+So, you must know what to do in case of Git-conflicts solved by git-repo-sync.
 
 ### Minimize chances of The Trade-off
 
 Run **git-repo-sync** before Git-pushing. I.e. synchronize your both Git-remote-repos before pushing into any of them.<br/>
 In this case, Git will be responsible for conflict resolution, not **git-repo-sync**.
 
-### Conflict is a reason for The Trade-off
+### When git-repo-sync will be solving the conflicts.
+
+You'll receive the both
 
 - You run **git-repo-sync** rarely. I.e. someone aready pushed commites exactly to your branch after last running of **git-repo-sync**.
 - And you and your teammate have pushed changes to the same Git-branch but through different remote repositories.
 
-You don't know about **git-repo-sync** until you are in this situation.
+Basically, you don't know about **git-repo-sync** until you are in this situation.
 
-### Behavior of git-repo-sync
+### Behavior of git-repo-sync in case of Git-conflicst
 
-**git-repo-sync** sees the conflict and uses one of Conflict Solving strategies described below.<br/>
+**git-repo-sync** sees a Git-conflict and uses one of Conflict Solving strategies described below.<br/>
 As a result, you should provide the below steps to fix The Trade-off.
 
 ### Your steps to fix The Trade-off
@@ -74,7 +78,7 @@ The main idea is "Re-push your local Git-commit in case of a conflict".
 
 - Run **git-repo-sync** to synchronize your changes with changes from another side Git-remote-repository (if you have no periodical auto-runs).
 
-### How do I know if there were conflicts
+### How do I know if there were Git-conflicts
 
 - Check it manually. This is described in the above steps.
 - **git-repo-sync** has notifications over plain text files. Ask your DevOps to distribute it.
