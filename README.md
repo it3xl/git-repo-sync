@@ -53,7 +53,7 @@ In this case, Git will be responsible for conflict resolution, not **git-repo-sy
 
 ### When git-repo-sync will be solving the conflicts.
 
-You'll receive the both
+You should have the both
 
 - You run **git-repo-sync** rarely. I.e. someone aready pushed commites exactly to your branch after last running of **git-repo-sync**.
 - And you and your teammate have pushed changes to the same Git-branch but through different remote repositories.
