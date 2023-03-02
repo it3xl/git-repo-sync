@@ -221,13 +221,17 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
 * See [instructions](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) on how to configure more synchronization pairs of remote Git repositories.
 * Number of pairs is unlimited. Every pair is a separate sync project.
 
+## Notes
+* Git-rebases are not used in the implementation as they could bring issues. https://github.com/it3xl/git-repo-sync/issues/15
+
 ## Required Specification
 
-* Use any Linux, Windows or Mac machine.
+* Use any Linux or Windows machine.
 * Install Git.
+* Check that bash version is 4.2 or above. (that's why there may be problems on macOS)
 * Use bash to run **git-repo-sync**.
 * For users of \*nix OS-es.
-  * update *bash* in old Linux distros.
+  * update *bash* in old Linux distros. (4.2 or above)
   * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
 * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it periodically yourself.
 
