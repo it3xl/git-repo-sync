@@ -231,7 +231,3 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
   * update *bash* in old Linux distros. (4.2 or above)
   * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
 * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it periodically yourself.
-
-## Contacts
-
-[it3xl.ru](http://it3xl.ru)
