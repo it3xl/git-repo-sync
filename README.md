@@ -4,6 +4,7 @@
 
 * The **git-repo-sync** is a bash script that synchronizes branches between two remote Git-repositories.
 * You configure once what branches to synchronize and how.
+  * You have to investigate some time to understand **git-repo-sync** conflict solving strategies and configuring.
 * Your run **git-repo-sync** periodically, preferebly every few minutes.
 
 *Warning!* Before reading the following you should know what is the difference between local and remote Git repositories.
