@@ -21,7 +21,7 @@ If someone pushed to the same branch (to another remote repo) in between the run
 * If it was deleted in the remote repo:
 * merge, rebase, etc., your local branch over the latest remote commits;
 * repeat Git-push for your branch.
-* Repeat until your push will not be deleted from your remote Git-repository.
+* Repeat everything until your pushed branch will be in expected commits in your remote Git-repository.
 
 ## Use Cases
 
