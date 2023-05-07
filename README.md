@@ -1,34 +1,57 @@
 # git-repo-sync
 
-## Synchronization of Branches of Remote Git-repositories
+## Synchronization of Branches between Remote Git-repositories
 
-The **git-repo-sync** synchronizes branches between two remote Git-repositories.<br/>
-Your two remote Git-repositories start behave as a single repository.<br/>
+* The **git-repo-sync** is a bash script that synchronizes branches between two remote Git-repositories.
+* You configure once what branches to synchronize and how.
+* Your run **git-repo-sync** periodically, preferebly every few minutes.
 
-**git-repo-sync** implemented as a bash script.
+*Warning!* Before reading the following you should know what is the difference between local and remote Git repositories.
 
-The main idea of this tool is to install, configure, auto-run every couple of minutes and forget.<br/>
-But know "The Trade-off" section below.
+If your people push (commit) often to a single synchronized Git-branch and do it to different remote Git-repositories, then:
 
-## Use cases
+* Run **git-repo-sync** before pushing to such the branch.
+
+If someone pushed to the same branch (to another remote repo) in between the runing of **git-repo-sync** and your pusing then:
+
+* Run **git-repo-sync**
+* Udpate your local repository (git fetch).
+* Check if your commits (push) wasn't deleted from your remote Git-repository. (FYI. You local commits in your local repository will not be changed!)
+* If it was deleted in the remote repo:
+* merge, rebase, etc., your local branch over the latest remote commits;
+* repeat Git-push for your branch.
+* Repeat until your push will not be deleted from your remote Git-repository.
+
+## Use Cases
 
 * Adhesion of Git-remote-repositories of clients and software/support suppliers. Temporary or permanent.
 * Independence from an external remote Git repository if it is slow and could be out of service time after time.
 * You software teams have independent Git remote repositories.
 
-## Required Specification
+## Requirements
 
-* Linux & Windows. And macOS with some tunings.
-  * You could expect minimal efforts on Windows, Arch linux or based on it OS-es like Manjaro.
-* Check that bash version is 4.2 or above. (Iprotant for macOS)
-* Install Git.
-* Install gAWK (GNU AWK).
-  * macOS and Ubuntu doesn't have gawk.
-  * To check gawk presence run `gawk '{ exit; }'` or see https://unix.stackexchange.com/a/236666/207074
-  * On Ubuntu consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626).
+* Install Git
 * Use bash to run **git-repo-sync**. (It is not tested for zsh)
-  * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it periodically yourself.
+* Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it periodically yourself.
 
+This is enough for Windows, Arch based Linux (Manjaro), GNU based Linux
+
+### macOS Additional Requirements
+
+* Update bash by running (restart your shell after this)
+  * `brew install bash`
+* Install gAWK (GNU AWK)
+  * `brew install gawk`
+
+### Ubuntu Additional Requirements
+
+* Install gAWK (GNU AWK).
+  * consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626).
+
+### Other Linux Additional Requirements
+
+* Check gawk presence. Run `gawk '{ exit; }'` or see https://unix.stackexchange.com/a/236666/207074
+* Check that bash version is 4.2 or above.
 
 ## How to use
 
