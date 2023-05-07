@@ -16,6 +16,20 @@ But know "The Trade-off" section below.
 * Independence from an external remote Git repository if it is slow and could be out of service time after time.
 * You software teams have independent Git remote repositories.
 
+## Required Specification
+
+* Linux & Windows. And macOS with some tunings.
+  * You could expect minimal efforts on Windows, Arch linux or based on it OS-es like Manjaro.
+* Check that bash version is 4.2 or above. (Iprotant for macOS)
+* Install Git.
+* Install gAWK (GNU AWK).
+  * macOS and Ubuntu doesn't have gawk.
+  * To check gawk presence run `gawk '{ exit; }'` or see https://unix.stackexchange.com/a/236666/207074
+  * On Ubuntu consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626).
+* Use bash to run **git-repo-sync**. (It is not tested for zsh)
+  * Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it periodically yourself.
+
+
 ## How to use
 
 Copy **git-repo-sync** somewhere
@@ -35,8 +49,6 @@ Run periodically the `git-sync.sh` file, which is located in the root of **git-r
     bash  git-sync.sh
 
 The `git-sync.sh` will tell you if there are any troubles. For example you need to update awk to gAWK in Ubuntu.
-
-FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
 ## The Trade-off
 
@@ -220,13 +232,3 @@ See `git-repo-sync/sync-projects/<your-sync-project-name>/file-signals/`
 * See [instructions](https://github.com/it3xl/git-repo-sync/blob/master/repo_settings/default_sync_project.sh) on how to configure more synchronization pairs of remote Git repositories.
 * Number of pairs is unlimited. Every pair is a separate sync project.
 
-## Required Specification
-
-* Use any Linux or Windows machine.
-* Install Git.
-* Check that bash version is 4.2 or above. (that's why there may be problems on macOS)
-* Use bash to run **git-repo-sync**.
-* For users of \*nix OS-es.
-  * update *bash* in old Linux distros. (4.2 or above)
-  * check that gAWK (GNU AWK) is installed on your machine. Consider [this case](https://askubuntu.com/questions/561621/choosing-awk-version-on-ubuntu-14-04/561626#561626) if you are going to update mAWK to gAWK on Ubuntu.
-* Tune any automation to run **git-repo-sync** periodically - crones, schedulers, Jenkins, GitLab-CI, etc. Or run it periodically yourself.
