@@ -3,22 +3,20 @@
 ## Synchronization of Branches of Remote Git-repositories
 
 The **git-repo-sync** synchronizes branches between two remote Git-repositories.<br/>
-It is like you have two entry points to a single repository and your two remote Git-repositories will be behaving as a single repository.<br/>
+Your two remote Git-repositories start behave as a single repository.<br/>
 
 **git-repo-sync** implemented as a bash script.
 
-The main idea of this tool is to install, auto-run every couple of minutes and forget.<br/>
+The main idea of this tool is to install, configure, auto-run every couple of minutes and forget.<br/>
 But know "The Trade-off" section below.
 
 ## Use cases
 
-* Adhesion of Git-remote-repositories of a client and a software/support supplier.
-    * Access to your Git remote repository is restricted by your local network.
-    * After completing of some work, remote access to your Git repository could be terminated.
-* Provides an independence from your base remote Git repository if it is slow and could be out of service time after time.
+* Adhesion of Git-remote-repositories of clients and software/support suppliers. Temporary or permanent.
+* Independence from an external remote Git repository if it is slow and could be out of service time after time.
 * You software teams have independent Git remote repositories.
 
-## How to run it
+## How to use
 
 Copy **git-repo-sync** somewhere
 
@@ -32,10 +30,11 @@ You can use URL-s and file paths.
     
     url_b='/c/my-folder/my-local-git-repo-folder'
 
-Run periodically the `git-sync.sh` file, which is located in the root of **git-repo-sync**.<br/>
-The `git-sync.sh` will tell you if there are any troubles. The main among them is you need to update awk to gAWK on Ubuntu.
+Run periodically the `git-sync.sh` file, which is located in the root of **git-repo-sync**.
 
     bash  git-sync.sh
+
+The `git-sync.sh` will tell you if there are any troubles. For example you need to update awk to gAWK in Ubuntu.
 
 FYI. Call _git-sync.sh_ over the bash as it is not tested for zsh.
 
