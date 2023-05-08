@@ -15,7 +15,7 @@ If your people push (commit) often to a single synchronized Git-branch and do it
 
 ### Manual Action of Synchronization
 
-If someone pushed to the same branch (to another remote repo) in between the runing of **git-repo-sync** and your pusing then:
+If someone pushed to the same branch (to another remote repo) in between the runing of **git-repo-sync** and your pusing. In this case:
 
 * Run **git-repo-sync**
 * Udpate your local repository (git fetch).
