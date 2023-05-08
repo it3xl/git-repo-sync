@@ -13,6 +13,8 @@ If your people push (commit) often to a single synchronized Git-branch and do it
 
 * Run **git-repo-sync** before pushing to such the branch.
 
+### Manual Action of Synchronization
+
 If someone pushed to the same branch (to another remote repo) in between the runing of **git-repo-sync** and your pusing then:
 
 * Run **git-repo-sync**
@@ -22,6 +24,8 @@ If someone pushed to the same branch (to another remote repo) in between the run
 * merge, rebase, etc., your local branch over the latest remote commits;
 * repeat Git-push for your branch.
 * Repeat everything until your pushed branch will be in expected commits in your remote Git-repository.
+
+This situation is covered by notifications but you have to configure this by yourlself in your enterprise environment.
 
 ## Use Cases
 
