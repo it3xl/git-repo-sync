@@ -246,6 +246,15 @@ Start synchronization as usual.
 Option 3.<br/>
 Your Git-repository is extra huge and you can't recreate it. This is a TL;DR. Ask a Git-professional for a help. 
 
+## Known Issues
+
+### It is still untracked
+`Something went wrong for <your-branch>. It is still untracked.
+Possibly the program or the network were interrupted.`
+
+Disable your antivirus or Check Point.<br/>
+Check if this branch is blocked by your Git-server.
+
 ## Automation support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
 * It works much faster under \*nix OS-es because Git-bash on Windows is slower. But compare to network latency, this is nothing.
