@@ -252,8 +252,8 @@ Your Git-repository is extra huge and you can't recreate it. This is a TL;DR. As
 `Something went wrong for <your-branch>. It is still untracked.
 Possibly the program or the network were interrupted.`
 
-Disable your antivirus or Check Point.<br/>
-Check if this branch is blocked by your Git-server.
+* Disable your antivirus or Check Point.
+* Check if this branch is blocked by your Git-server.
 
 ## Automation support
 * **git-repo-sync** works with remote Git repositories asynchronously, by default.
