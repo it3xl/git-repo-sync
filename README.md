@@ -228,7 +228,7 @@ Probably this is not a good idea to specify here the `master` branch name becaus
 * Arbitrary Git-history rewriting is supported.
 * Within a single installation, **git-repo-sync** can synchronize as many pairs of Git-repositories as you want. Every sync pair is a sync project for **git-repo-sync**.
 * Git-tags are not synchronized.
-  * Remarks why: Some Git-servers block manipulations with Git-tags. Time was saved for research and covering all possible cases.
+  * Remarks why: Some Git-servers block manipulations with Git-tags. Time was saved for research and covering all possible cases. Another repo's tags created issues for Git-tag based CI/CD-s.
 * **git-repo-sync** doesn't attempt to do Git-merge or rebase. Just FYI.
 
 ## Support Operations
