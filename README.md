@@ -3,11 +3,12 @@
 ## Synchronization of Branches between Remote Git-repositories
 
 * The **git-repo-sync** is a bash script that synchronizes branches between two remote Git-repositories.
+  * Git-tags are not synchronized.
 * You configure once what branches to synchronize and how.
   * You have to investigate some time to understand **git-repo-sync** conflict solving strategies and configuring.
 * Your run **git-repo-sync** periodically, preferebly every few minutes.
 
-*Warning!* Before reading the following you should know what is the difference between local and remote Git repositories.
+*Warning!* Before reading the following keep in mind the difference between **local** and **remote** Git repositories.
 
 If your people push (commit) often to a single synchronized Git-branch and do it to different remote Git-repositories, then:
 
@@ -226,7 +227,8 @@ Probably this is not a good idea to specify here the `master` branch name becaus
 * It has protections from an occasional deletion of your entire remote repository.
 * Arbitrary Git-history rewriting is supported.
 * Within a single installation, **git-repo-sync** can synchronize as many pairs of Git-repositories as you want. Every sync pair is a sync project for **git-repo-sync**.
-* **git-repo-sync** doesn't synchronize Git-tags because some popular Git-servers block manipulations with Git-tags. (I do not want to research and cover all cases by tests for it).
+* Git-tags are not synchronized.
+  * Remarks why: Some Git-servers block manipulations with Git-tags. Time was saved for research and covering all possible cases.
 * **git-repo-sync** doesn't attempt to do Git-merge or rebase. Just FYI.
 
 ## Support Operations
